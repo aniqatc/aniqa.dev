@@ -14,7 +14,7 @@ summary: A calendar that shows the birthdays, events and sky for any date. Save 
 
 ## Why
 
-[Why you built it, in a short paragraph: what made you want a calendar of birthdays, history and the sky, and what you wanted to practise.]
+I wanted to practise using a calendar to drive an app's state: pick a date and everything else updates, from birthdays to the sky, with real data plugged in. It was also a good excuse to learn magic link, passwordless sign-in. And I liked the idea of a place where the community's birthdays get celebrated too.
 
 ## What it does
 
