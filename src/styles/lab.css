@@ -221,6 +221,11 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
+/* while the address is on its way */
+.next-entry-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
 .next-entry-button:hover {
   background: var(--accent);
 }

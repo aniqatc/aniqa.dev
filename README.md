@@ -67,15 +67,16 @@ npm install
 npm run dev    # http://localhost:4321
 ```
 
-The site builds without any keys; likes and faster star counts need these:
+The site builds without any keys; likes, on-page email sign-ups and faster star counts need these:
 
 | Variable                                             | For                                           | Where to get it                                                                                      |
 | ---------------------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Likes                                         | Vercel → Storage → Upstash Redis, then `vercel env pull .env.local` (`KV_REST_API_*` names work too) |
+| `BUTTONDOWN_API_KEY`                                 | Email sign-ups on the page (else a popup)     | Buttondown → Settings → API                                                                          |
 | `GITHUB_TOKEN`                                       | Star counts (optional, avoids the rate limit) | A read-only GitHub token                                                                             |
 | `VERCEL_DEPLOY_HOOK`                                 | Daily star refresh (Actions secret)           | Vercel → Settings → Git → Deploy Hooks                                                               |
 
-The email sign-ups on the home page, the lab and `/reviews` send to [Buttondown](https://buttondown.com): set your username as `buttondown` in [`src/lib/contact.ts`](src/lib/contact.ts). Subscribers are tagged `updates` (home page and lab) or `reviews`, so you can email each list on its own. Signing up opens Buttondown in a small popup to finish (a CAPTCHA, if it asks for one), while the form says thanks. Left empty, the forms only say thanks.
+The email sign-ups on the home page, the lab and `/reviews` send to [Buttondown](https://buttondown.com): set your username as `buttondown` in [`src/lib/contact.ts`](src/lib/contact.ts). Subscribers are tagged `updates` (home page and lab) or `reviews`, so you can email each list on its own. With `BUTTONDOWN_API_KEY` set, the form subscribes people through [`/api/subscribe`](src/pages/api/subscribe.ts) and says thanks on the page; without it, or when Buttondown wants a CAPTCHA, Buttondown's own page finishes the sign-up in a small popup. Left empty, the forms only say thanks.
 
 ### Add an entry
 

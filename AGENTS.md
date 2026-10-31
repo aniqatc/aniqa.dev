@@ -1,6 +1,6 @@
 # aniqa.dev
 
-Aniqa's portfolio (`aniqa.dev`, dark) and lab (`aniqa.dev/lab`, light). One Astro 7 site, plain CSS, strict TypeScript, on Vercel. Every page is static except the likes API. `README.md` is the human guide; this file covers what isn't obvious from the code.
+Aniqa's portfolio (`aniqa.dev`, dark) and lab (`aniqa.dev/lab`, light). One Astro 7 site, plain CSS, strict TypeScript, on Vercel. Every page is static except the likes and subscribe APIs. `README.md` is the human guide; this file covers what isn't obvious from the code.
 
 ## Commands
 
@@ -30,7 +30,7 @@ Aniqa's portfolio (`aniqa.dev`, dark) and lab (`aniqa.dev/lab`, light). One Astr
 - p5 and three aren't installed by default. Install one when an experiment needs it, then restart the dev server.
 - The Upstash database is live. Clean up any test likes you create.
 - Never print the values in `.env`.
-- The email sign-ups (`UpdatesSignup.astro`, and `NextEntry.astro` at the end of the lab) post to Buttondown's embed-subscribe endpoint for `CONTACT.buttondown` as a normal form, into a small popup (`src/scripts/signup.ts`), because Buttondown sometimes needs the subscriber to pass a CAPTCHA or fix an error there. Don't switch it to `fetch`: Buttondown's docs say not to, and those subscribers would be lost without anyone knowing. Each form's `tag` keeps the lists apart: `updates` for the home page and lab, `reviews` for reviews.
+- The email sign-ups (`UpdatesSignup.astro`, and `NextEntry.astro` at the end of the lab) run on `src/scripts/signup.ts`: it posts to `/api/subscribe`, which adds the address through Buttondown's API with `BUTTONDOWN_API_KEY` and the visitor's IP (for Buttondown's spam check). If the route can't (no key, Buttondown refuses), the form posts to Buttondown's embed-subscribe endpoint in a popup, where Buttondown can ask for a CAPTCHA. Don't send the embed-subscribe post with `fetch`: Buttondown's docs say not to, and those sign-ups would be lost silently. Each form's `tag` keeps the lists apart: `updates` for the home page and lab, `reviews` for reviews.
 
 ## Conventions
 
