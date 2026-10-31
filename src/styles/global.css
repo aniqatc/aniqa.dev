@@ -536,14 +536,14 @@ footer .wrap {
 footer a:hover {
   color: var(--accent);
 }
-/* © and the App reviews link, side by side (on phones, the © moves under the buttons: see the end of this file) */
+/* © and the Reviews link, side by side (on phones, the © moves under the buttons: see the end of this file) */
 .footer-start {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 18px;
 }
-/* App reviews: a pill with the accent dot, the same height as the contact buttons, so it stands out from the © */
+/* Reviews: a pill with the accent dot, the same height as the contact buttons, so it stands out from the © */
 .footer-reviews {
   display: inline-flex;
   align-items: center;
@@ -582,7 +582,7 @@ footer a:hover {
   .gh {
     display: none;
   }
-  /* phone footer: App reviews and the links in one centered row, with the © under them */
+  /* phone footer: Reviews and the links in one centered row, with the © under them */
   footer .wrap {
     justify-content: center;
     gap: 16px 8px;

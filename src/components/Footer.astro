@@ -2,7 +2,7 @@
 import Contact from './Contact.astro';
 import { getReviews } from '../lib/reviews';
 
-// the App reviews link shows once there's a review to read
+// the Reviews link shows once there's a review to read
 const hasReviews = (await getReviews()).length > 0;
 ---
 
@@ -13,7 +13,7 @@ const hasReviews = (await getReviews()).length > 0;
       {hasReviews && (
         <a class="footer-reviews" href="/reviews">
           <i aria-hidden="true" />
-          App reviews →
+          Reviews →
         </a>
       )}
     </span>
