@@ -59,6 +59,10 @@ const OVERRIDES = {
   'experiments/valorant': {
     switchTheme: (page) => page.click('button.theme'), // dark by default; the sun button makes it light
   },
+  'experiments/link-hovers': {
+    // at rest every card is a plain word, so show all twenty mid-hover
+    whenReady: (page) => page.check('[data-show-all]'),
+  },
 };
 
 // ---------- every entry, from its frontmatter ----------
@@ -169,7 +173,7 @@ const shootSite = async (browser, { url, colorScheme, switchTheme, whenReady, wi
 };
 
 // an experiment's stage on this site, sharp at 2× so the crop still fills a large card
-const shootStage = async (browser, base, { stagePath, colorScheme }) => {
+const shootStage = async (browser, base, { stagePath, colorScheme, whenReady }) => {
   const context = await browser.newContext({ viewport: SIZE, colorScheme, deviceScaleFactor: 2 });
   const page = await context.newPage();
   try {
@@ -181,6 +185,11 @@ const shootStage = async (browser, base, { stagePath, colorScheme }) => {
       content:
         'astro-dev-toolbar, .hdr, .pet { display: none !important; } .stage { border: 0 !important; border-radius: 0 !important; }',
     });
+    // a study that needs a control set first (Link Hovers' Show every hover state), then time for its transitions
+    if (whenReady) {
+      await whenReady(page);
+      await page.waitForTimeout(1500);
+    }
     return await page.locator('.stage').screenshot();
   } finally {
     await context.close();
