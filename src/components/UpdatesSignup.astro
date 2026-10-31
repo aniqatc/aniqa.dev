@@ -15,10 +15,8 @@ interface Props {
 
 const {
   placeholder = 'Your email, for new things',
-  // Buttondown emails a link to confirm the address, so the thanks points there
-  thanks = SIGNUP_ACTION
-    ? 'Thanks! Check your inbox to confirm'
-    : 'Thanks! You’ll hear about new things from me soon',
+  // Buttondown's popup says whether there's anything left to do (like confirming), so this stays general
+  thanks = 'Thanks! You’ll hear about new things from me soon',
   tag = 'updates',
 } = Astro.props;
 ---

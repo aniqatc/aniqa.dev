@@ -11,8 +11,8 @@ interface Props {
 }
 
 const { number } = Astro.props;
-// Buttondown emails a link to confirm the address, so the thanks points there
-const thanks = SIGNUP_ACTION ? 'Thanks! Check your inbox to confirm.' : 'Thanks! You’ll hear when it lands.';
+// Buttondown's popup says whether there's anything left to do (like confirming), so this stays general
+const thanks = 'Thanks! You’ll hear when it lands.';
 ---
 
 <form
