@@ -536,7 +536,7 @@ footer .wrap {
 footer a:hover {
   color: var(--accent);
 }
-/* © and the App reviews link, side by side */
+/* © and the App reviews link, side by side (on phones, the © moves under the buttons: see the end of this file) */
 .footer-start {
   display: flex;
   flex-wrap: wrap;
@@ -580,6 +580,32 @@ footer a:hover {
 }
 @media (max-width: 520px) {
   .gh {
+    display: none;
+  }
+  /* phone footer: App reviews and the links in one centered row, with the © under them */
+  footer .wrap {
+    justify-content: center;
+    gap: 16px 8px;
+  }
+  .footer-start {
+    display: contents;
+  }
+  .footer-copyright {
+    flex-basis: 100%;
+    order: 1;
+    text-align: center;
+  }
+  /* the email becomes a round mail button like the others; tapping it still copies the address */
+  .contact-f .copy {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+  .contact-f .copy .em {
+    display: none;
+  }
+  /* the ✓ takes the mail icon's place for a moment after copying */
+  .contact-f .copy:has(.ok:not(:empty)) .contact-mail {
     display: none;
   }
 }

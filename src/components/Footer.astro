@@ -9,7 +9,7 @@ const hasReviews = (await getReviews()).length > 0;
 <footer>
   <div class="wrap">
     <span class="footer-start">
-      <span>© {new Date().getFullYear()} Aniqa</span>
+      <span class="footer-copyright">© {new Date().getFullYear()} Aniqa</span>
       {hasReviews && (
         <a class="footer-reviews" href="/reviews">
           <i aria-hidden="true" />
