@@ -1,9 +1,8 @@
 ---
 // End of the lab archive: the next entry's number and an email sign-up for when it lands.
-// It subscribes the address to the Buttondown newsletter set in contact.ts, tagged `updates` like the portfolio
-// sign-up, then says thanks; with no username set it only says thanks. Without JavaScript the form posts to
-// Buttondown itself, which shows its own confirmation page.
-import { CONTACT } from '../lib/contact';
+// It subscribes the address to Buttondown (the username in contact.ts), tagged `updates` like the portfolio
+// sign-up, then says thanks. How it sends is in src/scripts/signup.ts.
+import { SIGNUP_ACTION, SIGNUP_WINDOW } from '../lib/contact';
 import { pad } from '../lib/projects';
 
 interface Props {
@@ -12,18 +11,17 @@ interface Props {
 }
 
 const { number } = Astro.props;
-const action = CONTACT.buttondown
-  ? `https://buttondown.com/api/emails/embed-subscribe/${CONTACT.buttondown}`
-  : undefined;
 // Buttondown emails a link to confirm the address, so the thanks points there
-const thanks = action ? 'Thanks! Check your inbox to confirm.' : 'Thanks! You’ll hear when it lands.';
+const thanks = SIGNUP_ACTION ? 'Thanks! Check your inbox to confirm.' : 'Thanks! You’ll hear when it lands.';
 ---
 
 <form
   class="next-entry"
   aria-labelledby="next-entry-title"
-  action={action}
+  action={SIGNUP_ACTION}
   method="post"
+  target={SIGNUP_WINDOW}
+  data-signup
   data-thanks={thanks}
   novalidate
 >
@@ -36,9 +34,10 @@ const thanks = action ? 'Thanks! Check your inbox to confirm.' : 'Thanks! You’
     </span>
     <span class="next-entry-note">Get an email when it lands.</span>
   </span>
-  <span class="next-entry-form">
+  <span class="next-entry-form" data-signup-fields>
     <input
       class="next-entry-email"
+      data-signup-email
       type="email"
       name="email"
       placeholder="you@example.com"
@@ -46,44 +45,13 @@ const thanks = action ? 'Thanks! Check your inbox to confirm.' : 'Thanks! You’
       aria-label="Email address"
       required
     />
-    <button class="next-entry-button" type="submit">
+    <button class="next-entry-button" type="submit" data-signup-button>
       Notify me
     </button>
   </span>
-  <span class="next-entry-thanks" role="status" hidden></span>
+  <span class="next-entry-thanks" role="status" data-signup-thanks hidden></span>
 </form>
 
 <script>
-  import { onPage } from '../scripts/page';
-  import { sendOff } from '../scripts/send-off';
-
-  // send a valid address to Buttondown (when the form has one), then say thanks
-  onPage(() => {
-    const form = document.querySelector<HTMLFormElement>('.next-entry');
-    if (!form) return;
-    const email = form.querySelector<HTMLInputElement>('.next-entry-email')!;
-    const fields = form.querySelector<HTMLElement>('.next-entry-form')!;
-    const thanks = form.querySelector<HTMLElement>('.next-entry-thanks')!;
-    const button = form.querySelector<HTMLElement>('.next-entry-button')!;
-    form.addEventListener('submit', async (ev) => {
-      ev.preventDefault();
-      if (!email.checkValidity()) {
-        email.reportValidity();
-        return;
-      }
-      if (form.getAttribute('action')) {
-        try {
-          // no-cors: Buttondown doesn't let pages read its reply, so a sent request counts as done
-          await fetch(form.action, { method: 'POST', body: new FormData(form), mode: 'no-cors' });
-        } catch {
-          // offline or blocked: let the browser post the form itself instead
-          form.submit();
-          return;
-        }
-      }
-      // send-off first: it measures the button before the fields go
-      sendOff(form, button, thanks, form.dataset.thanks ?? 'Thanks!');
-      fields.hidden = true;
-    });
-  });
+  import '../scripts/signup';
 </script>

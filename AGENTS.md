@@ -30,7 +30,7 @@ Aniqa's portfolio (`aniqa.dev`, dark) and lab (`aniqa.dev/lab`, light). One Astr
 - p5 and three aren't installed by default. Install one when an experiment needs it, then restart the dev server.
 - The Upstash database is live. Clean up any test likes you create.
 - Never print the values in `.env`.
-- The email sign-ups (`UpdatesSignup.astro`, and `NextEntry.astro` at the end of the lab) post to Buttondown's embed-subscribe endpoint for `CONTACT.buttondown`, with `mode: 'no-cors'`, so the page can't read the reply; it assumes success unless the request itself fails. Each form's `tag` keeps the lists apart: `updates` for the home page and lab, `reviews` for reviews.
+- The email sign-ups (`UpdatesSignup.astro`, and `NextEntry.astro` at the end of the lab) post to Buttondown's embed-subscribe endpoint for `CONTACT.buttondown` as a normal form, into a small popup (`src/scripts/signup.ts`), because Buttondown sometimes needs the subscriber to pass a CAPTCHA or fix an error there. Don't switch it to `fetch`: Buttondown's docs say not to, and those subscribers would be lost without anyone knowing. Each form's `tag` keeps the lists apart: `updates` for the home page and lab, `reviews` for reviews.
 
 ## Conventions
 
