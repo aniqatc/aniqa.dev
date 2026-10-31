@@ -8,7 +8,8 @@
 #   any other images you put under "What I liked"
 #   scorecard.png   the picture for the post on X, made by npm run scorecard -- <slug>
 app: App Name
-maker: handle # the maker's X handle, without the @
+maker: handle # the maker's handle, without the @; it links to their X profile
+# makerLink: https://bsky.app/profile/handle # optional: link @maker somewhere else instead (Bluesky, Threads, their site…)
 date: 2026-10-30 # YYYY-MM-DD, the day the review goes up
 type: Web app # Web app, iOS app, Chrome extension, CLI tool…
 triedOn: MacBook, Chrome # where you tried it

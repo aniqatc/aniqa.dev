@@ -8,7 +8,7 @@
 // Options:
 //   --app      The app's name (required)
 //   --slug     Folder name and URL slug (defaults to the app's name)
-//   --maker    The maker's X handle, without the @
+//   --maker    The maker's X handle, without the @ (to link them somewhere else, set makerLink in index.md)
 //   --live     A web app's address (no https://), or a phone / iPad app's App Store link
 //   --device   browser | phone | tablet (browser by default)
 //   --type     A label: Web app, iOS app, Chrome extension… (from the device by default)

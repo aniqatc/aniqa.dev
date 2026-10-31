@@ -90,5 +90,5 @@ export function appLinkLabel(review: Review) {
   return 'App ↗';
 }
 
-/** The maker's profile on X. */
-export const makerUrl = (review: Review) => `https://x.com/${review.data.maker}`;
+/** Where @maker links: `makerLink` when it's set (Bluesky, Threads, their site…), otherwise their profile on X. */
+export const makerUrl = (review: Review) => review.data.makerLink ?? `https://x.com/${review.data.maker}`;
