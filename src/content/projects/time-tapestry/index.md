@@ -8,7 +8,7 @@ repo: time-tapestry
 order: 2
 updated: 2026-10
 blurb: Birthdays, history and the night sky for any date, with birthdays you can save and share.
-screenshotAlt: "[Time Tapestry in dark mode: describe what's on screen once the screenshot is taken]"
+screenshotAlt: "Time Tapestry in dark mode on October 31: the calendar and add-a-birthday form on the left, then notable birthdays, three historical events and the Moon's phase, illumination and rise and set times."
 summary: A calendar that shows the birthdays, events and sky for any date. Save up to five birthdays of your own, privately or shared with everyone.
 ---
 
