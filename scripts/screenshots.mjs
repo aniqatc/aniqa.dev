@@ -49,6 +49,10 @@ const OVERRIDES = {
   'projects/moji-canvas': {
     fallback: repoImage('moji-canvas/HEAD/public/og-img.png'), // no dark mode, so its normal look
   },
+  'projects/time-tapestry': {
+    // light by default; signed out in a fresh browser, so no account details show
+    switchTheme: (page) => page.click('button[aria-label="Switch to dark mode"]'),
+  },
   'projects/rflect-cli': {
     image: repoImage('rflect-cli/HEAD/assets/rflect-help-v2.png'),
   },
@@ -58,13 +62,20 @@ const OVERRIDES = {
 };
 
 // ---------- every entry, from its frontmatter ----------
+// a frontmatter value without its comment or quotes
+const plain = (value) => value?.replace(/\s+#.*$/, '').replace(/^['"]|['"]$/g, '');
 const field = (text, name) => text.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1].trim();
 const entries = ['projects', 'experiments'].flatMap((collection) =>
   readdirSync(`src/content/${collection}`)
     .filter((slug) => existsSync(`src/content/${collection}/${slug}/index.md`))
     .map((slug) => ({ slug, text: readFileSync(`src/content/${collection}/${slug}/index.md`, 'utf8') }))
-    // drafts get no screenshot until they're ready
-    .filter(({ text }) => field(text, 'draft') !== 'true')
+    // drafts are skipped unless named (npm run screenshots -- <slug>), so one can be shot before it goes up
+    .filter(
+      ({ slug, text }) =>
+        plain(field(text, 'draft')) !== 'true' ||
+        process.argv.includes(slug) ||
+        process.argv.includes(`${collection}/${slug}`),
+    )
     .map(({ slug, text }) => {
       const live = field(text, 'live');
       const hasSketch = ['sketch.ts', 'sketch.astro'].some((f) =>
@@ -84,7 +95,6 @@ const entries = ['projects', 'experiments'].flatMap((collection) =>
 );
 
 // app reviews: a web app's site, with its icon as logo.png; a phone or iPad app is left for its own screenshots
-const plain = (value) => value?.replace(/\s+#.*$/, '').replace(/^['"]|['"]$/g, '');
 const reviews = existsSync('src/content/reviews')
   ? readdirSync('src/content/reviews')
       .filter((slug) => existsSync(`src/content/reviews/${slug}/index.md`))

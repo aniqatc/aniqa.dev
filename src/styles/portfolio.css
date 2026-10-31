@@ -226,6 +226,10 @@ body:has(.pf) > main {
   .intro-row {
     padding-block: 10px;
   }
+  /* six projects fit a 1280 × 720 screen */
+  .project-link {
+    padding-block: 11px;
+  }
 }
 
 /* Tinkering, Building and Updates: on small screens (650px and under) the label sits above its content */
