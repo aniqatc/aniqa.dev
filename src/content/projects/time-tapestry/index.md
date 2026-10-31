@@ -7,9 +7,8 @@ live: tt.aniqa.dev
 repo: time-tapestry
 order: 2
 updated: 2026-10
-draft: true # until screenshot.png is taken: npm run screenshots -- time-tapestry
 blurb: Birthdays, history and the night sky for any date, with birthdays you can save and share.
-screenshotAlt: '[Time Tapestry in dark mode: describe what''s on screen once the screenshot is taken]'
+screenshotAlt: "[Time Tapestry in dark mode: describe what's on screen once the screenshot is taken]"
 summary: A calendar that shows the birthdays, events and sky for any date. Save up to five birthdays of your own, privately or shared with everyone.
 ---
 
