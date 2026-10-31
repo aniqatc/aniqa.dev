@@ -15,7 +15,7 @@ summary: Twenty ways for a link to react when you point at it, each made with on
 
 ## Idea
 
-I wanted a drawer of hover effects I could reach for. [Your words: why you started it.]
+I wanted a set of link hover effects, and I used it as practice: each one uses a different CSS trick, as many as I could think of.
 
 ## Notes
 
