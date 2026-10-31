@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import Badge from './Badge.astro';
 import LikeButton from './LikeButton.astro';
+import Sparkle from './Sparkle.astro';
 import type { Badge as BadgeName } from '../lib/badges';
 import { links, pad, year, type LabEntry } from '../lib/projects';
 import { screenshotFor } from '../lib/screenshots';
@@ -9,17 +10,19 @@ import { screenshotFor } from '../lib/screenshots';
 interface Props {
   entry: LabEntry;
   badge?: BadgeName | null;
+  /** its copy in the Favorites group, which has no sparkle (the heading has one) */
+  inFavorites?: boolean;
 }
 
-const { entry, badge = null } = Astro.props;
-const { title, type, live } = entry.data;
+const { entry, badge = null, inFavorites = false } = Astro.props;
+const { title, type, live, favorite } = entry.data;
 // the small screenshot the hover preview shows (hover-preview.ts)
 const screenshot = screenshotFor(entry);
 const preview = screenshot ? await getImage({ src: screenshot, width: 600, format: 'webp' }) : undefined;
 ---
 
 <li
-  class="row"
+  class:list={['row', { 'row-favorite': inFavorites }]}
   data-slug={entry.id}
   data-example={entry.data.example || undefined}
   data-t={title}
@@ -29,6 +32,7 @@ const preview = screenshot ? await getImage({ src: screenshot, width: 600, forma
   <span class="n">{pad(entry.n)}</span>
   <span class="t">
     <a href={`/lab/${entry.id}`}>{title}</a>
+    {favorite && !inFavorites && <Sparkle label="One of my favorites" />}
     <Badge badge={badge} />
   </span>
   <span class="k">{type}</span>
@@ -40,5 +44,5 @@ const preview = screenshot ? await getImage({ src: screenshot, width: 600, forma
       </a>
     ))}
   </span>
-  <LikeButton slug={entry.id} title={title} />
+  <LikeButton slug={entry.id} title={title} inFavorites={inFavorites} />
 </li>

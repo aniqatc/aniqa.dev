@@ -53,6 +53,7 @@ const experiments = defineCollection({
     // ("Made for a mouse", "The live site is down"). Use it rarely.
     headsUp: z.string().optional(),
     v1: z.url().optional(), // the first version's full URL (a CodePen), shown as "v1 ↗" in Links
+    favorite: z.boolean().default(false), // one of my favorites: pinned in the Favorites group at the top of the lab
   }),
 });
 

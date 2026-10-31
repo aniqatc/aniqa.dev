@@ -11,6 +11,7 @@ hint: Move to stir · click to scatter # shown under the canvas
 # themes: true # optional: a Day / Night switch in the top-right corner of the stage (the sketch must handle recolor)
 # headsUp: Made for a mouse. # optional, rare: a "Before you start" box above the figure
 # draft: true # optional: hide it from the portfolio and lab until it's ready
+# favorite: true # optional: one of my favorites, pinned in the Favorites group at the top of the lab
 screenshotAlt: What's on screen in screenshot.png. # take it with npm run screenshots
 summary: Two sentences for the top of the page. What it does and how to play with it.
 ---

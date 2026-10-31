@@ -6,10 +6,12 @@ interface Props {
   title: string;
   /** larger, outlined version for the lab note / experiment top bar */
   big?: boolean;
+  /** the second heart on the lab for a favorite (in Favorites and in its year), so its clip id doesn't repeat */
+  inFavorites?: boolean;
 }
 
-const { slug, title, big = false } = Astro.props;
-const clip = `lk-${slug}${big ? '-lg' : ''}`;
+const { slug, title, big = false, inFavorites = false } = Astro.props;
+const clip = `lk-${slug}${big ? '-lg' : ''}${inFavorites ? '-fav' : ''}`;
 const HEART =
   'M12 21s-7.5-4.6-9.6-9.1C.9 8.6 2.7 4.5 6.6 4.1c2.2-.2 4 .9 5.4 2.8 1.4-1.9 3.2-3 5.4-2.8 3.9.4 5.7 4.5 4.2 7.8C19.5 16.4 12 21 12 21z';
 ---

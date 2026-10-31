@@ -144,6 +144,22 @@
 .row .l a {
   line-height: 44px;
 }
+/* ---------- Favorites: a group above the years ---------- */
+/* the sparkle: next to a favorite's title in its year, and on the Favorites heading */
+.sparkle {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  fill: var(--accent);
+}
+/* the heading reads like a year, with the sparkle in front */
+.year.year-favorites {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg);
+}
+
 /* the dashed next-entry row closes the list, so the oldest row drops its line */
 .archive ol:last-of-type .row:last-child {
   border-bottom: 0;
