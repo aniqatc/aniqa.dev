@@ -1,11 +1,10 @@
 // Email sign-ups (src/scripts/signup.ts): subscribes an address to Buttondown through its API, so the form can
 // say thanks on the page with no popup. Runs on the server (a Vercel function), where the API key stays secret.
 //
-//   POST /api/subscribe  { email, tag }  → { ok: true }
+//   POST /api/subscribe  { email, tag }  → { ok: true } (active immediately; no confirmation email)
 //                                        → { error } with 400 (bad address or tag) or 429 (too many tries)
 //                                        → { fallback: true } with 503 / 502 when there's no key or Buttondown
-//                                          says no; the form then finishes in Buttondown's popup instead,
-//                                          where Buttondown can ask for a CAPTCHA
+//                                          rejects the request
 //
 // Needs BUTTONDOWN_API_KEY (Buttondown → Settings → API) in .env locally and in Vercel's environment.
 import type { APIRoute } from 'astro';
@@ -60,15 +59,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const subscriber = {
     email_address: address,
     tags: [tag],
+    // Buttondown's regular type skips double opt-in; consent is collected by this form submission.
+    type: 'regular',
     ip_address: clientAddress,
     referrer_url: request.headers.get('referer') ?? undefined,
   };
-  let res = await addSubscriber(subscriber);
-  // on a plan without tags, Buttondown refuses a new tag: subscribe without it rather than not at all
-  if (res.status === 403) res = await addSubscriber({ ...subscriber, tags: [] });
+  const res = await addSubscriber(subscriber);
   if (res.ok) return json({ ok: true });
 
-  // anything else (a spam check, a blocked address, Buttondown down): log it and let the popup take over
+  // anything else (a spam check, a blocked address, Buttondown down): log it for diagnosis
   console.error(`Buttondown said ${res.status}:`, await res.text().catch(() => ''));
   return json({ fallback: true }, 502);
 };

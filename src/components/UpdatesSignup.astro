@@ -2,7 +2,7 @@
 // An email sign-up: new things on the portfolio intro, new reviews on /reviews.
 // It subscribes the address to Buttondown (the username in contact.ts), tagged so you can tell the lists apart,
 // then says thanks. How it sends is in src/scripts/signup.ts.
-import { SIGNUP_ACTION, SIGNUP_WINDOW } from '../lib/contact';
+import { SIGNUP_ACTION } from '../lib/contact';
 
 interface Props {
   /** the field's placeholder, also its label for screen readers */
@@ -15,7 +15,7 @@ interface Props {
 
 const {
   placeholder = 'Your email, for new things',
-  // Buttondown's popup says whether there's anything left to do (like confirming), so this stays general
+  // Confirmation happens through Buttondown's welcome automation, if configured.
   thanks = 'Thanks! You’ll hear about new things from me soon',
   tag = 'updates',
 } = Astro.props;
@@ -26,7 +26,6 @@ const {
   aria-label="Get updates"
   action={SIGNUP_ACTION}
   method="post"
-  target={SIGNUP_WINDOW}
   data-signup
   data-thanks={thanks}
   novalidate

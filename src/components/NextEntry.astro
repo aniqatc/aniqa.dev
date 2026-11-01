@@ -2,7 +2,7 @@
 // End of the lab archive: the next entry's number and an email sign-up for when it lands.
 // It subscribes the address to Buttondown (the username in contact.ts), tagged `updates` like the portfolio
 // sign-up, then says thanks. How it sends is in src/scripts/signup.ts.
-import { SIGNUP_ACTION, SIGNUP_WINDOW } from '../lib/contact';
+import { SIGNUP_ACTION } from '../lib/contact';
 import { pad } from '../lib/projects';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { number } = Astro.props;
-// Buttondown's popup says whether there's anything left to do (like confirming), so this stays general
+// Confirmation happens through Buttondown's welcome automation, if configured.
 const thanks = 'Thanks! You’ll hear when it lands.';
 ---
 
@@ -20,7 +20,6 @@ const thanks = 'Thanks! You’ll hear when it lands.';
   aria-labelledby="next-entry-title"
   action={SIGNUP_ACTION}
   method="post"
-  target={SIGNUP_WINDOW}
   data-signup
   data-thanks={thanks}
   novalidate

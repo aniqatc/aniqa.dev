@@ -2,20 +2,17 @@
 // Each form is marked with data-signup, and its parts with data-signup-email, -fields, -button and -thanks.
 //
 // A valid address goes to /api/subscribe (src/pages/api/subscribe.ts), which adds it to Buttondown with the
-// form's tag, and the form says thanks on the page. If that route can't do it (no API key, or Buttondown wants a
-// CAPTCHA), the form posts to Buttondown itself in a small popup instead, so no sign-up is lost. Without
-// JavaScript the form posts to Buttondown in a new tab. With no Buttondown username set in contact.ts, the form
-// has no action and only says thanks.
-import { SIGNUP_WINDOW } from '../lib/contact';
+// form's tag as an active subscriber, then the form says thanks on the page. If the API is unavailable, keep the
+// form visible and show an error so the visitor can retry.
 import { onPage } from './page';
 import { sendOff } from './send-off';
 
-// past this, the popup takes over; browsers only allow a popup within a few seconds of the click
+// bound how long the form waits before showing the retry message
 const SERVER_TIMEOUT_MS = 4000;
 
-type ServerResult = { ok: true } | { error: string } | { fallback: true };
+type ServerResult = { ok: true } | { error: string } | { unavailable: true };
 
-/** Ask the server to subscribe the address; anything unexpected (offline, slow, a 500) means use the popup. */
+/** Ask the server to subscribe the address; unexpected failures leave the form available to retry. */
 async function subscribe(email: string, tag: string): Promise<ServerResult> {
   try {
     const res = await fetch('/api/subscribe', {
@@ -28,9 +25,9 @@ async function subscribe(email: string, tag: string): Promise<ServerResult> {
     if (res.ok && body.ok) return { ok: true };
     if ((res.status === 400 || res.status === 429) && body.error) return { error: body.error };
   } catch {
-    // fall through to the popup
+    // show the retry message below
   }
-  return { fallback: true };
+  return { unavailable: true };
 }
 
 onPage(() => {
@@ -70,10 +67,8 @@ onPage(() => {
         email.reportValidity();
         return;
       }
-      // the popup: Buttondown's own page finishes the sign-up (a CAPTCHA, if it asks for one)
-      window.open('', SIGNUP_WINDOW, 'popup,width=480,height=640');
-      form.submit();
-      sayThanks();
+      email.setCustomValidity('Sign-up is temporarily unavailable. Please try again in a moment.');
+      email.reportValidity();
     });
   }
 });

@@ -11,9 +11,8 @@ export const CONTACT = {
   buttondown: 'aniqa',
 };
 
-// where the sign-up forms post: Buttondown's subscribe form for that username (none when it's empty), opened in
-// a popup window with this name (see src/scripts/signup.ts)
+// where the sign-up forms post when JavaScript is unavailable: Buttondown's subscribe form for that username
+// (none when it's empty)
 export const SIGNUP_ACTION = CONTACT.buttondown
   ? `https://buttondown.com/api/emails/embed-subscribe/${CONTACT.buttondown}`
   : undefined;
-export const SIGNUP_WINDOW = 'buttondown-signup';
