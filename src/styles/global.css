@@ -477,11 +477,11 @@ h1 .dot.peek {
   animation-delay: 0.06s;
 }
 .signup-thanks {
-  animation: signup-thanks-in 0.45s 0.3s ease-out both;
+  animation: signup-thanks-in 0.45s 1.2s ease-out both;
 }
 .signup-heart {
   color: var(--blush);
-  animation: signup-heart-pop 0.5s 0.75s cubic-bezier(0.3, 1.8, 0.5, 1) both;
+  animation: signup-heart-pop 0.5s 1.65s cubic-bezier(0.3, 1.8, 0.5, 1) both;
 }
 @keyframes signup-fly {
   0% {
