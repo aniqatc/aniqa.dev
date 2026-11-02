@@ -47,8 +47,11 @@ onPage(() => {
   const timers: number[] = [];
 
   dice.addEventListener('click', () => {
-    // favorites are listed twice (in Favorites and in their year), so only pick from the years
-    const rows = [...document.querySelectorAll<HTMLElement>('.row:not([data-example]):not(.row-favorite)')];
+    // favorites are listed twice (in Favorites and in their year), so only pick from the years.
+    // hover previews inject sketches that also use .row (no data-slug), so stick to archive items
+    const rows = [
+      ...document.querySelectorAll<HTMLElement>('li.row[data-slug]:not([data-example]):not(.row-favorite)'),
+    ];
     const row = rows[Math.floor(Math.random() * rows.length)];
     if (!row) return;
     const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
