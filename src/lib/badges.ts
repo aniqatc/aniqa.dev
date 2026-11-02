@@ -9,7 +9,7 @@ export type Badge = 'Example' | 'New' | 'Updated';
 // The default values are used in the tests, but the actual values are set in refresh-stars.yml
 const DAY = 24 * 60 * 60 * 1000;
 const NEW_DAYS = 60;
-const UPDATED_COUNT = 3;
+const UPDATED_COUNT = 4;
 
 // Returns whether an entry is considered "New" based on its release date (last 60 days)
 function isNew(released: string, now = Date.now()) {
@@ -17,7 +17,7 @@ function isNew(released: string, now = Date.now()) {
   return (now - new Date(y, m - 1, 15).getTime()) / DAY <= NEW_DAYS;
 }
 
-// Returns a set of the three most recently updated real entries that aren't already "New"
+// Returns a set of the four most recently updated real entries that aren't already "New"
 export function updatedSet(lab: LabEntry[], now = Date.now()) {
   return new Set(
     lab
