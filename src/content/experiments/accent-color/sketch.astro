@@ -1,0 +1,457 @@
+---
+const PRESETS = ['#1f9fb0', '#e11d48', '#f59e0b', '#fde68a', '#7c3aed', '#1e3a8a'];
+const SCHEMES = ['light', 'dark'];
+const VARIANTS = ['default', 'custom'];
+---
+
+<div class="demo" data-study="accent-color" data-pausable>
+  <div class="demo-bar controls">
+    <label class="picker">
+      <span class="sr-only">Pick an accent color</span>
+      <input type="color" value="#1f9fb0" aria-label="Pick an accent color" data-color-picker />
+      <output class="demo-out" data-hex>
+        #1f9fb0
+      </output>
+    </label>
+    <div class="presets" role="group" aria-label="Preset colors">
+      {PRESETS.map((color) => (
+        <button
+          type="button"
+          class="preset"
+          style={`--swatch: ${color}`}
+          data-color={color}
+          aria-label={color}
+          aria-pressed={color === PRESETS[0] ? 'true' : 'false'}
+        />
+      ))}
+    </div>
+    <label class="demo-check cycle-label">
+      <input type="checkbox" data-cycle />
+      Cycle hues
+    </label>
+  </div>
+
+  <div class="matrix" role="group" aria-label="Default and custom controls on light and dark surfaces">
+    <span class="corner" aria-hidden="true"></span>
+    <div class="colhead">
+      <span class="label">Browser default</span>
+      <code>no accent-color</code>
+    </div>
+    <div class="colhead">
+      <span class="label">Custom</span>
+      <code>
+        accent-color: <span data-heading-color>#1f9fb0</span>
+      </code>
+    </div>
+
+    {SCHEMES.map((scheme) => (
+      <>
+        <div class="rowhead label">{scheme}</div>
+        {VARIANTS.map((variant) => {
+          const group = `${scheme}-${variant}`;
+          return (
+            <section class:list={['cell', scheme, variant]} data-label={`${scheme} · ${variant}`}>
+              <div class="row" role="group" aria-label={`${scheme} ${variant} checkboxes`}>
+                <label>
+                  <input type="checkbox" checked /> on
+                </label>
+                <label>
+                  <input type="checkbox" /> off
+                </label>
+                <label>
+                  <input type="checkbox" checked disabled /> disabled
+                </label>
+              </div>
+              <div class="row" role="radiogroup" aria-label={`${scheme} ${variant} radios`}>
+                <label>
+                  <input type="radio" name={`radio-${group}`} checked /> one
+                </label>
+                <label>
+                  <input type="radio" name={`radio-${group}`} /> two
+                </label>
+                <label>
+                  <input type="radio" name={`radio-${group}`} disabled /> disabled
+                </label>
+              </div>
+              <div class="stack">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="62"
+                  aria-label={`${scheme} ${variant} slider`}
+                  data-range
+                />
+                <progress max="100" value="62" aria-label={`${scheme} ${variant} progress`} data-progress />
+              </div>
+            </section>
+          );
+        })}
+      </>
+    ))}
+  </div>
+
+  <pre class="demo-code snippet" aria-label="CSS for the custom controls"><code data-code></code></pre>
+  <p class="note">
+    Look at the check mark in the selected boxes. Browsers choose a light or dark mark to keep it readable
+    against the accent. Try the pale yellow, then the deep blue.
+  </p>
+</div>
+
+<style>
+  .demo {
+    --picked-accent: #1f9fb0;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .controls {
+    gap: 12px 20px;
+    align-items: center;
+  }
+
+  .picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .picker input {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .picker input::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  .picker input::-webkit-color-swatch,
+  .picker input::-moz-color-swatch {
+    border: 0;
+    border-radius: 50%;
+  }
+
+  .presets {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .preset {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--swatch);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 18%, transparent);
+    cursor: pointer;
+  }
+
+  .preset[aria-pressed='true'] {
+    outline: 2px solid var(--fg);
+    outline-offset: 3px;
+  }
+
+  .cycle-label {
+    margin-left: auto;
+    font: 500 11.5px/1.4 var(--font-mono);
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .colhead,
+  .rowhead {
+    display: grid;
+    gap: 2px;
+    align-content: end;
+  }
+
+  .colhead code {
+    color: var(--fg);
+    font-size: 11px;
+  }
+
+  .rowhead {
+    align-content: center;
+  }
+
+  .cell {
+    display: grid;
+    min-width: 0;
+    gap: 16px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  .cell.light {
+    color: #13222b;
+    background: #eef3f4;
+    color-scheme: light;
+  }
+
+  .cell.dark {
+    color: #e4eef0;
+    background: #0f1a1f;
+    border-color: transparent;
+    color-scheme: dark;
+  }
+
+  .cell.custom input,
+  .cell.custom progress {
+    accent-color: var(--picked-accent);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+  }
+
+  .row label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 400 11px/1.4 var(--font-mono);
+    opacity: 0.85;
+    cursor: pointer;
+  }
+
+  .row label:has(input:disabled) {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .row input[type='checkbox'],
+  .row input[type='radio'] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .row input:disabled {
+    cursor: not-allowed;
+  }
+
+  .stack {
+    display: grid;
+    gap: 10px;
+  }
+
+  .stack input[type='range'],
+  .stack progress {
+    width: 100%;
+    margin: 0;
+  }
+
+  .snippet {
+    display: block;
+    white-space: pre;
+  }
+
+  .swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    border-radius: 4px;
+    background: var(--picked-accent);
+    vertical-align: -2px;
+  }
+
+  .snippet-value {
+    color: var(--accent);
+  }
+
+  .note {
+    max-width: 62ch;
+    margin: -8px 0 0;
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+
+  @media (max-width: 600px) {
+    .matrix {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .corner,
+    .rowhead {
+      display: none;
+    }
+
+    .cell::before {
+      content: attr(data-label);
+      color: var(--muted);
+      font: 500 9.5px/1.4 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cell {
+      padding: 14px;
+    }
+
+    .cycle-label {
+      margin-left: 0;
+    }
+  }
+</style>
+
+<script>
+  import { STAGE_PAUSE, type StagePauseEvent } from '../../../lib/sketch';
+  import { onPage } from '../../../scripts/page';
+
+  const toHex = (hue: number) => {
+    // Convert a hue to a vivid, readable color without adding a color library.
+    const saturation = 0.7;
+    const lightness = 0.48;
+    const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+    const x = chroma * (1 - Math.abs(((hue / 60) % 2) - 1));
+    const offset = lightness - chroma / 2;
+    const rgb =
+      hue < 60
+        ? [chroma, x, 0]
+        : hue < 120
+          ? [x, chroma, 0]
+          : hue < 180
+            ? [0, chroma, x]
+            : hue < 240
+              ? [0, x, chroma]
+              : hue < 300
+                ? [x, 0, chroma]
+                : [chroma, 0, x];
+
+    return `#${rgb
+      .map((channel) =>
+        Math.round((channel + offset) * 255)
+          .toString(16)
+          .padStart(2, '0'),
+      )
+      .join('')}`;
+  };
+
+  // Astro keeps page scripts alive during view transitions, so only set up controls on this study.
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-study="accent-color"]');
+    if (!root) return;
+
+    const picker = root.querySelector<HTMLInputElement>('[data-color-picker]')!;
+    const hex = root.querySelector<HTMLOutputElement>('[data-hex]')!;
+    const headingColor = root.querySelector<HTMLElement>('[data-heading-color]')!;
+    const presets = [...root.querySelectorAll<HTMLButtonElement>('[data-color]')];
+    const cycle = root.querySelector<HTMLInputElement>('[data-cycle]')!;
+    const code = root.querySelector<HTMLElement>('[data-code]')!;
+    const ranges = [...root.querySelectorAll<HTMLInputElement>('[data-range]')];
+    const progressBars = [...root.querySelectorAll<HTMLProgressElement>('[data-progress]')];
+    const stage = root.closest('.stage')!;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let animationFrame = 0;
+    let previousTime = 0;
+    let hue = 200;
+    let stagePaused = false;
+
+    // Keep the picker, preset state, CSS sample and custom controls on the same color.
+    const setAccent = (color: string) => {
+      root.style.setProperty('--picked-accent', color);
+      picker.value = color;
+      hex.value = color;
+      headingColor.textContent = color;
+      presets.forEach((button) =>
+        button.setAttribute('aria-pressed', String(button.dataset.color === color)),
+      );
+      code.replaceChildren(
+        document.createTextNode('input, progress {\n  accent-color: '),
+        Object.assign(document.createElement('span'), { className: 'swatch' }),
+        Object.assign(document.createElement('span'), { className: 'snippet-value', textContent: color }),
+        document.createTextNode(';\n}'),
+      );
+    };
+
+    // Stop the optional hue animation before a manual color choice.
+    const stopCycle = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      previousTime = 0;
+      cycle.checked = false;
+    };
+
+    // Advance the hue at a steady pace and pause cleanly with the lab stage controls.
+    const animate = (time: number) => {
+      if (!cycle.checked || stagePaused || reducedMotion) return;
+      if (!previousTime) previousTime = time;
+      const elapsed = time - previousTime;
+      if (elapsed >= 32) {
+        hue = (hue + elapsed * 0.03) % 360;
+        setAccent(toHex(hue));
+        previousTime = time;
+      }
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    // Changing any slider updates every slider and progress bar for a direct comparison.
+    const syncRanges = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || target.type !== 'range') return;
+      ranges.forEach((range) => (range.value = target.value));
+      progressBars.forEach((progress) => (progress.value = Number(target.value)));
+    };
+
+    const onPicker = () => {
+      stopCycle();
+      setAccent(picker.value);
+    };
+
+    const onPreset = (event: Event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('[data-color]');
+      if (!button?.dataset.color) return;
+      stopCycle();
+      setAccent(button.dataset.color);
+    };
+
+    const onCycle = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      previousTime = 0;
+      if (cycle.checked && !stagePaused && !reducedMotion) animationFrame = requestAnimationFrame(animate);
+    };
+
+    const onStagePause = (event: Event) => {
+      stagePaused = (event as StagePauseEvent).detail.paused;
+      onCycle();
+    };
+
+    // Reduced-motion users can still pick colors, but the continuous color animation stays off.
+    if (reducedMotion) cycle.disabled = true;
+
+    picker.addEventListener('input', onPicker);
+    root.querySelector('.presets')!.addEventListener('click', onPreset);
+    root.addEventListener('input', syncRanges);
+    cycle.addEventListener('change', onCycle);
+    stage.addEventListener(STAGE_PAUSE, onStagePause);
+    setAccent(picker.value);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      picker.removeEventListener('input', onPicker);
+      root.querySelector('.presets')!.removeEventListener('click', onPreset);
+      root.removeEventListener('input', syncRanges);
+      cycle.removeEventListener('change', onCycle);
+      stage.removeEventListener(STAGE_PAUSE, onStagePause);
+    };
+  });
+</script>
