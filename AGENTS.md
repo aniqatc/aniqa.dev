@@ -36,5 +36,5 @@ Aniqa's portfolio (`aniqa.dev`, dark) and lab (`aniqa.dev/lab`, light). One Astr
 ## Conventions
 
 - Entry notes: first person, plain and specific. Don't invent facts; leave `[bracketed notes]` for Aniqa to fill in.
-- Keep: plain CSS with tokens in `src/styles/tokens.css` (no Tailwind), the lab at `/lab` (`lab.aniqa.dev` redirects there), no hover preview on touch screens, and reduced motion turning animations off.
+- Keep: plain CSS with tokens in `src/styles/tokens.css` (no Tailwind), the lab at `/lab`, no hover preview on touch screens, and reduced motion turning animations off.
 - Astro docs: https://docs.astro.build

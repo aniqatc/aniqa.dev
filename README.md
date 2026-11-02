@@ -7,7 +7,7 @@ Aniqa's portfolio, lab, and app reviews, built with Astro and hosted on Vercel.
 - **Reviews:** [aniqa.dev/reviews](https://aniqa.dev/reviews) — indie app reviews
 - **Source:** [github.com/aniqatc/aniqa.dev](https://github.com/aniqatc/aniqa.dev)
 
-`lab.aniqa.dev` redirects to `/lab`. Pages are static except likes and sign-ups.
+The lab lives at `/lab`. Pages are static except likes and sign-ups.
 
 | Portfolio                                     | Lab                               |
 | --------------------------------------------- | --------------------------------- |
