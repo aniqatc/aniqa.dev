@@ -1,135 +1,194 @@
 # aniqa.dev
 
-My portfolio at aniqa.dev, with a lab of smaller experiments at aniqa.dev/lab. Built with Astro, hosted on Vercel. _Built with agent assistance from Claude._
+Aniqa's portfolio, lab, and app reviews, built with Astro and hosted on Vercel.
 
-**[Live site](https://aniqa.dev)** · **[Lab](https://aniqa.dev/lab)**
+- **Portfolio:** [aniqa.dev](https://aniqa.dev) — selected work and case studies
+- **Lab:** [aniqa.dev/lab](https://aniqa.dev/lab) — experiments, studies, and notes
+- **Reviews:** [aniqa.dev/reviews](https://aniqa.dev/reviews) — indie app reviews
+- **Source:** [github.com/aniqatc/aniqa.dev](https://github.com/aniqatc/aniqa.dev)
 
-| Portfolio (dark)                                                                                      | Lab (light)                                                                              |
-| ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| ![Portfolio title card: "Aniqa." with a mint full stop on a dark background](public/og-portfolio.png) | ![Lab title card: "Lab." with a teal full stop on a light background](public/og-lab.png) |
+`lab.aniqa.dev` redirects to `/lab`. Pages are static except likes and sign-ups.
+
+| Portfolio                                     | Lab                               |
+| --------------------------------------------- | --------------------------------- |
+| ![Portfolio preview](public/og-portfolio.png) | ![Lab preview](public/og-lab.png) |
+
+Entry Open Graph images are in `public/og/`. After changing a title, blurb, or screenshot, run `npm run og` and include the updated images.
 
 ## Tech
 
-- **Astro 7** and **TypeScript** (strict), with plain CSS and theme tokens
-- **Upstash Redis** for likes, on **Vercel**
-- **Fontsource** for self-hosted Bricolage Grotesque and Geist
-- **p5.js** and **Three.js** for experiments that need them
-- **Playwright** for the screenshots and share cards
+- Astro 7, strict TypeScript, plain CSS, Sätteri, Vercel adapter
+- Fontsource: Bricolage Grotesque, Geist, Geist Mono
+- Upstash Redis for likes; Buttondown for sign-ups
+- Playwright for screenshots and share cards
+- p5.js and Three.js for experiments that need them
 
 ## Features
 
-- **Portfolio** (dark): selected projects with screenshot previews and case studies, and an intro with what I'm building now.
-- **Lab** (light): an archive of experiments with hover previews, a random-entry button, and likes (five per visitor).
-- **App reviews**: apps from indie makers at `/reviews`, each with scores, screenshots in a browser, phone or iPad frame, and a scorecard to post on X.
-- **Everywhere**: a share card for each entry, a pet that follows you between pages and leaves a trail (a ghost, a bee, a snowball… one of twenty, changing through the year), and a 404 with a sleeping dot.
+- Portfolio case studies and “Building now” section
+- Lab archive by year, favorites, random entry, likes, and mouse-only hover previews
+- Live experiment stages with optional themes and controls
+- Reviews with scores, app screenshots, and shareable scorecards
+- Generated Open Graph images, page transitions, and an animated calendar pet
 
-## Design
+## Pet calendar
 
-Dark for the portfolio, light for the lab, with a cross-fade between them. One accent: mint on dark, a deeper teal on light. Every preview is a screenshot of the real thing: projects in dark mode, lab entries in light.
+The default is `auto` in `src/lib/pets.ts`. Set `PET` there to a pet name to pin one.
+
+| Dates                                                   | Pet                                     |
+| ------------------------------------------------------- | --------------------------------------- |
+| Jan 1–7                                                 | Party                                   |
+| Jan 8–31                                                | Penguin                                 |
+| Feb 1–14 / Feb 15–29                                    | Heart / mochi                           |
+| March / April / May / June                              | Chick / bunny / sprout / bee            |
+| July–August / September / October / November / December | Frog / owl / pumpkin / acorn / snowball |
+
+Date overrides: Feb 27 cupcake; Mar 27, May 5, June 26, Oct 18 heart; June 30 and Sep 20 cupcake; Oct 31 ghost; Dec 25 tree; Dec 31 party. Mother's Day and Father's Day use party; Eid uses moon; Diwali uses diya; Lunar New Year uses lantern. Moving-date rules and calendars are in `src/lib/pets.ts`.
+
+Click the dot by the site name to reveal the pet. It follows pointer movement or taps. Reduced-motion settings reduce its movement and animation.
 
 ## Accessibility
 
-- Every link and button is reachable by keyboard and shows a focus ring.
-- Reduced motion stops the animations and the pet.
-- The current page is marked with `aria-current`, and icon-only controls have labels.
+- Semantic links and controls, accessible names, and visible keyboard focus
+- Hover previews only on mouse; links work on touch screens
+- Reduced-motion preferences disable or reduce animations
 
 ## Project structure
 
 ```text
-src/
-  content/      projects/, experiments/ and reviews/, one folder per entry
-  components/   previews, lab rows, cards, the like button, the pet
-  pages/        home, case studies, lab, reviews, 404, and api/likes.ts
-  scripts/      likes, hover previews, pet, sketch runner
-  lib/          content helpers, Redis client, GitHub stars, "now" lists
-  styles/       theme tokens, portfolio and lab styles
-templates/      starters for npm run new
+src/content/projects/      Portfolio case studies
+src/content/experiments/   Lab entries and studies
+src/content/reviews/       App reviews
+src/components/            Shared Astro components
+src/lib/                    Content helpers and site data
+src/pages/                  Routes and API endpoints
+src/scripts/                Browser interactions
+src/styles/                 Tokens and shared styles
+templates/                  Entry scaffolds
+scripts/                    Build and image tools
+public/og/                  Generated preview images
 ```
 
 ## Key concepts
 
-- **One folder per entry.** The folder puts it in the portfolio or the lab, and its frontmatter is checked at build time.
-- **Static, plus one function.** Only `/api/likes` runs on the server; every page is built ahead of time.
-- **Star counts at build time.** A daily rebuild keeps them current, so visitors never call GitHub.
-- **Likes in Redis.** A total per entry and a count per visitor; the sixth like is refused. Visitors are anonymous browser IDs.
-- **Screenshots** sit next to each entry as `screenshot.png`, made by `npm run screenshots` and served as WebP through `astro:assets`. The hover previews only load theirs on the first hover.
-- **Page scripts** set up in `onPage()` and clean up before the next page loads, since pages swap in place.
-- **The pet** is one behaviour (`src/scripts/pet.ts`) with swappable drawings in `src/lib/pets.ts`, and comes out of the logo dot or the full stop in the page title. Its trail is in `src/scripts/pet-trail.ts`. `PET` is `'auto'`, which follows the `SEASONS` calendar there (a pet a month, plus birthdays and holidays, first match wins); set it to a pet's name to pin one.
+- One folder per entry, with `index.md`; schemas are in `src/content.config.ts`.
+- Lab entries with `sketch.ts` or `sketch.astro` run on the page. Others link out.
+- `stage: frame` is fixed-ratio; `stage: fit` grows to fit studies.
+- `themes: true` adds day/night controls to a stage.
+- `draft: true` hides entries from production; `favorite: true` pins a lab entry.
+- Projects and lab entries need `screenshot.png` and descriptive `screenshotAlt`.
 
 ## Setup
 
-Requires Node 22.22+. For `npm run screenshots`, `npm run og` and `npm run scorecard`, also run `npx playwright install chromium`.
+Requires Node.js 22.22 or newer.
 
-```bash
-git clone https://github.com/aniqatc/directory
-cd directory
+```sh
 npm install
-npm run dev    # http://localhost:4321
+cp .env.example .env.local
+npx playwright install chromium
+npm run dev
 ```
 
-The site builds without any keys; likes, on-page email sign-ups and faster star counts need these:
+The site builds without credentials. Add the variables needed for these features:
 
-| Variable                                             | For                                           | Where to get it                                                                                      |
-| ---------------------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Likes                                         | Vercel → Storage → Upstash Redis, then `vercel env pull .env.local` (`KV_REST_API_*` names work too) |
-| `BUTTONDOWN_API_KEY`                                 | Email sign-ups on the page (else a popup)     | Buttondown → Settings → API                                                                          |
-| `GITHUB_TOKEN`                                       | Star counts (optional, avoids the rate limit) | A read-only GitHub token                                                                             |
-| `VERCEL_DEPLOY_HOOK`                                 | Daily star refresh (Actions secret)           | Vercel → Settings → Git → Deploy Hooks                                                               |
+| Variable                   | Used for                                                                   |
+| -------------------------- | -------------------------------------------------------------------------- |
+| `BUTTONDOWN_API_KEY`       | Email sign-ups                                                             |
+| `UPSTASH_REDIS_REST_URL`   | Likes database URL                                                         |
+| `UPSTASH_REDIS_REST_TOKEN` | Likes database token                                                       |
+| `GITHUB_TOKEN`             | Optional GitHub API reads, such as star counts                             |
+| `VERCEL_DEPLOY_HOOK`       | GitHub Actions secret for daily star refresh; not an `.env.local` variable |
 
-The email sign-ups on the home page, the lab and `/reviews` send to [Buttondown](https://buttondown.com): set your username as `buttondown` in [`src/lib/contact.ts`](src/lib/contact.ts). Subscribers are tagged `updates` (home page and lab) or `reviews`, so you can email each list on its own. With `BUTTONDOWN_API_KEY` set, the form subscribes people through [`/api/subscribe`](src/pages/api/subscribe.ts) and says thanks on the page; without it, or when Buttondown wants a CAPTCHA, Buttondown's own page finishes the sign-up in a small popup. Left empty, the forms only say thanks.
+Upstash also accepts `KV_REST_API_URL` and `KV_REST_API_TOKEN` as aliases.
 
-### Add an entry
+### NPM scripts
 
-Run `npm run new` and answer the prompts. It creates a folder from [`templates/`](templates) with the frontmatter filled in.
+| Command                           | What it does                                                       |
+| --------------------------------- | ------------------------------------------------------------------ |
+| `npm run dev`                     | Start the site at `localhost:4321` (foreground; stop with Ctrl+C). |
+| `npm run start`                   | Alias for `npm run dev`.                                           |
+| `npm run build`                   | Type-check and build.                                              |
+| `npm run check`                   | Run Astro checks.                                                  |
+| `npm run lint`                    | Run ESLint.                                                        |
+| `npm run format` / `format:check` | Format files / check formatting.                                   |
+| `npm run new`                     | Scaffold a project, experiment, or review.                         |
+| `npm run screenshots`             | Capture content screenshots; pass slugs to select entries.         |
+| `npm run og`                      | Generate Open Graph images.                                        |
+| `npm run scorecard -- <slug>`     | Generate a review scorecard.                                       |
 
-- **Project (portfolio):** choose **project**, then write the blurb, summary and notes in `index.md`. It gets a case study at `/work/<slug>`; `order` sets its place in Selected work.
-- **Lab entry that links out:** choose **experiment** → **none**, then write `index.md`.
-- **Experiment that runs on the site:** choose **experiment**, then **canvas**, **p5**, **three** or **css**. Each starter already works; replace it with your own. For p5 or Three.js, install the library when asked and restart `npm run dev`.
-- **Study (one idea with controls):** choose **experiment** → **study**. Its stage grows to fit it, and `src/styles/demo.css` has the buttons, sliders and lines that make it match the lab. `word-cycle` shows one.
+There is no preview script for the Vercel adapter.
 
-Optional fields for experiments: `themes: true` adds a Day / Night switch in the top-right corner of the stage, and `headsUp: "…"` adds a "Before you start" box (for any lab entry; use it rarely).
+## Adding content
 
-Then, for any entry: run `npm run screenshots -- <slug>` and describe what's on screen in `screenshotAlt`, run `npm run og` for its share card, and check the page. If a site needs something before its shot (its own theme toggle, a hint to wait out, a repo image to fall back to), add it to `OVERRIDES` in [`scripts/screenshots.mjs`](scripts/screenshots.mjs). Set `draft: true` to hide it until it's ready.
+Each entry is a folder under `src/content/`. Start with the matching command below, then:
 
-With Claude Code, `/new-project` and `/new-experiment` do the writing and the screenshot for you.
+1. Edit the new folder's `index.md`: complete its frontmatter and write-up.
+2. Add `screenshot.png` and describe what it shows in `screenshotAlt`.
+3. Run `npm run og`, then check the page locally with `npm run dev`.
 
-### Add an app review
+The scaffold prints the new folder path and the next steps. Use `draft: true` to keep a project or experiment out of production while you work. Reviews start as drafts automatically.
 
-Run `npm run new` and choose **review**, or `npm run new -- --kind review --app "Tally Ho" --maker tallyhoapp --live tallyho.app`. It creates `src/content/reviews/<slug>/` from [`templates/review/`](templates/review) as a draft, which only shows on `npm run dev`.
+### Portfolio project
 
-- **Web app:** `npm run screenshots -- reviews/<slug>` takes `screenshot.png` and saves the site's icon as `logo.png`.
-- **Phone or iPad app:** set `device: phone` or `tablet`, put the App Store link in `live`, and add screenshots from the device: `screenshot.png`, plus `screenshot-2.png` and `screenshot-3.png` for a phone.
+```sh
+npm run new -- --kind project --title "Title" --slug slug
+```
 
-Fill in the scores, verdict and sections, then run `npm run scorecard -- <slug>` for `scorecard.png`, the picture to post on X. When it's ready, delete `draft: true` and run `npm run og` so the review's link unfurls as its scorecard. Add `stillUsing: true` later if you keep using the app.
+1. Edit `src/content/projects/<slug>/index.md`. Fill in `released`, `type`, `stack`, `blurb`, `summary`, and `order`.
+2. Write `Why`, `What it does`, and `What I learned` in first person. Keep each point specific and short. Add `Hardest part` or dated `Revisited` only when you have something useful to add.
+3. Add the screenshot and alt text. The screenshot script captures the live site in dark mode.
 
-For feedback you send the maker privately instead, add the app to `PRIVATE_FEEDBACK` in [`src/lib/private-feedback.ts`](src/lib/private-feedback.ts) (its logo, if you have one, goes in `src/assets/private-feedback/`). It shows under "Feedback given privately" on `/reviews`, with no page of its own.
+### Lab note that links out
 
-## Scripts
+```sh
+npm run new -- --kind experiment --sketch none --title "Title" --slug slug
+```
 
-| Command                             | What it does                                |
-| ----------------------------------- | ------------------------------------------- |
-| `npm run dev`                       | Local site at `localhost:4321`              |
-| `npm run build`                     | Type-check, then build                      |
-| `npm run new`                       | Add a project, experiment or app review     |
-| `npm run og`                        | Make share cards for every entry and review |
-| `npm run scorecard`                 | Make each review's scorecard for X          |
-| `npm run screenshots`               | Retake every entry's screenshot             |
-| `npm run check` / `lint` / `format` | Type-check, lint, format                    |
+1. In `src/content/experiments/<slug>/index.md`, fill in `live` (the site host) and `repo` (the GitHub repository name, if public).
+2. Write `Why I built it` and `What I learned`. Keep the notes brief and specific. If this is a CodePen migration, put its URL in `v1` and describe the migration in `Revisited`.
+3. Run `npm run screenshots -- <slug>` to capture the live site in light mode. Add alt text describing the screenshot.
+
+### On-site experiment
+
+```sh
+npm run new -- --kind experiment --sketch canvas --title "Title" --slug slug
+```
+
+1. Choose `canvas`, `css`, `p5`, or `three` in `--sketch`. The scaffold creates `sketch.ts` for canvas, p5, and Three.js, or `sketch.astro` for CSS art. Install p5.js or Three.js if needed, then restart the dev server.
+2. In `index.md`, fill in the type, stack, summary, and optional `hint`. Write an `Idea` and a few short `Notes` about what you tried, tuned, or learned.
+3. Set `stage: frame` for a fixed stage or `stage: fit` when the stage should grow with the sketch. Capture the screenshot with `npm run screenshots -- <slug>` and add alt text.
+
+### CSS or JavaScript study
+
+```sh
+npm run new -- --kind experiment --sketch study --title "Title" --slug slug
+```
+
+1. Edit `sketch.astro` to build the study. Use the shared controls and styles in `src/styles/demo.css`.
+2. In `index.md`, set `type` to `CSS study` or `JS study`, and fill in the summary and hint. Write an `Idea` and `Notes` that explain the concept, the technique, and what you noticed while testing it.
+3. For a CodePen migration, put the original URL in `v1` and add a dated `Revisited` note. Capture the screenshot with `npm run screenshots -- <slug>` and add alt text.
+
+### App review
+
+```sh
+npm run new -- --kind review --app "App name" --maker handle --live example.com
+```
+
+1. Fill in the review's date, `triedOn`, scores, verdict, and brand colour in `index.md`.
+2. Write `First look`, `What I liked`, `Small ideas`, and `Who it's for`. Use concrete details from trying the app; keep suggestions kind and specific.
+3. For a web app, run `npm run screenshots -- reviews/<slug>` to capture the app and its icon. For a phone or tablet app, add device screenshots and set `device` to `phone` or `tablet`.
+4. Run `npm run scorecard -- <slug>` to make the share image. Check the draft locally, remove `draft: true` when ready, then run `npm run og` for the review's link preview.
 
 ## Changelog
 
-### October 2026
+### October 2026 — v2
 
-- Rebuilt in Astro, replacing the React version (kept at the `react-v1` tag).
-- Added the lab, likes in Upstash, and build-time star counts.
-- Added the 404 page, the pet, page transitions and share cards.
-- Gave the pet twenty looks and a calendar: a pet for each month, plus birthdays and holidays.
-- Added app reviews, with a scorecard for each one to post on X.
+- Rebuilt the portfolio in Astro; added the lab, reviews, likes, pets, and generated share images.
 
-### 2025
+### 2025 — v1
 
-- Updated the React portfolio.
+- Published the original React portfolio. See the [`react-v1` tag](https://github.com/aniqatc/aniqa.dev/tree/react-v1).
 
 ## License
 
-Code is [MIT](LICENSE): reuse it freely, keeping the copyright notice. The writing, experiments and images are © Aniqa, all rights reserved.
+Code is [MIT](LICENSE). Writing, experiments, and images are © Aniqa, all rights reserved.

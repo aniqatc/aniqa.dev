@@ -41,7 +41,7 @@ npm run new -- --yes --kind project --title "Weather" --type Dashboard --stack "
 ```
 
 - **`order`:** set automatically, to the end of Selected work. Change it in `index.md` if the user wants it higher.
-- **Not ready yet:** add `--draft` to keep it off the portfolio and the lab. `npm run screenshots` skips drafts unless you name them (`npm run screenshots -- <slug>`).
+- **Not ready yet:** add `--draft` to keep it off the portfolio. `npm run screenshots` skips drafts unless you name them (`npm run screenshots -- <slug>`).
 
 ## 3. Write the case study
 

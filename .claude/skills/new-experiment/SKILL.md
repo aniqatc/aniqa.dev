@@ -70,6 +70,6 @@ Run `npm run screenshots -- <slug>`. A lab note is shot from its live site at 14
    - **For a sketch:** check that it draws, that Pause / Play and Restart work, that Fullscreen opens and Esc closes it, and that it starts paused on a still frame with reduced motion (Playwright `reducedMotion: 'reduce'`).
    - **For a study:** check that the stage fits it at desktop and phone widths, that every control works by keyboard, and with `themes: true` that it reads well on Night.
 3. On `/lab`, hover the new row and check the screenshot appears.
-4. **Not ready yet:** add `draft: true` to `index.md` to keep it off the portfolio and the lab. `npm run screenshots` skips drafts unless you name them (`npm run screenshots -- <slug>`).
+4. **Not ready yet:** add `draft: true` to `index.md` to keep it out of the lab. `npm run screenshots` skips drafts unless you name them (`npm run screenshots -- <slug>`).
 
 Tell the user what you built, what's still a placeholder, and where. Don't commit unless they ask; when they do, use no Claude co-author line.
