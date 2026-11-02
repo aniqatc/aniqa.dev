@@ -44,21 +44,19 @@ const facts = [
     </section>
 
     <section class="archive" aria-label="Archive">
-      {
-        favorites.length > 0 && (
-          <>
-            <h3 class="year label year-favorites">
-              <Sparkle />
-              Favorites
-            </h3>
-            <ol>
-              {favorites.map((e) => (
-                <LabRow entry={e} badge={badgeFor(e, updated)} inFavorites />
-              ))}
-            </ol>
-          </>
-        )
-      }
+      {favorites.length > 0 && (
+        <>
+          <h3 class="year label year-favorites">
+            <Sparkle />
+            Favorites
+          </h3>
+          <ol>
+            {favorites.map((e) => (
+              <LabRow entry={e} badge={badgeFor(e, updated)} inFavorites />
+            ))}
+          </ol>
+        </>
+      )}
       {byYear(lab).map(([y, entries]) => (
         <>
           <h3 class="year label">{y}</h3>

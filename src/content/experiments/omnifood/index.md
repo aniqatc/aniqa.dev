@@ -1,6 +1,6 @@
 ---
 title: Omnifood
-type: Redesign
+type: Landing Page
 stack: HTML / Sass / JS
 released: 2022-12
 live: omnifood.aniqa.dev

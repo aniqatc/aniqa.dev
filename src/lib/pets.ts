@@ -24,18 +24,18 @@ export type PetId =
   | 'lantern';
 
 // The pet everyone gets: a name to pin one, or 'auto' to follow the calendar in SEASONS.
-export const PET: PetId | 'auto' = 'auto';
+const PET: PetId | 'auto' = 'auto';
 
 /**
  * Used when PET is 'auto'. Each entry is a date range (MM-DD, inclusive) or, for a holiday whose date moves,
  * an `on` test with a `label` saying when it falls. The first match wins, so single days sit at the top and
  * override the month they fall in. Anything not listed gets FALLBACK.
  */
-export type Season =
+type Season =
   { from: string; to: string; pet: PetId } | { on: (day: Date) => boolean; label: string; pet: PetId };
 
 // The seasonal assignments for the pets.
-export const SEASONS: Season[] = [
+const SEASONS: Season[] = [
   // special days
   { from: '02-27', to: '02-27', pet: 'cupcake' }, // my birthday
   { from: '03-27', to: '03-27', pet: 'heart' },
@@ -75,7 +75,7 @@ export const SEASONS: Season[] = [
   { from: '11-01', to: '11-30', pet: 'acorn' },
   { from: '12-01', to: '12-31', pet: 'snowball' },
 ];
-export const FALLBACK: PetId = 'dot';
+const FALLBACK: PetId = 'dot';
 
 // Holidays without a calendar the browser can work out.
 const DIWALI = ['2026-11-08', '2027-10-29', '2028-10-17', '2029-11-05', '2030-10-26'];
@@ -153,7 +153,7 @@ type Face = {
 };
 
 // Represents the drawing of a pet, including its body, face, and optional additional elements.
-export type PetDrawing = {
+type PetDrawing = {
   label: string; // the name or description of the pet
   back?: string; // elements drawn behind the body
   body: string; // the main body of the pet
@@ -181,7 +181,7 @@ const CAP = '#b7834f'; // a brown colour used for caps
 const CAP_LINE = '#8f6237'; // a darker brown used for cap lines
 
 // The collection of all pet drawings, indexed by their PetId.
-export const PETS: Record<PetId, PetDrawing> = {
+const PETS: Record<PetId, PetDrawing> = {
   dot: {
     label: 'The dot',
     body: '<circle r="10" fill="var(--pet)"/>',

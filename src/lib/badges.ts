@@ -12,7 +12,7 @@ const NEW_DAYS = 60;
 const UPDATED_COUNT = 3;
 
 // Returns whether an entry is considered "New" based on its release date (last 60 days)
-export function isNew(released: string, now = Date.now()) {
+function isNew(released: string, now = Date.now()) {
   const [y, m] = released.split('-').map(Number);
   return (now - new Date(y, m - 1, 15).getTime()) / DAY <= NEW_DAYS;
 }

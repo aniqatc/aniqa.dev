@@ -74,7 +74,7 @@ const reviews = defineCollection({
   schema: z.object({
     app: z.string(), // the app's name
     maker: z.string().regex(/^[A-Za-z0-9_.-]+$/, 'The handle without the @'), // the maker's handle, shown as @maker
-    makerLink: z.string().url().optional(), // where @maker links; their X profile (x.com/<maker>) when left out
+    makerLink: z.url().optional(), // where @maker links; their X profile (x.com/<maker>) when left out
     date: day, // the day the review went up
     type: z.string(), // a label: Web app, iOS app, Chrome extension…
     triedOn: z.string(), // where you tried it: "MacBook, Chrome", "iPhone 15"

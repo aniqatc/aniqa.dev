@@ -40,7 +40,7 @@ const SCORE_LABELS = {
   value: 'Pricing / value',
 } as const;
 
-export type ScoreStatus = 'polished' | 'getting-there' | 'needs-love';
+type ScoreStatus = 'polished' | 'getting-there' | 'needs-love';
 const STATUS_LABELS: Record<ScoreStatus, string> = {
   polished: 'Polished',
   'getting-there': 'Getting there',
@@ -48,7 +48,7 @@ const STATUS_LABELS: Record<ScoreStatus, string> = {
 };
 
 /** A score's status word: 4–5 "Polished", 3 "Getting there", 1–2 "Needs love". */
-export const statusFor = (value: number): ScoreStatus =>
+const statusFor = (value: number): ScoreStatus =>
   value >= 4 ? 'polished' : value === 3 ? 'getting-there' : 'needs-love';
 
 /** The review's scores, ready to show: label, value, status and its word. */

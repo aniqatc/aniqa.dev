@@ -45,9 +45,13 @@ const addSubscriber = (body: Record<string, unknown>) =>
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   if (!apiKey) return json({ fallback: true }, 503);
 
-  const { email = '', tag = '' } = (await request.json().catch(() => ({}))) as { email?: string; tag?: string };
+  const { email = '', tag = '' } = (await request.json().catch(() => ({}))) as {
+    email?: string;
+    tag?: string;
+  };
   const address = email.trim();
-  if (!EMAIL.test(address) || address.length > 254) return json({ error: 'That email doesn’t look right' }, 400);
+  if (!EMAIL.test(address) || address.length > 254)
+    return json({ error: 'That email doesn’t look right' }, 400);
   if (!TAGS.has(tag)) return json({ error: 'unknown tag' }, 400);
 
   if (ratelimit) {

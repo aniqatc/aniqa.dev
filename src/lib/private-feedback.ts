@@ -7,7 +7,7 @@ import type { ImageMetadata } from 'astro';
 /** One app: its name, the month the feedback went to the maker (YYYY-MM), and its brand colour. */
 export type PrivateFeedback = { app: string; month: string; brand: string };
 
-export const PRIVATE_FEEDBACK: PrivateFeedback[] = [
+const PRIVATE_FEEDBACK: PrivateFeedback[] = [
   // { app: 'Tally Ho', month: '2026-11', brand: '#8b7cf6' },
 ];
 
