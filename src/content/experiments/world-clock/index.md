@@ -1,6 +1,6 @@
 ---
 title: World Clock
-type: Dashboard
+type: Web app
 stack: JS / Moment Timezone / SVG
 released: 2023-10
 live: clock.aniqa.dev
