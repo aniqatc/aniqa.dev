@@ -1,0 +1,644 @@
+---
+// The pet easter egg: no markup of its own. src/scripts/pet.ts brings the header's brand dot to life on click
+// and adds the pet to <body>, so its styles are global.
+---
+
+<script>
+  import '../scripts/pet';
+</script>
+
+<style is:global>
+  .pet {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 50;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .pet > svg:first-child {
+    display: block;
+    width: 32px;
+    height: 32px;
+    overflow: visible;
+  }
+  .pet-shadow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 49;
+    width: 24px;
+    height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), transparent);
+    pointer-events: none;
+  }
+  :root[data-mode='lab'] .pet-shadow {
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.2), transparent);
+  }
+
+  /* ---- the trail (src/scripts/pet-trail.ts): marks under the pet that fade on their own ---- */
+  .pet-trail {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 48;
+    pointer-events: none;
+    font-style: normal;
+    line-height: 1;
+  }
+  /* soft dots that shrink away (the dot, mochi) */
+  .pet-trail-dots {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: var(--pet);
+    animation: trail-shrink 0.9s ease-out forwards;
+  }
+  /* a bee's dotted flight path, which lingers */
+  .pet-trail-flight {
+    width: 3px;
+    height: 3px;
+    margin: -1.5px 0 0 -1.5px;
+    border-radius: 50%;
+    background: var(--pet-shade);
+    animation: trail-fade 1.6s ease-in forwards;
+  }
+  /* footprints, left and right of the path, pointing the way it walked */
+  .pet-trail-prints {
+    width: 5px;
+    height: 3.5px;
+    margin: -1.75px 0 0 -2.5px;
+    border-radius: 50%;
+    background: var(--muted);
+    transform: translateY(var(--side));
+    animation: trail-print 1.8s ease-in forwards;
+  }
+  /* small leaves that drift down and turn */
+  .pet-trail-leaves {
+    width: 8px;
+    height: 5px;
+    margin: -2.5px 0 0 -4px;
+    border-radius: 0 100% 0 100%;
+    background: var(--pet-leaf);
+    animation: trail-fall 1.6s ease-in forwards;
+  }
+  /* a ghost's soft wisps, rising */
+  .pet-trail-wisps {
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--pet) 55%, var(--pet-light));
+    filter: blur(3px);
+    animation: trail-rise 1.2s ease-out forwards;
+  }
+  /* snowflakes, falling */
+  .pet-trail-snow {
+    width: 4px;
+    height: 4px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: #fff;
+    animation: trail-fall 1.6s ease-in forwards;
+  }
+  /* white flakes would vanish on the light lab, so they get the pet's lightest shade and a faint edge */
+  :root[data-mode='lab'] .pet-trail-snow {
+    background: var(--pet-light);
+    box-shadow: 0 0 0 0.5px color-mix(in srgb, var(--ink) 25%, transparent);
+  }
+  /* tiny hearts, floating up */
+  .pet-trail-hearts::before {
+    content: '♥';
+    display: block;
+    margin: -5px 0 0 -4px;
+    font-size: 9px;
+    color: var(--blush);
+    animation: trail-rise 1.3s ease-out forwards;
+  }
+  .pet-trail-hearts {
+    animation: trail-hold 1.3s forwards;
+  }
+  /* confetti, falling and turning */
+  .pet-trail-confetti {
+    width: 5px;
+    height: 3px;
+    margin: -1.5px 0 0 -2.5px;
+    border-radius: 1px;
+    background: var(--c);
+    animation: trail-fall 1.3s ease-in forwards;
+  }
+  /* sparkles, twinkling */
+  .pet-trail-sparkles::before {
+    content: '✦';
+    display: block;
+    margin: -5px 0 0 -4px;
+    font-size: 9px;
+    color: var(--pet);
+    animation: trail-twinkle 1s ease-in-out forwards;
+  }
+  .pet-trail-sparkles {
+    animation: trail-hold 1s forwards;
+  }
+  @keyframes trail-shrink {
+    from {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+  }
+  @keyframes trail-fade {
+    from {
+      opacity: 0.8;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes trail-print {
+    from {
+      opacity: 0.5;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes trail-fall {
+    from {
+      opacity: 0.85;
+      transform: translateY(0) rotate(0deg);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(18px) rotate(var(--turn, 0deg));
+    }
+  }
+  @keyframes trail-rise {
+    from {
+      opacity: 0.6;
+      transform: translateY(0) scale(0.8);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-16px) scale(1.4);
+    }
+  }
+  @keyframes trail-twinkle {
+    0% {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+    35% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.2) rotate(45deg);
+    }
+  }
+  /* keeps a mark whose pseudo-element does the animating around until it's done */
+  @keyframes trail-hold {
+    to {
+      opacity: 1;
+    }
+  }
+  .pet-z {
+    position: absolute;
+    left: 24px;
+    top: -2px;
+    font: 500 10px var(--font-mono);
+    color: var(--muted);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .pet-z + .pet-z {
+    left: 30px;
+  }
+  .pet.sleep .pet-z {
+    animation: pet-zz 2.4s ease-in-out infinite;
+  }
+  .pet.sleep .pet-z + .pet-z {
+    animation-delay: 1.2s;
+  }
+  .pet-heart {
+    position: absolute;
+    left: 11px;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .pet.hop .pet-heart {
+    animation: pet-heart 0.9s ease-out;
+  }
+  /* ---- parts of the drawings in src/lib/pets.ts ---- */
+  .pet .sleep-only,
+  .pet .hop-only,
+  .pet .born-only {
+    display: none;
+  }
+  .pet.sleep .sleep-only {
+    display: inline;
+  }
+  .pet.sleep .awake-only {
+    display: none;
+  }
+  /* shows for a moment on a tap; stays hidden when motion is reduced (no animation, opacity 0) */
+  .pet.hop .hop-only {
+    display: inline;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: pet-extra 0.9s ease-out forwards;
+  }
+  .pet.born .born-only {
+    display: inline;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: pet-born 0.6s ease-in forwards;
+  }
+  .pet .pet-cap {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transition: transform 0.4s ease;
+  }
+  .pet.hop .pet-cap {
+    animation: pet-cap 0.56s ease-out;
+  }
+  .pet[data-pet='acorn'].sleep .pet-cap {
+    transform: translateY(2.6px) rotate(-7deg);
+  }
+  .pet[data-pet='snowball'].sleep .pet-cap {
+    transform: translateY(3.4px) rotate(-6deg);
+  }
+  .pet .pet-wing-l,
+  .pet .pet-wing-r,
+  .pet .pet-flap-l,
+  .pet .pet-flap-r {
+    transform-box: fill-box;
+    animation: pet-flutter-l 0.5s ease-in-out infinite;
+  }
+  .pet .pet-wing-l,
+  .pet .pet-flap-l {
+    transform-origin: 100% 100%;
+  }
+  .pet .pet-wing-r,
+  .pet .pet-flap-r {
+    transform-origin: 0% 100%;
+    animation-name: pet-flutter-r;
+  }
+  .pet .pet-flap-l,
+  .pet .pet-flap-r {
+    animation-duration: 0.25s;
+  }
+  .pet .pet-sway {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: pet-sway 2.2s ease-in-out infinite;
+  }
+  .pet .pet-ghost {
+    transition: fill-opacity 0.6s ease;
+  }
+  .pet.sleep .pet-ghost {
+    fill-opacity: 0.55;
+  }
+  .pet[data-pet='ghost'] > svg:first-child {
+    animation: pet-float 2.2s ease-in-out infinite;
+  }
+  .pet[data-pet='heart'] > svg:first-child {
+    animation: pet-beat 1.2s ease-in-out infinite;
+  }
+  .pet[data-pet='mochi'] > svg:first-child {
+    transform-origin: 50% 81%;
+    transition: transform 0.6s ease;
+  }
+  .pet[data-pet='mochi'].sleep > svg:first-child {
+    transform: scale(1.35, 0.62); /* melts into a puddle */
+  }
+  .pet[data-pet='party'].sleep .pet-cap {
+    transform: translate(-3px, 6px) rotate(-38deg); /* the hat slips over an eye */
+  }
+  .pet[data-pet='pumpkin'].sleep .pet-cap {
+    transform: rotate(-38deg); /* the stem tips over like a nightcap */
+  }
+  .pet[data-pet='pumpkin'].hop .f path {
+    animation: pet-glow 0.9s ease-out; /* the jack-o'-lantern lights up */
+  }
+  /* the Christmas tree: lights twinkle, go dim while it naps, flash on a tap; the star spins */
+  .pet .pet-lights circle {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: pet-twinkle 1.8s ease-in-out infinite;
+  }
+  .pet .pet-lights circle:nth-child(2n) {
+    animation-delay: -0.9s;
+  }
+  .pet .pet-lights circle:nth-child(3n) {
+    animation-delay: -0.5s;
+  }
+  .pet.sleep .pet-lights,
+  .pet.sleep .pet-star {
+    opacity: 0.4;
+    transition: opacity 0.6s;
+  }
+  .pet.sleep .pet-lights circle {
+    animation: none;
+  }
+  .pet .pet-star,
+  .pet .pet-sparkle {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+  .pet.hop .pet-star {
+    animation: pet-spin 0.7s ease-out;
+  }
+  .pet.hop .pet-lights circle {
+    animation: pet-flash 0.25s ease-in-out 3;
+  }
+  /* the Eid moon: a star twinkles, the lantern swings, dims for a nap and glows on a tap */
+  .pet .pet-sparkle {
+    animation: pet-twinkle 2.4s ease-in-out infinite;
+  }
+  .pet .pet-lantern {
+    transform-box: fill-box;
+    transform-origin: 27% 0%;
+    animation: pet-swing 2.6s ease-in-out infinite;
+  }
+  .pet .pet-lantern-light {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    transition: opacity 0.6s;
+  }
+  .pet.sleep .pet-lantern-light {
+    opacity: 0.35;
+  }
+  .pet.sleep .pet-lantern {
+    animation: none;
+  }
+  .pet.hop .pet-lantern-light {
+    animation: pet-lantern 0.9s ease-out;
+  }
+  /* the Diwali diya: its flame flares on a tap */
+  .pet .pet-flame {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+  .pet.hop .pet-flame {
+    animation: pet-flare 0.9s ease-out;
+  }
+  /* the Lunar New Year lantern sways from its string and glows on a tap */
+  .pet[data-pet='lantern'] > svg:first-child {
+    transform-origin: 50% 6%;
+    animation: pet-swing 2.6s ease-in-out infinite;
+  }
+  .pet[data-pet='lantern'].sleep > svg:first-child {
+    animation: none;
+  }
+  .pet.hop .pet-lantern-body {
+    animation: pet-glow-red 0.9s ease-out;
+  }
+  @keyframes pet-flare {
+    30%,
+    60% {
+      transform: scale(1.5);
+    }
+  }
+  @keyframes pet-glow-red {
+    30%,
+    60% {
+      fill: #ff8a6a;
+    }
+  }
+  @keyframes pet-twinkle {
+    50% {
+      opacity: 0.45;
+      transform: scale(0.8);
+    }
+  }
+  @keyframes pet-flash {
+    50% {
+      opacity: 0.2;
+    }
+  }
+  @keyframes pet-spin {
+    to {
+      transform: rotate(144deg) scale(1);
+    }
+    40% {
+      transform: rotate(80deg) scale(1.35);
+    }
+  }
+  @keyframes pet-swing {
+    0%,
+    100% {
+      transform: rotate(-7deg);
+    }
+    50% {
+      transform: rotate(7deg);
+    }
+  }
+  @keyframes pet-lantern {
+    30%,
+    70% {
+      fill: #fff;
+      transform: scale(1.25);
+    }
+  }
+  .pet[data-pet='owl'] > svg:first-child {
+    transform-origin: 50% 70%;
+    animation: pet-tilt 3.4s ease-in-out infinite;
+  }
+  .pet[data-pet='penguin'] > svg:first-child {
+    transform-origin: 50% 85%;
+    animation: pet-waddle 1s ease-in-out infinite;
+  }
+  .pet[data-pet='owl'].sleep > svg:first-child,
+  .pet[data-pet='penguin'].sleep > svg:first-child {
+    animation: none;
+  }
+  .pet.hop .pet-tongue {
+    transform-origin: 0% 100%;
+    animation: pet-tongue 0.6s ease-out forwards;
+  }
+  .pet .pet-flicker {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: pet-flicker 0.7s ease-in-out infinite;
+  }
+  .pet .pet-smoke {
+    animation: pet-smoke 2.2s ease-out infinite;
+  }
+  @keyframes pet-glow {
+    15%,
+    60% {
+      fill: #f5c451;
+    }
+  }
+  @keyframes pet-tilt {
+    0%,
+    30%,
+    100% {
+      transform: none;
+    }
+    40%,
+    55% {
+      transform: rotate(-9deg);
+    }
+    65%,
+    85% {
+      transform: rotate(7deg);
+    }
+  }
+  @keyframes pet-waddle {
+    0%,
+    100% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(5deg);
+    }
+  }
+  @keyframes pet-tongue {
+    0% {
+      opacity: 1;
+      transform: scale(0);
+    }
+    30%,
+    60% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(0);
+    }
+  }
+  @keyframes pet-flicker {
+    0%,
+    100% {
+      transform: scale(1, 1) rotate(-3deg);
+    }
+    50% {
+      transform: scale(0.9, 1.12) rotate(3deg);
+    }
+  }
+  @keyframes pet-smoke {
+    0% {
+      opacity: 0;
+      transform: translateY(1px);
+    }
+    30% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+  @keyframes pet-extra {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    18% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    30%,
+    75% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+  @keyframes pet-born {
+    0% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(3px, -12px) rotate(25deg);
+    }
+  }
+  @keyframes pet-cap {
+    40% {
+      transform: translateY(-3.5px) rotate(-10deg);
+    }
+  }
+  @keyframes pet-flutter-l {
+    50% {
+      transform: rotate(-18deg);
+    }
+  }
+  @keyframes pet-flutter-r {
+    50% {
+      transform: rotate(18deg);
+    }
+  }
+  @keyframes pet-sway {
+    0%,
+    100% {
+      transform: rotate(-6deg);
+    }
+    50% {
+      transform: rotate(6deg);
+    }
+  }
+  @keyframes pet-float {
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+  @keyframes pet-beat {
+    12% {
+      transform: scale(1.07);
+    }
+    24% {
+      transform: scale(0.98);
+    }
+    34% {
+      transform: scale(1.04);
+    }
+    45% {
+      transform: none;
+    }
+  }
+  @keyframes pet-zz {
+    0% {
+      opacity: 0;
+      transform: none;
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(8px, -14px);
+    }
+  }
+  @keyframes pet-heart {
+    0% {
+      opacity: 0;
+      transform: translateY(4px) scale(0.6);
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-16px) scale(1);
+    }
+  }
+</style>

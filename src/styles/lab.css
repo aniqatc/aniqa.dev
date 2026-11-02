@@ -1,0 +1,388 @@
+/* ---------- Lab archive ---------- */
+/* the same type scale as the portfolio home: heading, lede and labels match it */
+.wrap.lab h1 {
+  font-size: clamp(44px, 6vw, 72px);
+}
+.wrap.lab .lede {
+  font-size: 17px;
+}
+.wrap.lab .label,
+.wrap.lab .facts dt {
+  font-size: 10px;
+}
+.wrap.lab .facts dd {
+  font-size: 11.5px;
+}
+/* .wrap.lab so the 800px beats .wrap's 1080px from global.css, which loads later */
+.wrap.lab {
+  max-width: 800px;
+  padding-block: 56px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.lab-top {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.lab-top > div {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.lab-top .lede {
+  color: var(--muted);
+  max-width: 40ch;
+}
+
+/* stats on the left, random entry on the right, under one thin line */
+/* .lab-top .lab-stats so the row beats .lab-top > div's column */
+.lab-top .lab-stats {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px 28px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  transition: border-color 0.6s;
+}
+.lab-stats .facts {
+  flex: 0 1 auto;
+  grid-template-columns: repeat(3, max-content);
+  justify-content: start;
+  gap: 8px 40px;
+}
+.lab-stats .facts > div {
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* No. / Project / Type / Year / Links / Like */
+.row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) 8rem 3rem 8rem 3rem;
+  column-gap: 16px;
+  align-items: center;
+}
+.year {
+  margin: 0;
+  padding: 40px 4px 10px;
+  border-bottom: 1px solid var(--fg);
+  transition: border-color 0.6s;
+}
+.year:first-of-type {
+  padding-top: 12px;
+}
+.archive ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.row {
+  min-height: 44px;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--line);
+  transition:
+    background 0.2s,
+    padding 0.25s;
+  -webkit-touch-callout: none;
+}
+.row:hover {
+  background: linear-gradient(90deg, var(--surface), transparent 85%);
+  padding-left: 12px;
+}
+.row .n {
+  font: 400 10px/1 var(--font-mono);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.row:hover .n {
+  color: var(--accent);
+}
+.row .t {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font: 500 14.5px/1.2 var(--font-body);
+  letter-spacing: -0.01em;
+}
+.row .t a {
+  display: block;
+  min-width: 0;
+  line-height: 44px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row .t a:hover {
+  color: var(--accent);
+}
+.row .k {
+  font: 400 10px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row .y {
+  font: 400 10.5px/1 var(--font-mono);
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.row .l {
+  justify-content: flex-end;
+  font: 400 10px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.row .l a {
+  line-height: 44px;
+}
+/* ---------- Favorites: a group above the years ---------- */
+/* the sparkle: next to a favorite's title in its year, and on the Favorites heading */
+.sparkle {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  fill: var(--accent);
+}
+/* the heading reads like a year, with the sparkle in front */
+.year.year-favorites {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg);
+}
+
+/* the dashed next-entry row closes the list, so the oldest row drops its line */
+.archive ol:last-of-type .row:last-child {
+  border-bottom: 0;
+}
+
+/* ---------- Next entry: the list ends with an email sign-up ---------- */
+.next-entry {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  column-gap: 16px;
+  align-items: center;
+  margin-top: 6px;
+  padding: 12px 12px 12px 3px;
+  border: 1px dashed var(--line);
+  background: var(--surface);
+}
+/* lines up with the title, like the numbers in the rows above */
+.next-entry-number {
+  align-self: start;
+  font: 400 10px/calc(14.5px * 1.2) var(--font-mono);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.next-entry-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.next-entry-title {
+  font: 500 14.5px/1.2 var(--font-body);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.next-entry-note {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.next-entry-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.next-entry-email {
+  width: 200px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 12.5px var(--font-body);
+}
+.next-entry-email::placeholder {
+  color: var(--muted);
+}
+.next-entry-email:focus-visible,
+.next-entry-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.next-entry-button {
+  height: 34px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font: 500 10px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+/* while the address is on its way */
+.next-entry-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.next-entry-button:hover {
+  background: var(--accent);
+}
+/* the same height as the field, so the row doesn't move when it swaps in */
+.next-entry-thanks[hidden] {
+  display: none;
+}
+/* it takes the form's place in the grid, and the heart stays on the same line as the words */
+.next-entry-thanks {
+  grid-column: 3;
+  display: block;
+  align-content: center;
+  min-height: 34px;
+  font: 500 10.5px/1.4 var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.next-entry-thanks .signup-heart {
+  display: inline-block;
+  margin-left: 6px;
+}
+
+/* ---------- Floating preview (desktop only) ---------- */
+.tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  pointer-events: none;
+  width: 232px;
+  padding: 6px;
+  border-radius: 14px;
+  background: #16151b;
+  box-shadow: 0 18px 40px -12px rgba(22, 21, 27, 0.5);
+  opacity: 0;
+  transform: translate(-9999px, 0);
+  transition: opacity 0.18s ease;
+}
+.tip.show {
+  opacity: 1;
+}
+.tip-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 9px;
+}
+/* a sketch, drawn at the entry page's 800px stage width and shrunk into the card (220 / 800), top 16:10 showing */
+.tip-sketch {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--bg);
+  color: var(--fg);
+}
+.tip-sketch[hidden] {
+  display: none;
+}
+.tip-sketch-stage {
+  width: 800px;
+  padding: 24px;
+  transform: scale(0.275);
+  transform-origin: top left;
+}
+.tip-cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 4px 2px;
+  font: 400 10px/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: #9690a3;
+  white-space: nowrap;
+}
+.tip-cap b {
+  font-weight: 500;
+  color: #ebe7f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (hover: none) {
+  .tip {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: 2rem minmax(0, 1fr) 3rem 7.5rem 2.75rem;
+  }
+  .next-entry {
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+  }
+  .row .k {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .wrap.lab {
+    padding-block: 44px 56px;
+    gap: 20px;
+  }
+  .row {
+    grid-template-columns: 1.4rem minmax(0, 1fr) 6.4rem 2.6rem;
+    column-gap: 8px;
+  }
+  .row .y {
+    display: none;
+  }
+  /* the form wraps under the text */
+  .next-entry {
+    grid-template-columns: 1.4rem minmax(0, 1fr);
+    column-gap: 8px;
+    row-gap: 12px;
+  }
+  .next-entry-form,
+  .next-entry-thanks {
+    grid-column: 2;
+  }
+  .next-entry-email {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+  .row .t {
+    font-size: 14px;
+  }
+  .row .t .chip {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+  .row .l {
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+  .lab-top .facts {
+    gap: 16px;
+  }
+}

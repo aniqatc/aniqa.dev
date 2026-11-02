@@ -1,0 +1,118 @@
+---
+// An email sign-up: new things on the portfolio intro, new reviews on /reviews.
+// It subscribes the address to Buttondown (the username in contact.ts), tagged so you can tell the lists apart,
+// then says thanks. How it sends is in src/scripts/signup.ts.
+import { SIGNUP_ACTION } from '../lib/contact';
+
+interface Props {
+  /** the field's placeholder, also its label for screen readers */
+  placeholder?: string;
+  /** what the form says once an address is in */
+  thanks?: string;
+  /** the Buttondown tag for these subscribers, e.g. "reviews" */
+  tag?: string;
+}
+
+const {
+  placeholder = 'Your email, for new things',
+  // Confirmation happens through Buttondown's welcome automation, if configured.
+  thanks = 'Thanks! You’ll hear about new things from me soon',
+  tag = 'updates',
+} = Astro.props;
+---
+
+<form
+  class="updates-signup"
+  aria-label="Get updates"
+  action={SIGNUP_ACTION}
+  method="post"
+  data-signup
+  data-thanks={thanks}
+  novalidate
+>
+  <input type="hidden" name="embed" value="1" />
+  <input type="hidden" name="tag" value={tag} />
+  <span class="updates-signup-fields" data-signup-fields>
+    <input
+      class="updates-signup-email"
+      data-signup-email
+      type="email"
+      name="email"
+      placeholder={placeholder}
+      autocomplete="email"
+      aria-label={placeholder}
+      required
+    />
+    <button class="updates-signup-button" type="submit" data-signup-button>
+      Notify me
+    </button>
+  </span>
+  <span class="updates-signup-thanks" role="status" data-signup-thanks hidden></span>
+</form>
+
+<script>
+  import '../scripts/signup';
+</script>
+
+<style>
+  .updates-signup-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .updates-signup-fields[hidden] {
+    display: none;
+  }
+  .updates-signup-email {
+    flex: 1 1 180px;
+    min-width: 0;
+    height: 34px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg);
+    font: 400 12.5px var(--font-body);
+  }
+  .updates-signup-email::placeholder {
+    color: var(--muted);
+  }
+  .updates-signup-button {
+    height: 34px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--fg);
+    color: var(--bg);
+    font: 500 10px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  /* while the address is on its way */
+  .updates-signup-button:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .updates-signup-button:hover {
+    background: var(--accent);
+  }
+  .updates-signup-email:focus-visible,
+  .updates-signup-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  /* the same height as the field, so nothing moves when it swaps in */
+  .updates-signup-thanks {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .updates-signup-thanks[hidden] {
+    display: none;
+  }
+</style>

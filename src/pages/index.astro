@@ -1,0 +1,69 @@
+---
+import '../styles/portfolio.css';
+import Base from '../layouts/Base.astro';
+import LatestReview from '../components/LatestReview.astro';
+import NowBuilding from '../components/NowBuilding.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import UpdatesSignup from '../components/UpdatesSignup.astro';
+import WorkPreview from '../components/WorkPreview.astro';
+import { getLab, getSelected, real } from '../lib/projects';
+import { TINKERING } from '../lib/now';
+
+const selected = await getSelected();
+const lab = await getLab();
+---
+
+<Base mode="portfolio">
+  <main class="wrap pf">
+    <section class="intro" aria-labelledby="pf-h">
+      <h1 id="pf-h">
+        Aniqa<span class="dot">.</span>
+      </h1>
+      <p class="lede">
+        I started building to see how things work. Now I build to <em>solve real problems</em>.
+      </p>
+      <p class="intro-role label">Software engineer in New York</p>
+      <dl class="intro-list">
+        <div class="intro-row">
+          <dt class="label">Tinkering</dt>
+          <dd>
+            <ul class="chips">
+              {TINKERING.map((t) => (
+                <li>{t}</li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+        <NowBuilding />
+        <LatestReview />
+      </dl>
+    </section>
+
+    <section class="work" aria-labelledby="pf-work">
+      <div class="work-head">
+        <h2 class="label" id="pf-work">
+          Selected work
+        </h2>
+        <a href="/lab">{real(lab).length} more in the lab →</a>
+      </div>
+      <ol class="projects">
+        {selected.map((p, i) => (
+          <ProjectCard project={p} n={i + 1} />
+        ))}
+      </ol>
+    </section>
+
+    {/* its own block: under the intro on desktop, after the work when the columns stack */}
+    <section class="updates" aria-label="Updates">
+      <dl class="intro-list updates-list">
+        <div class="intro-row">
+          <dt class="label">Updates</dt>
+          <dd>
+            <UpdatesSignup />
+          </dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+  <WorkPreview />
+</Base>

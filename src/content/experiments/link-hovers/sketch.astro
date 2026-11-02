@@ -1,0 +1,599 @@
+---
+// Link Hovers: twenty links, each with one hover effect and the CSS trick behind it named underneath.
+// A specimen plays its hover when you point at it, tab to it, or tap it on a touch screen.
+// "Show every hover state" plays them all at once, to compare them side by side.
+const SPECIMENS = [
+  { effect: 'sweep', name: 'Sweep', text: 'Read more', trick: 'background-size 0 → 100%' },
+  { effect: 'rise', name: 'Rise', text: 'View project', trick: 'underline grows into a fill' },
+  { effect: 'slide-through', name: 'Slide through', text: 'Notes', trick: 'background-position' },
+  { effect: 'wiggle', name: 'Wiggle', text: 'Say hi', trick: '@keyframes rotate' },
+  { effect: 'scale-swap', name: 'Scale swap', text: 'Source', trick: '::after transform-origin' },
+  { effect: 'shimmer', name: 'Shimmer', text: 'What’s new', trick: 'background-clip: text' },
+  { effect: 'highlighter', name: 'Highlighter', text: 'Changelog', trick: 'background-size height' },
+  {
+    effect: 'countdown',
+    name: 'Countdown',
+    text: 'Launch in <span class="countdown-number"></span>',
+    trick: '@property integer',
+  },
+  { effect: 'opposing-bars', name: 'Opposing bars', text: 'Archive', trick: 'two pseudos, two origins' },
+  { effect: 'box-slide', name: 'Box slide', text: 'Résumé', trick: '::before translateX' },
+  { effect: 'frame-out', name: 'Frame out', text: 'Contact', trick: 'inset on ::before' },
+  { effect: 'difference', name: 'Difference', text: 'Invert', trick: 'mix-blend-mode' },
+  { effect: 'double', name: 'Double', text: 'Footnote', trick: 'border-bottom: double' },
+  { effect: 'dot-to-line', name: 'Dot to line', text: 'Next', trick: '::after morph' },
+  { effect: 'pill', name: 'Pill', text: 'Subscribe', trick: 'two halves meet' },
+  {
+    effect: 'roll',
+    name: 'Roll',
+    text: '<span class="roll-text" data-text="Résumé">Résumé</span>',
+    trick: 'attr() duplicate',
+  },
+  { effect: 'glow', name: 'Glow', text: 'Live demo', trick: 'text-shadow blur' },
+  { effect: 'stack', name: 'Stack', text: 'Lab', trick: 'stacked text-shadow' },
+  { effect: 'strike-drop', name: 'Strike, drop', text: 'Old link', trick: 'keyframed top' },
+  { effect: 'refocus', name: 'Refocus', text: 'Look closer', trick: 'filter: blur' },
+];
+---
+
+<div class="demo" data-study="link-hovers">
+  <div class="demo-bar">
+    <label class="demo-check">
+      <input type="checkbox" data-show-all />
+      Show every hover state
+    </label>
+    <span class="label">Compare them side by side</span>
+  </div>
+
+  <section class="specimen-grid" aria-label="Link hover specimens">
+    {SPECIMENS.map((specimen, index) => (
+      <article class="specimen">
+        <span class="specimen-number">{String(index + 1).padStart(2, '0')}</span>
+        <div class="specimen-stage">
+          <a
+            class={`specimen-link hover-${specimen.effect}`}
+            href={`#${specimen.effect}`}
+            aria-label={`${specimen.name} example`}
+            set:html={specimen.text}
+          />
+        </div>
+        <div class="specimen-meta">
+          <b>{specimen.name}</b>
+          <code>{specimen.trick}</code>
+        </div>
+      </article>
+    ))}
+  </section>
+</div>
+
+<style>
+  /* the countdown's number animates as a whole number, from 8 down to 0 */
+  @property --countdown {
+    syntax: '<integer>';
+    initial-value: 8;
+    inherits: false;
+  }
+
+  .demo-bar .label {
+    color: var(--muted);
+  }
+
+  /* twenty cards, four across (two on phones), each one link with its trick named underneath */
+  .specimen-grid {
+    /* a card a shade off the stage, and a pale accent for the fills, so both follow Day / Night */
+    --card: color-mix(in oklab, var(--surface) 45%, var(--bg));
+    --accent-soft: color-mix(in oklab, var(--accent) 20%, var(--bg));
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .specimen {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-width: 0;
+    min-height: 150px;
+    padding: 10px 12px 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    isolation: isolate;
+    transition:
+      background 0.5s ease,
+      border-color 0.5s ease;
+  }
+  .specimen-number {
+    font: 500 10.5px var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+  .specimen-stage {
+    display: grid;
+    place-items: center;
+    padding-block: 14px;
+  }
+  .specimen-meta {
+    display: grid;
+    gap: 1px;
+  }
+  .specimen-meta b {
+    font: 500 12.5px var(--font-body);
+  }
+  .specimen-meta code {
+    font: 400 10.5px var(--font-mono);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  .specimen-link {
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+    padding: 4px 6px;
+    border-radius: 4px;
+    color: var(--fg);
+    text-decoration: none;
+    font: 500 15px/1.3 var(--font-body);
+    transition:
+      color 0.35s ease,
+      background-size 0.35s ease,
+      transform 0.35s ease,
+      text-shadow 0.35s ease;
+  }
+  .specimen-link::before,
+  .specimen-link::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+  }
+  .specimen-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  /* "hovered" means pointing at the card, keyboard focus in it, tapped on a touch screen, or Show every hover state */
+  /* 01 sweep */
+  .hover-sweep {
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat left / 0% 100%;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible)) .hover-sweep {
+    background-size: 100% 100%;
+    color: var(--bg);
+  }
+
+  /* 02 rise */
+  .hover-rise {
+    background: linear-gradient(var(--fg), var(--fg)) no-repeat bottom / 100% 1.5px;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible)) .hover-rise {
+    background-size: 100% 100%;
+    color: var(--bg);
+  }
+
+  /* 03 slide through */
+  .hover-slide-through {
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat right bottom / 0% 2px;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-slide-through {
+    background-size: 100% 2px;
+    background-position: left bottom;
+  }
+
+  /* 04 wiggle */
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-wiggle {
+    color: var(--accent);
+    animation: link-wiggle 0.55s ease-in-out;
+  }
+  @keyframes link-wiggle {
+    20% {
+      transform: rotate(-5deg);
+    }
+    45% {
+      transform: rotate(4deg);
+    }
+    70% {
+      transform: rotate(-2deg);
+    }
+    100% {
+      transform: none;
+    }
+  }
+
+  /* 05 scale swap: the line grows from the left and shrinks back to the right */
+  .hover-scale-swap::after {
+    left: 6px;
+    right: 6px;
+    bottom: 1px;
+    height: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s ease;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-scale-swap::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* 06 shimmer */
+  .hover-shimmer {
+    color: transparent;
+    background-image: linear-gradient(100deg, var(--fg) 0 40%, var(--accent) 50%, var(--fg) 60% 100%);
+    background-size: 300% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-shimmer {
+    animation: link-shimmer 1.4s linear infinite;
+  }
+  @keyframes link-shimmer {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+
+  /* 07 highlighter */
+  .hover-highlighter {
+    background: linear-gradient(var(--accent-soft), var(--accent-soft)) no-repeat 0 100% / 100% 3px;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-highlighter {
+    background-size: 100% 62%;
+  }
+
+  /* 08 countdown: counter() prints the animated --countdown */
+  .hover-countdown :global(.countdown-number) {
+    display: inline-block;
+    min-width: 1.3ch;
+    text-align: left;
+    font-variant-numeric: tabular-nums;
+    counter-reset: countdown var(--countdown);
+  }
+  .hover-countdown :global(.countdown-number)::after {
+    content: counter(countdown);
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-countdown {
+    color: var(--accent);
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-countdown
+    :global(.countdown-number) {
+    animation: link-countdown 2.4s linear forwards;
+  }
+  @keyframes link-countdown {
+    to {
+      --countdown: 0;
+    }
+  }
+
+  /* 09 opposing bars */
+  .hover-opposing-bars::before,
+  .hover-opposing-bars::after {
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.35s ease;
+  }
+  .hover-opposing-bars::before {
+    top: 0;
+    transform-origin: left;
+  }
+  .hover-opposing-bars::after {
+    bottom: 0;
+    transform-origin: right;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-opposing-bars::before,
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-opposing-bars::after {
+    transform: scaleX(1);
+  }
+
+  /* 10 box slide */
+  .hover-box-slide {
+    overflow: hidden;
+  }
+  .hover-box-slide::before {
+    inset: 0;
+    z-index: -1;
+    border-radius: 4px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-box-slide::before {
+    transform: none;
+  }
+
+  /* 11 frame out */
+  .hover-frame-out::before {
+    inset: 6px;
+    border: 1.5px solid var(--accent);
+    border-radius: 6px;
+    opacity: 0;
+    transition:
+      inset 0.35s ease,
+      opacity 0.35s ease;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-frame-out {
+    font-weight: 600;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-frame-out::before {
+    inset: -3px;
+    opacity: 1;
+  }
+
+  /* 12 difference: a white dot grows over the word and inverts whatever is under it */
+  .hover-difference {
+    isolation: auto;
+  }
+  .hover-difference::before {
+    left: -14px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    translate: 0 -50%;
+    background: #fff;
+    mix-blend-mode: difference;
+    transition:
+      left 0.4s ease,
+      width 0.4s ease,
+      height 0.4s ease,
+      border-radius 0.4s ease;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-difference::before {
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+  }
+
+  /* 13 double */
+  .hover-double::after {
+    left: 50%;
+    bottom: -2px;
+    width: 0;
+    border-bottom: 1.5px solid var(--accent);
+    translate: -50% 0;
+    transition:
+      width 0.3s ease,
+      border-bottom-width 0.25s ease 0.3s;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-double::after {
+    width: 100%;
+    border-bottom: 5px double var(--accent);
+  }
+
+  /* 14 dot to line */
+  .hover-dot-to-line::after {
+    left: -12px;
+    top: calc(50% - 3px);
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--accent);
+    transition: all 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-dot-to-line::after {
+    left: 6px;
+    top: calc(100% - 2px);
+    width: calc(100% - 12px);
+    height: 2px;
+  }
+
+  /* 15 pill: two dots grow from each side and meet in the middle */
+  .hover-pill::before,
+  .hover-pill::after {
+    z-index: -1;
+    top: calc(50% - 4px);
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--fg);
+    transition: all 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+  }
+  .hover-pill::before {
+    left: -14px;
+  }
+  .hover-pill::after {
+    right: -14px;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible)) .hover-pill {
+    color: var(--bg);
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-pill::before {
+    left: -4px;
+    top: 0;
+    height: 100%;
+    width: 55%;
+    border-radius: 999px 0 0 999px; /* flat where the halves overlap, so there's no seam */
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-pill::after {
+    right: -4px;
+    top: 0;
+    height: 100%;
+    width: 55%;
+    border-radius: 0 999px 999px 0;
+  }
+
+  /* 16 roll: a copy of the word from attr() waits underneath and rolls up into place */
+  .hover-roll {
+    overflow: hidden;
+    padding: 0;
+  }
+  .hover-roll :global(.roll-text) {
+    position: relative;
+    display: block;
+    padding: 4px 6px;
+    transition: transform 0.4s cubic-bezier(0.6, 0, 0.2, 1);
+  }
+  .hover-roll :global(.roll-text)::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    padding: 4px 6px;
+    color: var(--accent);
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-roll
+    :global(.roll-text) {
+    transform: translateY(-100%);
+  }
+
+  /* 17 glow */
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible)) .hover-glow {
+    color: var(--accent);
+    transform: scale(1.04);
+    text-shadow: 0 0 14px color-mix(in oklab, var(--accent) 70%, transparent);
+  }
+
+  /* 18 stack */
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible)) .hover-stack {
+    transform: translate(-3px, -3px);
+    text-shadow:
+      1px 1px 0 var(--accent),
+      2px 2px 0 var(--accent),
+      3px 3px 0 var(--accent);
+  }
+
+  /* 19 strike, then drop to an underline */
+  .hover-strike-drop::after {
+    left: 6px;
+    right: 6px;
+    top: 50%;
+    height: 1.5px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-strike-drop::after {
+    animation: link-strike-drop 0.7s ease forwards;
+  }
+  @keyframes link-strike-drop {
+    0% {
+      transform: scaleX(0);
+      top: 50%;
+    }
+    50% {
+      transform: scaleX(1);
+      top: 50%;
+    }
+    100% {
+      transform: scaleX(1);
+      top: calc(100% - 1px);
+    }
+  }
+
+  /* 20 refocus */
+  .hover-refocus::before {
+    inset: 50% 50%;
+    border: 1px dashed var(--muted);
+    border-radius: 6px;
+    opacity: 0;
+    transition:
+      inset 0.45s ease,
+      opacity 0.3s ease;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-refocus {
+    animation: link-refocus 0.6s ease;
+  }
+  :is(.specimen:hover, .specimen.is-tapped, .show-all .specimen, .specimen:has(:focus-visible))
+    .hover-refocus::before {
+    inset: -4px;
+    opacity: 1;
+  }
+  @keyframes link-refocus {
+    0% {
+      filter: blur(0);
+      letter-spacing: 0;
+    }
+    40% {
+      filter: blur(2.5px);
+      letter-spacing: 0.06em;
+    }
+    100% {
+      filter: blur(0);
+      letter-spacing: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .specimen-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* reduced motion: every hover jumps straight to its end state */
+  @media (prefers-reduced-motion: reduce) {
+    .specimen-link,
+    .specimen-link::before,
+    .specimen-link::after,
+    .specimen-link :global(span) {
+      transition-duration: 0.01s !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { onPage } from '../../../scripts/page';
+
+  // onPage runs on every page change, so look for this study first and do nothing on other pages
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-study="link-hovers"]');
+    if (!root) return;
+    const grid = root.querySelector<HTMLElement>('.specimen-grid')!;
+    const showAll = root.querySelector<HTMLInputElement>('[data-show-all]')!;
+    const touchScreen = matchMedia('(hover: none)');
+
+    // the links are only examples, so they don't go anywhere
+    const stayHere = (event: Event) => {
+      if ((event.target as HTMLElement).closest('.specimen-link')) event.preventDefault();
+    };
+    // on a touch screen, a tap plays that card's hover; tapping it again (or another card) stops it
+    const tapCard = (event: Event) => {
+      if (!touchScreen.matches) return;
+      const card = (event.target as HTMLElement).closest<HTMLElement>('.specimen');
+      if (!card) return;
+      const wasTapped = card.classList.contains('is-tapped');
+      grid.querySelectorAll('.specimen.is-tapped').forEach((tapped) => tapped.classList.remove('is-tapped'));
+      if (!wasTapped) {
+        void card.offsetWidth; // restart its animation
+        card.classList.add('is-tapped');
+      }
+    };
+    const toggleAll = () => grid.classList.toggle('show-all', showAll.checked);
+
+    grid.addEventListener('click', stayHere);
+    grid.addEventListener('click', tapCard);
+    showAll.addEventListener('change', toggleAll);
+    toggleAll();
+    return () => {
+      grid.removeEventListener('click', stayHere);
+      grid.removeEventListener('click', tapCard);
+      showAll.removeEventListener('change', toggleAll);
+    };
+  });
+</script>

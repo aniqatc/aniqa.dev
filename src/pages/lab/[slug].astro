@@ -1,0 +1,159 @@
+---
+import { render } from 'astro:content';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import Detail from '../../layouts/Detail.astro';
+import Facts from '../../components/Facts.astro';
+import PrevNext from '../../components/PrevNext.astro';
+import SiteScreenshot from '../../components/SiteScreenshot.astro';
+import LikeButton from '../../components/LikeButton.astro';
+import Badge from '../../components/Badge.astro';
+import '../../styles/demo.css';
+import { badgeFor, updatedSet } from '../../lib/badges';
+import { fmtMonth, folderLink, getLab, links, pad, type LabEntry } from '../../lib/projects';
+
+// One page per lab entry: a lab note, or the experiment layout when it has a sketch.
+export async function getStaticPaths() {
+  const lab = await getLab();
+  const updated = updatedSet(lab);
+  return lab.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      total: lab.length,
+      older: lab[i - 1],
+      newer: lab[i + 1],
+      badge: badgeFor(entry, updated),
+    },
+  }));
+}
+
+interface Props {
+  entry: LabEntry;
+  total: number;
+  older?: LabEntry;
+  newer?: LabEntry;
+  badge: ReturnType<typeof badgeFor>;
+}
+
+const { entry, total, older, newer, badge } = Astro.props;
+const { title, type, stack, released, summary, example, hint, repo, stage, themes, headsUp, v1 } = entry.data;
+const { Content } = await render(entry);
+const no = `No. ${pad(entry.n)}`;
+const toLink = (e?: LabEntry) => e && { href: `/lab/${e.id}`, title: e.data.title };
+
+// A sketch next to the entry's index.md (src/content/experiments/<slug>/) runs on the page: sketch.ts (canvas, p5,
+// three; loaded by sketch-runner.ts) or sketch.astro (CSS art or a study, rendered straight into the stage).
+// Entries without one are lab notes that link out to the live site.
+const dir = '../../content/experiments';
+const scripts = import.meta.glob('../../content/experiments/*/sketch.ts');
+const art = import.meta.glob<{ default: AstroComponentFactory }>('../../content/experiments/*/sketch.astro', {
+  eager: true,
+});
+const hasScript = `${dir}/${entry.id}/sketch.ts` in scripts;
+const Art = art[`${dir}/${entry.id}/sketch.astro`]?.default;
+const isExperiment = hasScript || Boolean(Art);
+const fit = isExperiment && stage === 'fit';
+// lab notes link to the live site and its repo; an experiment links to its own code (its repo if it has one,
+// otherwise its folder in this site's repo)
+const codeLinks = !isExperiment
+  ? []
+  : repo
+    ? links(entry).filter((l) => l.label === 'Code ↗')
+    : [folderLink(entry)];
+// the Links fact: Live (or npm), Code, then v1 if the entry has a first version elsewhere
+const entryLinks = [
+  ...(isExperiment ? codeLinks : links(entry)),
+  ...(v1 ? [{ label: 'v1 ↗', href: v1 }] : []),
+];
+---
+
+<Detail
+  entry={entry}
+  mode="lab"
+  variant={isExperiment ? 'xp' : 'nb'}
+  title={title}
+  lede={summary}
+  back={{ href: '/lab', label: '← Archive' }}
+  position={`${pad(entry.n)} / ${pad(total)}`}
+>
+  <LikeButton slot="actions" slug={entry.id} title={title} big />
+  <Fragment slot="eyebrow">
+    {isExperiment ? 'Experiment' : 'Lab note'} <b>{no}</b>
+    {example ? <span class="chip">Example entry</span> : <Badge badge={badge} />}
+  </Fragment>
+
+  {/* every lab entry, lab note or experiment, has the same header facts */}
+  <Facts
+    slot="facts"
+    class="entry-facts"
+    items={[
+      { label: 'Made', value: fmtMonth(released) },
+      { label: 'Type', value: type },
+      { label: 'Stack', value: stack },
+      { label: 'Links', value: entryLinks },
+    ]}
+  />
+
+  {headsUp && (
+    <aside class="heads-up" aria-label="Before you start">
+      <p class="label">Before you start</p>
+      <p>{headsUp}</p>
+    </aside>
+  )}
+
+  {isExperiment ? (
+    <>
+      <figure>
+        <div
+          class:list={['stage', { 'stage-art': Art, 'stage-fit': fit, 'stage-with-themes': themes }]}
+          data-sketch={hasScript ? entry.id : undefined}
+        >
+          {Art && <Art />}
+          {themes && (
+            <span class="stage-theme label" role="group" aria-label="Stage colours">
+              <button type="button" data-theme-set="day" aria-pressed="true">
+                Day
+              </button>
+              <button type="button" data-theme-set="night" aria-pressed="false">
+                Night
+              </button>
+            </span>
+          )}
+          {!fit && (
+            <button type="button" class="fs-exit label">
+              Exit · Esc
+            </button>
+          )}
+        </div>
+        <figcaption class="stage-bar label">
+          <span>{hint}</span>
+          <span>
+            <button type="button" data-act="pause" hidden>
+              Pause
+            </button>
+            <button type="button" data-act="restart" hidden>
+              Restart
+            </button>
+            {!fit && (
+              <button type="button" data-act="fullscreen">
+                Fullscreen ⤢
+              </button>
+            )}
+          </span>
+        </figcaption>
+      </figure>
+      <Content />
+    </>
+  ) : (
+    <>
+      <SiteScreenshot entry={entry} />
+      <Content />
+    </>
+  )}
+
+  <PrevNext label="More entries" labels={['← Older', 'Newer →']} prev={toLink(older)} next={toLink(newer)} />
+</Detail>
+
+<script>
+  import '../../scripts/sketch-runner';
+</script>

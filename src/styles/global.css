@@ -1,0 +1,627 @@
+* {
+  box-sizing: border-box;
+}
+[hidden] {
+  display: none !important;
+}
+html {
+  background: var(--bg);
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 15px/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.6s ease,
+    color 0.6s ease;
+}
+/* covers the notch strip so content doesn't show behind it */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+  transition: background-color 0.6s ease;
+}
+img {
+  max-width: 100%;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+::selection {
+  background: var(--pop);
+  color: #1b1a12;
+}
+
+.label {
+  font: 500 10.5px/1.3 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(24px, env(safe-area-inset-left, 0px));
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.chip {
+  display: inline-block;
+  flex: none;
+  padding: 3px 6px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font: 500 9.5px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.chip-soft {
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+/* page titles: "Aniqa." and "Lab." */
+h1 {
+  margin: 0;
+  font: 800 clamp(50px, 7.2vw, 86px) / 0.9 var(--font-display);
+  letter-spacing: -0.035em;
+}
+.dot {
+  color: var(--accent);
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+h1:hover .dot {
+  transform: translateY(-0.18em) scale(1.25);
+}
+/* the full stop is a way to let the pet out too (pet.ts); it hides while the pet is out of it */
+h1 .dot {
+  position: relative;
+  cursor: pointer;
+  /* the middle of the dot itself, not of the tall text box, so it pops and wiggles in place */
+  transform-origin: 0.11em 0.7em;
+}
+h1 .dot.out {
+  opacity: 0;
+}
+
+/* ---------- The tease (pet.ts): on hover, eyes blink open in the dot ---------- */
+.brand i::before,
+h1 .dot::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 46%, var(--ink) 0 12%, transparent 13%),
+    radial-gradient(circle at 68% 46%, var(--ink) 0 12%, transparent 13%);
+  opacity: 0;
+  pointer-events: none;
+}
+.brand i::before {
+  inset: 0;
+}
+/* where the dot sits in the full stop's text box */
+h1 .dot::before {
+  left: 0.021em;
+  top: 0.61em;
+  width: 0.186em;
+  height: 0.186em;
+}
+.brand i.peek {
+  animation: peek-grow 0.9s ease-in-out;
+}
+h1 .dot.peek {
+  animation: peek-wiggle 0.9s ease-in-out;
+}
+.peek::before {
+  animation: peek-eyes 0.9s ease-in-out;
+}
+/* the logo dot is tiny, so it swells while the eyes are open */
+@keyframes peek-grow {
+  0%,
+  100% {
+    scale: 1;
+    rotate: 0deg;
+  }
+  20%,
+  70% {
+    scale: 2.2;
+  }
+  30% {
+    rotate: -14deg;
+  }
+  45% {
+    rotate: 12deg;
+  }
+  60% {
+    rotate: 0deg;
+  }
+}
+@keyframes peek-wiggle {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: -12deg;
+  }
+  45% {
+    rotate: 10deg;
+  }
+  65% {
+    rotate: 0deg;
+  }
+}
+/* open, look, blink, close */
+@keyframes peek-eyes {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: none;
+  }
+  50% {
+    transform: none;
+  }
+  55% {
+    transform: scaleY(0.15);
+  }
+  62% {
+    transform: none;
+  }
+}
+.lede {
+  margin: 0;
+  font: 400 19px/1.45 var(--font-display);
+  max-width: 30ch;
+  text-wrap: balance;
+}
+.lede em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+/* ---------- Facts row (lab stats, detail page meta) ---------- */
+.facts {
+  --cols: 4;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 20px 28px;
+  margin: 0;
+}
+.facts > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  transition: border-color 0.6s;
+}
+.facts dt {
+  margin: 0;
+}
+.facts dd {
+  margin: 0;
+  font: 500 12px/1.55 var(--font-mono);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.facts dd a {
+  border-bottom: 1px solid var(--accent);
+}
+.facts dd a:hover {
+  color: var(--accent);
+}
+.facts dd a + a {
+  margin-left: 14px;
+}
+
+/* ---------- Project links: Live ↗ / Code ↗ ---------- */
+.l {
+  display: flex;
+  gap: 14px;
+}
+.l a {
+  position: relative;
+  z-index: 1;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.l a:hover {
+  color: var(--accent);
+}
+
+/* ---------- Header ---------- */
+.hdr {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 9;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  transition:
+    background-color 0.6s ease,
+    border-color 0.6s ease;
+}
+.hdr .wrap {
+  height: var(--hdr);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 14px/1 var(--font-display);
+  letter-spacing: -0.01em;
+}
+.brand i {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pet);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.brand i::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+}
+.brand i:hover {
+  animation: wig 0.6s ease;
+}
+.brand i.out {
+  opacity: 0;
+  animation: none;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.switch {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font: 500 11.5px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  transition: border-color 0.6s;
+}
+.switch a {
+  padding: 7px 13px;
+  border-radius: 999px;
+  color: var(--muted);
+}
+.switch a:hover {
+  color: var(--fg);
+}
+/* on app reviews: under the portfolio but not on it, so a soft fill instead of the full one */
+.switch a.switch-under {
+  background: var(--line);
+  color: var(--fg);
+  transition:
+    background-color 0.6s,
+    color 0.6s;
+}
+.switch a[aria-current='page'] {
+  background: var(--fg);
+  color: var(--bg);
+  transition:
+    background-color 0.6s,
+    color 0.6s;
+}
+.gh {
+  font: 500 11.5px/1 var(--font-mono);
+  color: var(--muted);
+}
+.gh:hover {
+  color: var(--accent);
+}
+@keyframes wig {
+  0%,
+  100% {
+    transform: none;
+  }
+  30% {
+    transform: translateY(-3px) scale(1.25);
+  }
+  60% {
+    transform: translateY(1px) scale(0.85, 1.15);
+  }
+}
+
+/* ---------- Contact (portfolio intro + footer) ---------- */
+.contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font: 500 11.5px/1 var(--font-mono);
+}
+.contact a,
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  border-bottom: 1px solid var(--line);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.contact a:hover,
+.copy:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.copy {
+  padding: 0;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.copy .ok {
+  color: var(--accent);
+}
+.copy .ok:empty {
+  display: none;
+}
+/* the footer: round icon buttons for the links and a pill for the email, like the other pill buttons */
+.contact-f {
+  align-items: center;
+  gap: 8px;
+  font: 400 11.5px/1 var(--font-mono);
+}
+.contact-f .contact-icon,
+.contact-f .copy {
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.contact-f .contact-icon {
+  justify-content: center;
+  width: 34px;
+}
+.contact-f .copy {
+  gap: 8px;
+  padding: 0 14px 0 12px;
+}
+.contact-f svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Sign-up send-off (send-off.ts): a paper plane from the button, then thanks and a heart ---------- */
+.signup-send {
+  position: absolute;
+  left: var(--from-x);
+  top: var(--from-y);
+  pointer-events: none;
+}
+.signup-plane,
+.signup-trail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  animation: signup-fly 1s cubic-bezier(0.45, 0, 0.35, 1) forwards;
+}
+.signup-plane {
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.signup-trail {
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.signup-trail:nth-child(1) {
+  animation-delay: 0.18s;
+}
+.signup-trail:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.signup-trail:nth-child(3) {
+  animation-delay: 0.06s;
+}
+.signup-thanks {
+  animation: signup-thanks-in 0.45s 0.9s ease-out both;
+}
+.signup-heart {
+  color: var(--blush);
+  animation: signup-heart-pop 0.5s 1.25s cubic-bezier(0.3, 1.8, 0.5, 1) both;
+}
+@keyframes signup-fly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-6px, 4px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(26px, -72px) rotate(-8deg) scale(0.9);
+  }
+}
+@keyframes signup-thanks-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes signup-heart-pop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- Footer ---------- */
+footer {
+  border-top: 1px solid var(--line);
+  transition: border-color 0.6s;
+}
+footer .wrap {
+  padding-block: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font: 400 11.5px/1 var(--font-mono);
+  color: var(--muted);
+}
+footer a:hover {
+  color: var(--accent);
+}
+/* © and the Reviews link, side by side (on phones, the © moves under the buttons: see the end of this file) */
+.footer-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+/* Reviews: a pill with the accent dot, the same height as the contact buttons, so it stands out from the © */
+.footer-reviews {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--fg);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.footer-reviews:hover {
+  border-color: var(--accent);
+}
+.footer-reviews i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+@media (max-width: 860px) {
+  .facts {
+    --cols: 2;
+  }
+}
+@media (max-width: 560px) {
+  .wrap {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+}
+@media (max-width: 520px) {
+  .gh {
+    display: none;
+  }
+  /* phone footer: Reviews and the links in one centered row, with the © under them */
+  footer .wrap {
+    justify-content: center;
+    gap: 16px 8px;
+  }
+  .footer-start {
+    display: contents;
+  }
+  .footer-copyright {
+    flex-basis: 100%;
+    order: 1;
+    text-align: center;
+  }
+  /* the email becomes a round mail button like the others; tapping it still copies the address */
+  .contact-f .copy {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+  .contact-f .copy .em {
+    display: none;
+  }
+  /* the ✓ takes the mail icon's place for a moment after copying */
+  .contact-f .copy:has(.ok:not(:empty)) .contact-mail {
+    display: none;
+  }
+}
+/* page changes: the old page fades into the new one (night ↔ day when switching between portfolio and lab),
+   at the same pace as the prototype's colour transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

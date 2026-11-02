@@ -1,2 +1,14 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.env
+.env.*
+!.env.example
 .DS_Store
-.vercel
+.idea/
+npm-debug.log*
+.vscode/
+
+# review scorecards (npm run scorecard): for posting on X, not used by the site
+src/content/reviews/*/scorecard.png

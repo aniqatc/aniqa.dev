@@ -1,2 +1,13 @@
+# AI search: allowed, so assistants can find and link
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+
 User-agent: *
 Allow: /
+Disallow: /api/
+
+Sitemap: https://aniqa.dev/sitemap-index.xml

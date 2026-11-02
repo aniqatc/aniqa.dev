@@ -1,0 +1,56 @@
+---
+// End of the lab archive: the next entry's number and an email sign-up for when it lands.
+// It subscribes the address to Buttondown (the username in contact.ts), tagged `updates` like the portfolio
+// sign-up, then says thanks. How it sends is in src/scripts/signup.ts.
+import { SIGNUP_ACTION } from '../lib/contact';
+import { pad } from '../lib/projects';
+
+interface Props {
+  /** the number the next entry will get (entry count + 1) */
+  number: number;
+}
+
+const { number } = Astro.props;
+// Confirmation happens through Buttondown's welcome automation, if configured.
+const thanks = 'Thanks! You’ll hear when it lands.';
+---
+
+<form
+  class="next-entry"
+  aria-labelledby="next-entry-title"
+  action={SIGNUP_ACTION}
+  method="post"
+  data-signup
+  data-thanks={thanks}
+  novalidate
+>
+  <input type="hidden" name="embed" value="1" />
+  <input type="hidden" name="tag" value="updates" />
+  <span class="next-entry-number">{pad(number)}</span>
+  <span class="next-entry-text">
+    <span class="next-entry-title" id="next-entry-title">
+      The next entry isn't made yet.
+    </span>
+    <span class="next-entry-note">Get an email when it lands.</span>
+  </span>
+  <span class="next-entry-form" data-signup-fields>
+    <input
+      class="next-entry-email"
+      data-signup-email
+      type="email"
+      name="email"
+      placeholder="you@example.com"
+      autocomplete="email"
+      aria-label="Email address"
+      required
+    />
+    <button class="next-entry-button" type="submit" data-signup-button>
+      Notify me
+    </button>
+  </span>
+  <span class="next-entry-thanks" role="status" data-signup-thanks hidden></span>
+</form>
+
+<script>
+  import '../scripts/signup';
+</script>

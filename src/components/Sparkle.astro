@@ -1,0 +1,21 @@
+---
+// The favorite mark: a small four-point sparkle in the accent. Next to a favorite's title in its year, and on the
+// Favorites heading at the top of the lab.
+interface Props {
+  /** read out by screen readers; leave it out where the text next to it already says it (the heading) */
+  label?: string;
+}
+
+const { label } = Astro.props;
+---
+
+<svg
+  class="sparkle"
+  viewBox="0 0 12 12"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  {label && <title>{label}</title>}
+  <path d="M6 0c.5 3.2 2.8 5.5 6 6-3.2.5-5.5 2.8-6 6-.5-3.2-2.8-5.5-6-6 3.2-.5 5.5-2.8 6-6z"></path>
+</svg>

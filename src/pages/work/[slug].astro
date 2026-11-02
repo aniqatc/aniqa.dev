@@ -1,0 +1,69 @@
+---
+import { render } from 'astro:content';
+import Detail from '../../layouts/Detail.astro';
+import Facts from '../../components/Facts.astro';
+import PrevNext from '../../components/PrevNext.astro';
+import SiteScreenshot from '../../components/SiteScreenshot.astro';
+import Stars from '../../components/Stars.astro';
+import { fmtMonth, getSelected, links, pad, type Project } from '../../lib/projects';
+
+// One case study per selected project; previous / next wrap around.
+export async function getStaticPaths() {
+  const selected = await getSelected();
+  const total = selected.length;
+  return selected.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      i,
+      total,
+      prev: selected[(i - 1 + total) % total],
+      next: selected[(i + 1) % total],
+    },
+  }));
+}
+
+interface Props {
+  project: Project;
+  i: number;
+  total: number;
+  prev: Project;
+  next: Project;
+}
+
+const { project, i, total, prev, next } = Astro.props;
+const { title, type, stack, released, summary } = project.data;
+const { Content } = await render(project);
+const facts = [
+  { label: 'Released', value: fmtMonth(released) },
+  { label: 'Type', value: type },
+  { label: 'Stack', value: stack },
+  { label: 'Links', value: links(project) },
+];
+---
+
+<Detail
+  entry={project}
+  mode="portfolio"
+  variant="cs"
+  title={title}
+  lede={summary}
+  back={{ href: '/', label: '← All work' }}
+  position={`${pad(i + 1)} / ${pad(total)}`}
+>
+  <Stars slot="actions" repo={project.data.repo} title={title} variant="button" />
+  <Fragment slot="eyebrow">
+    Selected work <b>{pad(i + 1)}</b>
+  </Fragment>
+  <Facts slot="facts" class="entry-facts" items={facts} />
+  <SiteScreenshot entry={project} />
+  <Content />
+  {total > 1 && (
+    <PrevNext
+      label="More work"
+      labels={['← Previous', 'Next →']}
+      prev={{ href: `/work/${prev.id}`, title: prev.data.title }}
+      next={{ href: `/work/${next.id}`, title: next.data.title }}
+    />
+  )}
+</Detail>

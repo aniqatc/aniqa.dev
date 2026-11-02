@@ -1,0 +1,49 @@
+---
+import { existsSync } from 'node:fs';
+import '../styles/detail.css';
+import Base from './Base.astro';
+
+// Shared shell for case studies (cs), lab notes (nb), experiments (xp) and app reviews (rv):
+// top bar, eyebrow, title, lede and facts; the page fills in the rest.
+interface Props {
+  mode: 'portfolio' | 'lab';
+  variant: 'cs' | 'nb' | 'xp' | 'rv';
+  title: string;
+  lede: string;
+  back: { href: string; label: string };
+  /** e.g. "01 / 05"; lab entries leave it out */
+  position?: string;
+  /** the entry, to find its own link-preview card in public/og/ */
+  entry: { collection: string; id: string };
+}
+
+const { mode, variant, title, lede, back, position, entry } = Astro.props;
+// the entry's card from `npm run og`, if it has been made; Base falls back to the general card otherwise
+const card = `/og/${entry.collection}/${entry.id}.png`;
+const ogImage = existsSync(`public${card}`) ? card : undefined;
+---
+
+<Base mode={mode} title={title} description={lede} ogImage={ogImage}>
+  <main class="wrap detail">
+    <article class={`d d-${variant}`}>
+      <div class="d-top label">
+        <a class="back" href={back.href}>
+          {back.label}
+        </a>
+        <span class="d-top-r">
+          <slot name="actions" />
+          {position && <span>{position}</span>}
+        </span>
+      </div>
+      <div class="d-head">
+        <p class="d-eyebrow label">
+          <slot name="eyebrow" />
+        </p>
+        <h1 class="d-title">{title}</h1>
+        <p class="d-lede">{lede}</p>
+        <slot name="facts" />
+      </div>
+      <slot />
+    </article>
+  </main>
+</Base>

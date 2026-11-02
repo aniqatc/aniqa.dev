@@ -1,0 +1,46 @@
+/* One site, two moods. Portfolio + case studies = night; lab archive, lab notes + experiments = day.
+   Base.astro sets data-mode on <html>. */
+:root {
+  /* --pop is the accent on dark pages and on the pet; --pop-lab is the same hue darkened for text on the light lab */
+  --pop: #79d3e6;
+  --pop-lab: #177282; /* lagoon */
+  --pet: var(--pop);
+  /* darker shades of the pet for its wings, leaves, stems and stripes; they follow --pop */
+  --pet-shade: color-mix(in oklab, var(--pet) 86%, #000);
+  --pet-leaf: color-mix(in oklab, var(--pet) 76%, #000);
+  --pet-deep: color-mix(in oklab, var(--pet) 64%, #000);
+  --pet-light: color-mix(in oklab, var(--pet) 45%, #fff); /* the owl's and frog's bellies */
+  --blush: #f491b2;
+  --ink: #2a2418;
+  --heart: var(--accent); /* likes follow the accent, darkened on the light lab */
+  --font-display: 'Bricolage Grotesque Variable', 'Avenir Next', system-ui, sans-serif;
+  --font-body: 'Geist Variable', 'Helvetica Neue', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+  --hdr: 52px;
+}
+
+/* night: the portfolio, and an experiment stage switched to Night on the lab (themes: true) */
+:root,
+.night {
+  --bg: #16151b;
+  --surface: #1f1d26;
+  --line: #2e2b37;
+  --fg: #ebe7f0;
+  --body: #cfcad6;
+  --muted: #9690a3;
+  --accent: var(--pop);
+  --pet-line: var(--pop); /* thin lines on the pet (a bee's antennae) that would vanish into the dark */
+  color-scheme: dark;
+}
+
+:root[data-mode='lab'] {
+  --bg: #f1efea;
+  --surface: #e7e4dc;
+  --line: #d6d2c8;
+  --fg: #1b1a20;
+  --body: #34323a;
+  --muted: #6a6571;
+  --accent: var(--pop-lab);
+  --pet-line: var(--ink);
+  color-scheme: light;
+}

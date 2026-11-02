@@ -1,0 +1,519 @@
+---
+// Transform Tiles: compare twelve CSS transform functions, animated with the Web Animations API.
+---
+
+<div class="demo" data-study="transform-tiles">
+  <div class="demo-bar">
+    <button class="demo-btn demo-act" type="button" data-toggle aria-pressed="true" data-playing>
+      Pause
+    </button>
+    <label class="control">
+      <span class="label">Speed</span>
+      <input data-speed type="range" min="0.25" max="2" step="0.25" value="1" aria-label="Animation speed" />
+      <output data-speed-out>1.00×</output>
+    </label>
+    <label class="control">
+      <span class="label">Perspective</span>
+      <input
+        data-persp
+        type="range"
+        min="100"
+        max="1200"
+        step="50"
+        value="400"
+        aria-label="Perspective depth"
+      />
+      <output data-persp-out>400px</output>
+    </label>
+  </div>
+
+  <section class="grid" data-grid aria-label="Transform specimens"></section>
+
+  <div class="key" aria-label="Diagram key">
+    <span>
+      <i class="ghost-key"></i> starting position
+    </span>
+    <span>
+      <i class="origin-key"></i> transform-origin (center)
+    </span>
+    <span>Perspective only changes the last two tiles. Compare them with RotateX and RotateY.</span>
+  </div>
+</div>
+
+<style is:global>
+  .demo[data-study='transform-tiles'] {
+    gap: 18px;
+  }
+  .demo[data-study='transform-tiles'] .demo-bar {
+    gap: 8px 24px;
+  }
+  .demo[data-study='transform-tiles'] .control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: min(100%, 190px);
+  }
+  .demo[data-study='transform-tiles'] .control input {
+    flex: 1;
+    min-width: 48px;
+    accent-color: var(--accent);
+  }
+  .demo[data-study='transform-tiles'] .control output {
+    min-width: 52px;
+    color: var(--muted);
+    font: 500 11px/1.4 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .demo[data-study='transform-tiles'] .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .demo[data-study='transform-tiles'] .tile {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg);
+    cursor: default;
+  }
+  .demo[data-study='transform-tiles'] .tile.paused {
+    border-color: var(--accent);
+  }
+  .demo[data-study='transform-tiles'] .tile:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .demo[data-study='transform-tiles'] .specimen {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 20% 20%,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 20% 20%;
+  }
+  .demo[data-study='transform-tiles'] .ghost,
+  .demo[data-study='transform-tiles'] .sq {
+    grid-area: 1 / 1;
+    width: 40%;
+    aspect-ratio: 1;
+    border-radius: 4px;
+  }
+  .demo[data-study='transform-tiles'] .ghost {
+    border: 1.5px dashed var(--muted);
+    opacity: 0.55;
+  }
+  .demo[data-study='transform-tiles'] .sq {
+    position: relative;
+    background: var(--tile);
+    box-shadow: 0 6px 14px -8px var(--tile);
+    will-change: transform;
+  }
+  .demo[data-study='transform-tiles'] .sq::before {
+    position: absolute;
+    top: 14%;
+    left: 14%;
+    width: 18%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--bg);
+    content: '';
+  }
+  .demo[data-study='transform-tiles'] .origin {
+    z-index: 1;
+    grid-area: 1 / 1;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    opacity: 0.7;
+    background:
+      linear-gradient(var(--fg), var(--fg)) center / 100% 1.5px no-repeat,
+      linear-gradient(var(--fg), var(--fg)) center / 1.5px 100% no-repeat;
+  }
+  .demo[data-study='transform-tiles'] .meta {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .demo[data-study='transform-tiles'] .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .demo[data-study='transform-tiles'] .name {
+    font-size: 12px;
+  }
+  .demo[data-study='transform-tiles'] .family {
+    color: var(--muted);
+    font: 500 9px/1.4 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .demo[data-study='transform-tiles'] .meta code {
+    min-height: 2.8em;
+    overflow-wrap: anywhere;
+    color: var(--muted);
+    font: 400 10px/1.4 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .demo[data-study='transform-tiles'] .key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    color: var(--muted);
+    font: 400 10px/1.5 var(--font-mono);
+  }
+  .demo[data-study='transform-tiles'] .key span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .demo[data-study='transform-tiles'] .key i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  .demo[data-study='transform-tiles'] .ghost-key {
+    border: 1.5px dashed var(--muted);
+  }
+  .demo[data-study='transform-tiles'] .origin-key {
+    width: 2px !important;
+    border-radius: 0 !important;
+    background: var(--fg);
+  }
+  @media (max-width: 900px) {
+    .demo[data-study='transform-tiles'] .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 640px) {
+    .demo[data-study='transform-tiles'] .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+  }
+</style>
+
+<script>
+  import { onPage } from '../../../scripts/page';
+
+  // Round values shown in the transform readouts so they stay easy to scan.
+  const round = (n: number) => Math.round(n * 10) / 10;
+
+  // One spec describes a tile's label, colour, timing, keyframes, and how to display its current value.
+  type Spec = {
+    name: string;
+    family: string;
+    hue: number;
+    duration: number;
+    stops: [number, number[]][];
+    template: (value: number[]) => string;
+    perspective?: boolean;
+    square?: HTMLElement;
+    output?: HTMLElement;
+    animation?: Animation;
+    held?: boolean;
+  };
+
+  // Shared keyframes for the scale, rotation, and skew examples.
+  const scaleStops = (): [number, number[]][] => [
+    [0, [1]],
+    [0.25, [1.3]],
+    [0.5, [1]],
+    [0.75, [0.7]],
+    [1, [1]],
+  ];
+  const spinStops = (): [number, number[]][] => [
+    [0, [0]],
+    [0.5, [360]],
+    [1, [0]],
+  ];
+  const skewStops = (): [number, number[]][] => [
+    [0, [0]],
+    [0.25, [10]],
+    [0.5, [0]],
+    [0.75, [-10]],
+    [1, [0]],
+  ];
+
+  // The twelve transform examples. Each keyframe stop pairs a time (0–1) with its transform values.
+  const SPECS: Spec[] = [
+    {
+      name: 'Translate',
+      family: 'Move',
+      hue: 168,
+      duration: 2,
+      stops: [
+        [0, [0, 0]],
+        [0.2, [-30, 0]],
+        [0.4, [-30, -30]],
+        [0.6, [30, -30]],
+        [0.8, [30, 0]],
+        [1, [0, 0]],
+      ],
+      template: (v) => `translate(${round(v[0])}%, ${round(v[1])}%)`,
+    },
+    {
+      name: 'Scale',
+      family: 'Scale',
+      hue: 182,
+      duration: 2,
+      stops: scaleStops(),
+      template: (v) => `scale(${v[0].toFixed(2)})`,
+    },
+    {
+      name: 'ScaleX',
+      family: 'Scale',
+      hue: 182,
+      duration: 2,
+      stops: scaleStops(),
+      template: (v) => `scaleX(${v[0].toFixed(2)})`,
+    },
+    {
+      name: 'ScaleY',
+      family: 'Scale',
+      hue: 182,
+      duration: 2,
+      stops: scaleStops(),
+      template: (v) => `scaleY(${v[0].toFixed(2)})`,
+    },
+    {
+      name: 'Rotate',
+      family: 'Rotate',
+      hue: 200,
+      duration: 4,
+      stops: spinStops(),
+      template: (v) => `rotate(${Math.round(v[0])}deg)`,
+    },
+    {
+      name: 'RotateX',
+      family: 'Rotate',
+      hue: 200,
+      duration: 4,
+      stops: spinStops(),
+      template: (v) => `rotateX(${Math.round(v[0])}deg)`,
+    },
+    {
+      name: 'RotateY',
+      family: 'Rotate',
+      hue: 200,
+      duration: 4,
+      stops: spinStops(),
+      template: (v) => `rotateY(${Math.round(v[0])}deg)`,
+    },
+    {
+      name: 'Skew',
+      family: 'Skew',
+      hue: 218,
+      duration: 2,
+      stops: skewStops(),
+      template: (v) => `skew(${round(v[0])}deg)`,
+    },
+    {
+      name: 'SkewX',
+      family: 'Skew',
+      hue: 218,
+      duration: 2,
+      stops: skewStops(),
+      template: (v) => `skewX(${round(v[0])}deg)`,
+    },
+    {
+      name: 'SkewY',
+      family: 'Skew',
+      hue: 218,
+      duration: 2,
+      stops: skewStops(),
+      template: (v) => `skewY(${round(v[0])}deg)`,
+    },
+    {
+      name: 'RotateX',
+      family: 'Perspective',
+      hue: 236,
+      duration: 4,
+      stops: spinStops(),
+      perspective: true,
+      template: (v) => `perspective(${perspective}px) rotateX(${Math.round(v[0])}deg)`,
+    },
+    {
+      name: 'RotateY',
+      family: 'Perspective',
+      hue: 236,
+      duration: 4,
+      stops: spinStops(),
+      perspective: true,
+      template: (v) => `perspective(${perspective}px) rotateY(${Math.round(v[0])}deg)`,
+    },
+  ];
+  let perspective = 400;
+
+  // Find the two surrounding keyframes and interpolate their values for the live readout.
+  function valueAt(spec: Spec, progress: number) {
+    const stops = spec.stops;
+    for (let i = 1; i < stops.length; i++) {
+      if (progress <= stops[i][0]) {
+        const [start, a] = stops[i - 1],
+          [end, b] = stops[i],
+          fraction = (progress - start) / (end - start);
+        return a.map((v, j) => v + (b[j] - v) * fraction);
+      }
+    }
+    return stops[stops.length - 1][1];
+  }
+
+  // Set up the study only when its page is active; onPage also lets us clean up on navigation.
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-study="transform-tiles"]');
+    if (!root) return;
+
+    // Cache the controls and read the user's motion preference before creating animations.
+    const grid = root.querySelector<HTMLElement>('[data-grid]')!;
+    const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]')!;
+    const speedInput = root.querySelector<HTMLInputElement>('[data-speed]')!;
+    const speedOutput = root.querySelector<HTMLOutputElement>('[data-speed-out]')!;
+    const perspInput = root.querySelector<HTMLInputElement>('[data-persp]')!;
+    const perspOutput = root.querySelector<HTMLOutputElement>('[data-persp-out]')!;
+    perspective = Number(perspInput.value);
+    perspOutput.textContent = `${perspective}px`;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let playing = !reduce;
+    let speed = 1;
+    let raf = 0;
+
+    // Reset any state left by an earlier visit so setup can safely run again after a page transition.
+    SPECS.forEach((spec) => {
+      spec.animation?.cancel();
+      spec.animation = undefined;
+      spec.held = false;
+    });
+
+    // Build or rebuild a tile's animation, keeping its current time when settings change.
+    const build = (spec: Spec, initialTime?: number) => {
+      const frames = spec.stops.map(([offset, value]) => ({ offset, transform: spec.template(value) }));
+      const previous = spec.animation;
+      spec.animation = spec.square!.animate(frames, {
+        duration: spec.duration * 1000,
+        iterations: Infinity,
+        easing: 'linear',
+      });
+      spec.animation.playbackRate = speed;
+      if (previous) {
+        spec.animation.currentTime = previous.currentTime;
+        previous.cancel();
+      } else if (initialTime != null) spec.animation.currentTime = initialTime;
+      if (!playing || spec.held) spec.animation.pause();
+    };
+
+    // Build all twelve cards before starting any animations, so a failed animation can't leave a partial grid.
+    const tiles = new DocumentFragment();
+    const tileElements = new Map<Spec, HTMLElement>();
+    SPECS.forEach((spec) => {
+      const tile = document.createElement('article');
+      tile.className = 'tile';
+      tile.tabIndex = 0;
+      tile.style.setProperty('--tile', `oklch(0.7 0.11 ${spec.hue})`);
+      tile.setAttribute('aria-label', `${spec.family}: ${spec.name}`);
+      tile.innerHTML = `<div class="specimen"><span class="ghost"></span><span class="sq"></span><span class="origin"></span></div><div class="meta"><div class="row"><span class="name">${spec.name}</span><span class="family">${spec.family}</span></div><code aria-live="off"></code></div>`;
+      tiles.append(tile);
+      tileElements.set(spec, tile);
+      spec.square = tile.querySelector('.sq')!;
+      spec.output = tile.querySelector('code')!;
+    });
+    grid.replaceChildren(tiles);
+
+    // Start each animation independently so one browser error doesn't stop the remaining tiles from initializing.
+    SPECS.forEach((spec) => {
+      const tile = tileElements.get(spec)!;
+      try {
+        build(spec, reduce ? spec.duration * 1000 * spec.stops[1][0] : 0);
+      } catch (error) {
+        console.error(`Transform Tiles could not animate ${spec.name}.`, error);
+        spec.animation?.cancel();
+        spec.animation = undefined;
+        return;
+      }
+
+      // Pointer hover pauses only for a mouse; focus and taps also let keyboard and touch users inspect a tile.
+      const hold = (on: boolean) => {
+        spec.held = on;
+        tile.classList.toggle('paused', on);
+        if (on) spec.animation!.pause();
+        else if (playing) spec.animation!.play();
+      };
+      tile.addEventListener('pointerenter', (event) => {
+        if (event.pointerType === 'mouse') hold(true);
+      });
+      tile.addEventListener('pointerleave', (event) => {
+        if (event.pointerType === 'mouse') hold(false);
+      });
+      tile.addEventListener('focus', () => hold(true));
+      tile.addEventListener('blur', () => hold(false));
+      tile.addEventListener('click', (event) => {
+        if (event.pointerType !== 'mouse') hold(!spec.held);
+      });
+    });
+
+    // Only interactive specs have an animation; a static card remains visible if its animation failed.
+    const activeSpecs = SPECS.filter((spec) => spec.animation);
+
+    // Keep the shared Play/Pause control and its pressed state in sync.
+    const syncToggle = () => {
+      toggle.textContent = playing ? 'Pause' : 'Play';
+      toggle.setAttribute('aria-pressed', String(playing));
+      toggle.toggleAttribute('data-playing', playing);
+    };
+    toggle.addEventListener('click', () => {
+      playing = !playing;
+      activeSpecs.forEach((spec) =>
+        playing && !spec.held ? spec.animation!.play() : spec.animation!.pause(),
+      );
+      syncToggle();
+    });
+    syncToggle();
+
+    // Apply the selected playback rate to every tile.
+    speedInput.addEventListener('input', () => {
+      speed = Number(speedInput.value);
+      speedOutput.textContent = `${speed.toFixed(2)}×`;
+      activeSpecs.forEach((spec) => {
+        spec.animation!.playbackRate = speed;
+      });
+    });
+
+    // Perspective is part of the transform string, so rebuild only the two perspective examples.
+    perspInput.addEventListener('input', () => {
+      perspective = Number(perspInput.value);
+      perspOutput.textContent = `${perspective}px`;
+      activeSpecs.filter((spec) => spec.perspective).forEach((spec) => build(spec));
+    });
+
+    // Update each value label on every frame to match the animation's current position.
+    const readouts = () => {
+      activeSpecs.forEach((spec) => {
+        const duration = spec.duration * 1000;
+        const current = (Number(spec.animation!.currentTime) || 0) % duration;
+        spec.output!.textContent = spec.template(valueAt(spec, current / duration));
+      });
+      raf = requestAnimationFrame(readouts);
+    };
+    raf = requestAnimationFrame(readouts);
+
+    // Stop the frame loop and cancel animations when leaving the study page.
+    return () => {
+      cancelAnimationFrame(raf);
+      SPECS.forEach((spec) => {
+        spec.animation?.cancel();
+        spec.animation = undefined;
+        spec.held = false;
+      });
+    };
+  });
+</script>
