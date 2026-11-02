@@ -192,6 +192,7 @@ const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
   import { STAGE_PAUSE, type StagePauseEvent } from '../../../lib/sketch';
   import { onPage } from '../../../scripts/page';
 
+  // Keep the words, their hues, and CSS keyframe stops aligned by index.
   const WORDS = 'Eclectic Vibrant Evolving Colorful Diverse Busy Lively Inspiring Exciting'.split(' ');
   const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
   const STOPS = ['0%', '12.5%', '25%', '37.5%', '50%', '62.5%', '75%', '87.5%', '100%'];
@@ -214,6 +215,7 @@ const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
     let raf = 0;
     let shown = '';
 
+    // Update the pressed state for the active mode or blend option.
     const press = (sel: string, on: Element) =>
       root.querySelectorAll(sel).forEach((b) => b.setAttribute('aria-pressed', String(b === on)));
 
@@ -271,6 +273,7 @@ const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
       roll.style.transform = `translateY(-${word}em)`;
       render();
     };
+    // Restart the active animation or timer with the current mode and motion state.
     function run() {
       clearInterval(timer);
       cancelAnimationFrame(raf);
@@ -281,6 +284,7 @@ const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
       render();
     }
 
+    // Switch between keyframe-based Swap and the sliding list used by Roll.
     root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) =>
       b.addEventListener('click', () => {
         mode = b.dataset.mode!;
@@ -289,6 +293,7 @@ const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
         run();
       }),
     );
+    // Change the text blend mode and refresh the displayed CSS.
     root.querySelectorAll<HTMLButtonElement>('[data-blend]').forEach((b) =>
       b.addEventListener('click', () => {
         blend = b.dataset.blend!;
@@ -304,12 +309,14 @@ const HUES = [350, 20, 60, 120, 170, 210, 250, 285, 315];
       run();
     };
     stage.addEventListener(STAGE_PAUSE, onPause);
+    // Move the page split and keep its percentage readout current.
     split.addEventListener('input', () => {
       scene.style.setProperty('--split', `${split.value}%`);
       root.querySelector('[data-split-out]')!.textContent = `${split.value}%`;
     });
 
     run();
+    // Stop the timer, animation-frame loop, and stage listener on navigation.
     return () => {
       stage.removeEventListener(STAGE_PAUSE, onPause);
       clearInterval(timer);

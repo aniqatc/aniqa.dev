@@ -1,8 +1,10 @@
 ---
 type GradientSpecimen = { id: string; name: string; note: string; layers: string[] };
 
+// Refer to each palette color by its shared CSS variable.
 const color = (index: number) => `var(--s${index})`;
 
+// Define four gradient families from reusable palette variables.
 const FAMILIES = [
   {
     name: 'Linear',
@@ -149,11 +151,16 @@ const FAMILIES = [
   },
 ];
 
+// Join a specimen's layers in the order CSS paints them.
 const gradient = (item: GradientSpecimen) => item.layers.join(', ');
+// Start on a conic example so the initial preview shows its off-center origin.
 const initial = FAMILIES[2].items[3];
+// Escape specimen CSS and highlight its palette variables for the code sample.
 const formatCode = (layers: string[]) => {
+  // Escape text before inserting it into the code sample's HTML.
   const escapeHtml = (text: string) =>
     text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Wrap palette variables so the study can style them with its accent color.
   const highlight = (text: string) =>
     escapeHtml(text).replace(/var\(--[a-z0-9-]+\)/g, (match) => `<span class="v">${match}</span>`);
   return `<span class="k">background:</span>\n${layers
@@ -248,6 +255,7 @@ const formatCode = (layers: string[]) => {
 </div>
 
 <style>
+  /* The default palette colors are overridden by the selected palette below. */
   .demo {
     --s1: #1e3a8a;
     --s2: #e0f2fe;
@@ -300,6 +308,7 @@ const formatCode = (layers: string[]) => {
     --sky: #c4b5fd;
   }
 
+  /* Keep palette choices and their current color swatches together. */
   .controls {
     gap: 8px 24px;
     align-items: center;
@@ -321,6 +330,7 @@ const formatCode = (layers: string[]) => {
     transition: background-color 0.35s ease;
   }
 
+  /* Show the selected gradient beside its name, explanation, and CSS. */
   .detail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -390,6 +400,7 @@ const formatCode = (layers: string[]) => {
     border-color: var(--accent);
   }
 
+  /* Arrange specimens by gradient family, with four tiles across on wider screens. */
   .families {
     display: grid;
     gap: 18px;
@@ -482,6 +493,7 @@ const formatCode = (layers: string[]) => {
   }
 
   @media (max-width: 600px) {
+    /* Stack the preview and family labels above their content on small screens. */
     .detail {
       grid-template-columns: 1fr;
       gap: 12px;
@@ -524,9 +536,12 @@ const formatCode = (layers: string[]) => {
 <script>
   import { onPage } from '../../../scripts/page';
 
+  // Escape generated CSS before inserting syntax highlights into the code block.
   const escapeHtml = (text: string) =>
     text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Highlight palette variables in the updated CSS sample.
   const formatCode = (layers: string[]) => {
+    // Add a colored span around each variable reference.
     const highlight = (text: string) =>
       escapeHtml(text).replace(/var\(--[a-z0-9-]+\)/g, (match) => `<span class="v">${match}</span>`);
     return `<span class="k">background:</span>\n${layers

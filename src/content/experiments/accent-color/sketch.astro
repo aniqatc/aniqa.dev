@@ -1,4 +1,5 @@
 ---
+// Preset colors and matrix headings are shared by the rendered controls below.
 const PRESETS = ['#1f9fb0', '#e11d48', '#f59e0b', '#fde68a', '#7c3aed', '#1e3a8a'];
 const SCHEMES = ['light', 'dark'];
 const VARIANTS = ['default', 'custom'];
@@ -99,12 +100,14 @@ const VARIANTS = ['default', 'custom'];
 </div>
 
 <style>
+  /* Keep the custom accent local to this study. */
   .demo {
     --picked-accent: #1f9fb0;
     max-width: 760px;
     margin-inline: auto;
   }
 
+  /* Group the native color picker, preset swatches, and optional hue cycle. */
   .controls {
     gap: 12px 20px;
     align-items: center;
@@ -165,6 +168,7 @@ const VARIANTS = ['default', 'custom'];
     font: 500 11.5px/1.4 var(--font-mono);
   }
 
+  /* Compare browser defaults with custom accents on both light and dark surfaces. */
   .matrix {
     display: grid;
     grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1fr);
@@ -258,6 +262,7 @@ const VARIANTS = ['default', 'custom'];
     margin: 0;
   }
 
+  /* Show the CSS rule that applies the selected accent to native controls. */
   .snippet {
     display: block;
     white-space: pre;
@@ -285,6 +290,7 @@ const VARIANTS = ['default', 'custom'];
   }
 
   @media (max-width: 600px) {
+    /* Give each matrix cell its own heading when the column labels no longer fit. */
     .matrix {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
@@ -316,8 +322,8 @@ const VARIANTS = ['default', 'custom'];
   import { STAGE_PAUSE, type StagePauseEvent } from '../../../lib/sketch';
   import { onPage } from '../../../scripts/page';
 
+  // Convert a hue to a vivid, readable color without adding a color library.
   const toHex = (hue: number) => {
-    // Convert a hue to a vivid, readable color without adding a color library.
     const saturation = 0.7;
     const lightness = 0.48;
     const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
@@ -411,11 +417,13 @@ const VARIANTS = ['default', 'custom'];
       progressBars.forEach((progress) => (progress.value = Number(target.value)));
     };
 
+    // Apply the native color picker's value and stop a running hue cycle.
     const onPicker = () => {
       stopCycle();
       setAccent(picker.value);
     };
 
+    // Apply a preset swatch and stop a running hue cycle.
     const onPreset = (event: Event) => {
       const button = (event.target as Element).closest<HTMLButtonElement>('[data-color]');
       if (!button?.dataset.color) return;
@@ -423,6 +431,7 @@ const VARIANTS = ['default', 'custom'];
       setAccent(button.dataset.color);
     };
 
+    // Start or stop the hue animation when the cycle control changes.
     const onCycle = () => {
       cancelAnimationFrame(animationFrame);
       animationFrame = 0;
@@ -430,6 +439,7 @@ const VARIANTS = ['default', 'custom'];
       if (cycle.checked && !stagePaused && !reducedMotion) animationFrame = requestAnimationFrame(animate);
     };
 
+    // Pause or resume the hue animation when the shared stage control changes.
     const onStagePause = (event: Event) => {
       stagePaused = (event as StagePauseEvent).detail.paused;
       onCycle();
@@ -445,6 +455,7 @@ const VARIANTS = ['default', 'custom'];
     stage.addEventListener(STAGE_PAUSE, onStagePause);
     setAccent(picker.value);
 
+    // Cancel the animation and remove listeners before leaving the page.
     return () => {
       cancelAnimationFrame(animationFrame);
       picker.removeEventListener('input', onPicker);

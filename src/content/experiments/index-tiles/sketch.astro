@@ -1,0 +1,457 @@
+---
+// Index Tiles: use one tile index to calculate its colour, shape and animation.
+---
+
+<div class="demo" data-study="index-tiles" data-pausable>
+  <div class="knobs" aria-label="Shared tile values">
+    <label class="knob" for="index-hue">
+      <code>--hue</code>
+      <input id="index-hue" type="range" min="0" max="360" value="300" data-value="hue" />
+      <output data-output="hue">300</output>
+    </label>
+    <label class="knob" for="index-hstep">
+      <code>--hstep</code>
+      <input id="index-hstep" type="range" min="-30" max="30" value="9" data-value="hstep" />
+      <output data-output="hstep">9</output>
+    </label>
+    <label class="knob" for="index-astep">
+      <code>--astep</code>
+      <input id="index-astep" type="range" min="0" max="90" step="5" value="45" data-value="astep" />
+      <output data-output="astep">45°</output>
+    </label>
+    <label class="knob" for="index-rstep">
+      <code>--rstep</code>
+      <input id="index-rstep" type="range" min="0" max="12" value="3" data-value="rstep" />
+      <output data-output="rstep">3px</output>
+    </label>
+    <label class="knob" for="index-dstep">
+      <code>--dstep</code>
+      <input id="index-dstep" type="range" min="100" max="900" step="50" value="300" data-value="dstep" />
+      <output data-output="dstep">300ms</output>
+    </label>
+    <div class="actions">
+      <span class="label">Animation controls</span>
+      <button type="button" class="demo-btn" data-reset>
+        Reset values
+      </button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="grid" role="group" aria-label="Sixteen indexed gradient tiles" data-grid>
+      {Array.from({ length: 16 }, (_, index) => {
+        const i = index + 1;
+        return (
+          <button
+            type="button"
+            class="cell"
+            aria-label={`Tile ${i}`}
+            aria-pressed={i === 7 ? 'true' : 'false'}
+            data-index={i}
+          >
+            <span class="tile" style={`--i: ${i}`} aria-hidden="true">
+              {i}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+
+    <div class="sheet">
+      <span class="label">The formula for each tile</span>
+      <pre class="demo-code" aria-label="CSS formula for the tiles"><code data-formula /></pre>
+
+      <section class="picked" aria-live="polite" aria-label="Selected tile values">
+        <span class="label">Tile you picked</span>
+        <h2>
+          <span class="chip tile" style="--i: 7" data-chip aria-hidden="true" />{' '}
+          <span data-picked>--i: 7</span>
+        </h2>
+        <dl data-values />
+      </section>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Starting values feed each tile's calculated styles. */
+  .demo[data-study='index-tiles'] {
+    --hue: 300;
+    --hstep: 9;
+    --astep: 45;
+    --rstep: 3;
+    --dstep: 300;
+    --play: running;
+    gap: 18px;
+  }
+
+  /* Keep the shared values, sliders, and reset action in one control panel. */
+  .knobs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr));
+    gap: 12px 22px;
+    padding-block: 14px;
+    border-block: 1px solid var(--line);
+  }
+
+  .knob {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr) 44px;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .knob code {
+    color: var(--muted);
+    font: 400 11px/1.4 var(--font-mono);
+  }
+
+  .knob input {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  .knob output {
+    color: var(--fg);
+    font: 500 11px/1.4 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .actions .label {
+    margin-right: auto;
+  }
+
+  /* Place the four-by-four tile grid beside its formula and selected values. */
+  .main {
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    max-width: 360px;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+
+  .cell {
+    display: grid;
+    min-width: 0;
+    aspect-ratio: 1;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+  }
+
+  .cell[aria-pressed='true'] {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+
+  /* Derive color, angle, corner shape, and motion from each tile's --i value. */
+  .tile {
+    --h1: calc(var(--hue) + var(--i) * var(--hstep));
+    --h2: calc(var(--h1) - 50);
+    display: grid;
+    width: 100%;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: clamp(2px, calc(var(--i) * var(--rstep) * 1px), 50%);
+    background: linear-gradient(
+      calc(45deg + var(--i) * var(--astep) * 1deg),
+      hsl(var(--h1) 75% 62%),
+      hsl(var(--h2) 80% 42%)
+    );
+    animation: spin calc(var(--i) * var(--dstep) * 1ms) linear calc(var(--i) * 100ms) infinite;
+    animation-play-state: var(--play);
+    color: white;
+    font: 500 10px/1 var(--font-mono);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Keep the formula and selected tile details together. */
+  .sheet {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  :global(.demo[data-study='index-tiles'] .demo-code .v) {
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+    font-weight: 700;
+    padding-inline: 2px;
+  }
+
+  .picked {
+    display: grid;
+    gap: 8px;
+  }
+
+  .picked h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font: 700 18px/1.2 var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  .chip {
+    width: 22px;
+    border-radius: 6px !important;
+    animation: none;
+  }
+
+  .picked dl {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 14px;
+    margin: 0;
+    font: 400 11px/1.55 var(--font-mono);
+  }
+
+  :global(.demo[data-study='index-tiles'] .picked dt) {
+    color: var(--muted);
+    padding-block: 7px;
+    border-bottom: 1px solid var(--line);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  :global(.demo[data-study='index-tiles'] .picked dd) {
+    display: grid;
+    min-width: 0;
+    margin: 0;
+    padding-block: 7px;
+    border-bottom: 1px solid var(--line);
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+  }
+
+  :global(.demo[data-study='index-tiles'] .picked .actual) {
+    color: var(--fg);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  :global(.demo[data-study='index-tiles'] .picked .calc) {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  @media (max-width: 640px) {
+    /* Stack the grid above the formula sheet while keeping four tiles per row. */
+    .main {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .grid {
+      margin-inline: auto;
+    }
+  }
+
+  /* Stop the spinning tiles when the visitor asks for reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    .tile {
+      animation-play-state: paused;
+    }
+  }
+</style>
+
+<script>
+  import { STAGE_PAUSE, type StagePauseEvent } from '../../../lib/sketch';
+  import { onPage } from '../../../scripts/page';
+
+  const DEFAULTS = { hue: 300, hstep: 9, astep: 45, rstep: 3, dstep: 300 };
+  const UNITS: Record<keyof typeof DEFAULTS, string> = {
+    hue: '',
+    hstep: '',
+    astep: '°',
+    rstep: 'px',
+    dstep: 'ms',
+  };
+
+  // Set up the study after navigation and leave other pages alone.
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-study="index-tiles"]');
+    if (!root) return;
+
+    const stage = root.closest<HTMLElement>('.stage')!;
+    const grid = root.querySelector<HTMLElement>('[data-grid]')!;
+    const cells = [...grid.querySelectorAll<HTMLButtonElement>('[data-index]')];
+    const inputs = [...root.querySelectorAll<HTMLInputElement>('[data-value]')];
+    const formula = root.querySelector<HTMLElement>('[data-formula]')!;
+    const values = root.querySelector<HTMLElement>('[data-values]')!;
+    const chip = root.querySelector<HTMLElement>('[data-chip]')!;
+    const picked = root.querySelector<HTMLElement>('[data-picked]')!;
+    const controller = new AbortController();
+    const { signal } = controller;
+    const settings = { ...DEFAULTS };
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let selected = 7;
+    let playing = !reduce;
+
+    // Show CSS generated from the five shared values and each tile's --i.
+    const renderFormula = () => {
+      formula.innerHTML = `<span class="k">.tile {</span>
+  --h1: calc(${settings.hue} + <span class="v">var(--i)</span> * ${settings.hstep});
+  background: linear-gradient(
+    calc(45deg + <span class="v">var(--i)</span> * ${settings.astep}deg),
+    hsl(var(--h1) 75% 62%),
+    hsl(calc(var(--h1) - 50) 80% 42%));
+  border-radius: clamp(2px, <span class="v">var(--i)</span> * ${settings.rstep}px, 50%);
+  animation: spin calc(<span class="v">var(--i)</span> * ${settings.dstep}ms)
+    linear calc(<span class="v">var(--i)</span> * 100ms) infinite;
+<span class="k">}</span>`;
+    };
+
+    // Explain the calculated style for the selected tile.
+    const renderValues = () => {
+      const tile = cells[selected - 1].querySelector<HTMLElement>('.tile')!;
+      const tileSize = tile.getBoundingClientRect().width;
+      const hue1 = settings.hue + selected * settings.hstep;
+      const hue2 = hue1 - 50;
+      const angle = (((45 + selected * settings.astep) % 360) + 360) % 360;
+      const radius = Math.min(tileSize / 2, Math.max(2, selected * settings.rstep));
+      const rows = [
+        [
+          'first color',
+          `hsl(${((hue1 % 360) + 360) % 360} 75% 62%)`,
+          `${settings.hue} + ${selected} × ${settings.hstep}`,
+        ],
+        ['second color', `hsl(${((hue2 % 360) + 360) % 360} 80% 42%)`, 'first hue − 50'],
+        ['angle', `${angle}°`, `45 + ${selected} × ${settings.astep}`],
+        [
+          'corner radius',
+          `${Number(radius.toFixed(1))}px`,
+          `clamp(2px, ${selected} × ${settings.rstep}px, 50%)`,
+        ],
+        [
+          'one spin',
+          `${((selected * settings.dstep) / 1000).toFixed(1)}s`,
+          `${selected} × ${settings.dstep}ms`,
+        ],
+        ['start delay', `${(selected / 10).toFixed(1)}s`, `${selected} × 100ms`],
+      ];
+      values.replaceChildren(
+        ...rows.flatMap(([label, value, calculation]) => {
+          const term = document.createElement('dt');
+          const result = document.createElement('dd');
+          const actual = document.createElement('span');
+          const calc = document.createElement('span');
+          term.textContent = label;
+          actual.className = 'actual';
+          actual.textContent = value;
+          calc.className = 'calc';
+          calc.textContent = calculation;
+          result.append(actual, calc);
+          return [term, result];
+        }),
+      );
+    };
+
+    // Refresh the formula, slider readouts and selected tile values after a change.
+    const render = () => {
+      for (const input of inputs) {
+        const key = input.dataset.value as keyof typeof DEFAULTS;
+        settings[key] = Number(input.value);
+        root.style.setProperty(`--${key}`, input.value);
+        root.querySelector<HTMLOutputElement>(`[data-output="${key}"]`)!.value =
+          `${input.value}${UNITS[key]}`;
+      }
+      renderFormula();
+      renderValues();
+    };
+
+    // Keep the stage caption's shared Pause / Play control in sync with this study's animation.
+    const setPlaying = (on: boolean) => {
+      playing = on;
+      root.style.setProperty('--play', on ? 'running' : 'paused');
+    };
+    stage.addEventListener(STAGE_PAUSE, (event) => setPlaying(!(event as StagePauseEvent).detail.paused), {
+      signal,
+    });
+    setPlaying(playing);
+
+    // Select a tile with click, keyboard focus, or a mouse hover.
+    const select = (button: HTMLButtonElement) => {
+      selected = Number(button.dataset.index);
+      cells.forEach((cell) => cell.setAttribute('aria-pressed', String(cell === button)));
+      chip.style.setProperty('--i', String(selected));
+      picked.textContent = `--i: ${selected}`;
+      renderValues();
+    };
+    grid.addEventListener(
+      'click',
+      (event) => {
+        const button = (event.target as Element).closest<HTMLButtonElement>('[data-index]');
+        if (button) select(button);
+      },
+      { signal },
+    );
+    grid.addEventListener(
+      'pointerover',
+      (event) => {
+        if ((event as PointerEvent).pointerType !== 'mouse') return;
+        const button = (event.target as Element).closest<HTMLButtonElement>('[data-index]');
+        if (button && !button.contains(event.relatedTarget as Node | null)) select(button);
+      },
+      { signal },
+    );
+    grid.addEventListener(
+      'focusin',
+      (event) => {
+        const button = (event.target as Element).closest<HTMLButtonElement>('[data-index]');
+        if (button) select(button);
+      },
+      { signal },
+    );
+
+    // Let each range change one shared value; Reset returns all five to the prototype defaults.
+    inputs.forEach((input) => input.addEventListener('input', render, { signal }));
+    root.querySelector<HTMLButtonElement>('[data-reset]')!.addEventListener(
+      'click',
+      () => {
+        inputs.forEach((input) => {
+          const key = input.dataset.value as keyof typeof DEFAULTS;
+          input.value = String(DEFAULTS[key]);
+        });
+        render();
+      },
+      { signal },
+    );
+
+    render();
+    select(cells[selected - 1]);
+    return () => controller.abort();
+  });
+</script>

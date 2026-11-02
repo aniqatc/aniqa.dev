@@ -584,12 +584,14 @@ const SPECIMENS = [
         card.classList.add('is-tapped');
       }
     };
+    // Play all specimen effects together when the comparison checkbox is enabled.
     const toggleAll = () => grid.classList.toggle('show-all', showAll.checked);
 
     grid.addEventListener('click', stayHere);
     grid.addEventListener('click', tapCard);
     showAll.addEventListener('change', toggleAll);
     toggleAll();
+    // Remove listeners so touch and comparison state do not leak across page visits.
     return () => {
       grid.removeEventListener('click', stayHere);
       grid.removeEventListener('click', tapCard);
