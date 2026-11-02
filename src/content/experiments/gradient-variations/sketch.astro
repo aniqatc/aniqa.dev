@@ -1,0 +1,635 @@
+---
+type GradientSpecimen = { id: string; name: string; note: string; layers: string[] };
+
+const color = (index: number) => `var(--s${index})`;
+
+const FAMILIES = [
+  {
+    name: 'Linear',
+    sub: 'a line',
+    items: [
+      {
+        id: 'linear-two-stops',
+        name: 'Two stops',
+        note: 'The simplest gradient: one color fades into another along a −45° line.',
+        layers: [`linear-gradient(-45deg, ${color(1)}, ${color(2)})`],
+      },
+      {
+        id: 'linear-mirrored',
+        name: 'Mirrored',
+        note: 'Listing the stops in a palindrome makes the gradient reflect around its middle.',
+        layers: [`linear-gradient(-45deg, ${color(1)}, ${color(3)}, ${color(4)}, ${color(3)}, ${color(1)})`],
+      },
+      {
+        id: 'linear-midpoint',
+        name: 'Midpoint hint',
+        note: 'A bare percentage between two colors moves the halfway point of the blend to 70%.',
+        layers: [`linear-gradient(to left bottom, ${color(1)}, 70%, ${color(4)})`],
+      },
+      {
+        id: 'linear-hard-bands',
+        name: 'Hard bands',
+        note: 'Stops that meet create sharp stripes instead of blending into each other.',
+        layers: [
+          `linear-gradient(to right, ${color(5)} 0 10%, ${color(1)} 10% 20%, ${color(7)} 20% 30%, ${color(8)} 30% 40%, ${color(6)} 40% 50%, ${color(4)} 50% 60%, ${color(9)} 60% 70%, ${color(2)} 70%)`,
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Radial',
+    sub: 'a point',
+    items: [
+      {
+        id: 'radial-ellipse',
+        name: 'Ellipse',
+        note: 'The default radial shape is an ellipse that stretches to fit the box.',
+        layers: [`radial-gradient(${color(5)}, ${color(8)})`],
+      },
+      {
+        id: 'radial-rings',
+        name: 'Rings',
+        note: 'Hard stops turn a radial gradient into concentric rings.',
+        layers: [
+          `radial-gradient(${color(5)} 0 20%, ${color(7)} 20% 40%, ${color(8)} 40% 60%, ${color(6)} 60% 80%, ${color(2)} 80%)`,
+        ],
+      },
+      {
+        id: 'radial-sized-ellipse',
+        name: 'Sized ellipse',
+        note: 'An explicit size makes the ellipse independent of the box dimensions.',
+        layers: [`radial-gradient(50% 100%, ${color(1)}, ${color(4)})`],
+      },
+      {
+        id: 'radial-sunset',
+        name: 'Sunset',
+        note: 'Moving the center to the bottom edge makes a radial gradient look like a setting sun.',
+        layers: [
+          'radial-gradient(circle at 50% 100%, white, yellow 8%, gold 16%, coral 30%, var(--sky) 62%)',
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Conic',
+    sub: 'an angle',
+    items: [
+      {
+        id: 'conic-color-wheel',
+        name: 'Color wheel',
+        note: 'A conic gradient sweeps colors around a center point.',
+        layers: [`conic-gradient(${color(5)}, ${color(7)}, ${color(8)}, ${color(6)}, ${color(2)})`],
+      },
+      {
+        id: 'conic-seamless',
+        name: 'Seamless',
+        note: 'Ending on the starting color hides the seam at the top of the sweep.',
+        layers: [`conic-gradient(${color(5)}, ${color(7)}, ${color(2)}, ${color(7)}, ${color(5)})`],
+      },
+      {
+        id: 'conic-quarters',
+        name: 'Quarters',
+        note: 'Hard stops at each quarter make four equal slices.',
+        layers: [`conic-gradient(${color(5)} 0 25%, ${color(7)} 0 50%, ${color(8)} 0 75%, ${color(6)} 0)`],
+      },
+      {
+        id: 'conic-off-center',
+        name: 'Off-center',
+        note: 'The starting angle and center point can both move. This one starts at 45° and sits low-left.',
+        layers: [
+          `conic-gradient(from 45deg at 25% 75%, ${color(5)}, ${color(7)}, ${color(8)}, ${color(6)}, ${color(2)})`,
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Layered',
+    sub: 'a stack',
+    items: [
+      {
+        id: 'layered-folded-corner',
+        name: 'Folded corner',
+        note: 'Two half-filled linear gradients overlap. Transparent stops let the lower one show through.',
+        layers: [
+          `linear-gradient(135deg, ${color(8)} 50%, transparent 0)`,
+          `linear-gradient(225deg, ${color(5)} 50%, ${color(7)} 0)`,
+        ],
+      },
+      {
+        id: 'layered-three-halves',
+        name: 'Three halves',
+        note: 'Three layers cover half the box at different angles and overlap into triangles.',
+        layers: [
+          `linear-gradient(270deg, ${color(4)} 50%, transparent 0)`,
+          `linear-gradient(225deg, ${color(6)} 50%, transparent 0)`,
+          `linear-gradient(-45deg, ${color(2)} 50%, ${color(9)} 0)`,
+        ],
+      },
+      {
+        id: 'layered-bottom-arcs',
+        name: 'Bottom arcs',
+        note: 'Circles centered on the bottom corners make quarter-circles.',
+        layers: [
+          `radial-gradient(circle at 100% 100%, ${color(7)} 50%, transparent 50.5%)`,
+          `radial-gradient(circle at 0 100%, ${color(4)} 50%, transparent 50.5%)`,
+          color(2),
+        ],
+      },
+      {
+        id: 'layered-top-arcs',
+        name: 'Top arcs',
+        note: 'The same corner-circle trick from the top, with a final color filling the gaps.',
+        layers: [
+          `radial-gradient(circle at 0 0, ${color(8)} 50%, transparent 50.5%)`,
+          `radial-gradient(circle at 100% 0, ${color(5)} 50%, transparent 50.5%)`,
+          color(2),
+        ],
+      },
+    ],
+  },
+];
+
+const gradient = (item: GradientSpecimen) => item.layers.join(', ');
+const initial = FAMILIES[2].items[3];
+const formatCode = (layers: string[]) => {
+  const escapeHtml = (text: string) =>
+    text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const highlight = (text: string) =>
+    escapeHtml(text).replace(/var\(--[a-z0-9-]+\)/g, (match) => `<span class="v">${match}</span>`);
+  return `<span class="k">background:</span>\n${layers
+    .map((layer, index) => `  ${highlight(layer)}${index === layers.length - 1 ? ';' : ','}`)
+    .join('\n')}`;
+};
+---
+
+<div class="demo" data-study="gradient-variations" data-palette="tide">
+  <div class="demo-bar controls">
+    <span class="demo-opts" role="group" aria-label="Gradient palette">
+      <span class="label">Palette</span>
+      <button type="button" class="demo-btn" data-palette-choice="tide" aria-pressed="true">
+        Tide
+      </button>
+      <button type="button" class="demo-btn" data-palette-choice="sunset" aria-pressed="false">
+        Sunset
+      </button>
+      <button type="button" class="demo-btn" data-palette-choice="mint" aria-pressed="false">
+        Mint
+      </button>
+      <button type="button" class="demo-btn" data-palette-choice="orchid" aria-pressed="false">
+        Orchid
+      </button>
+    </span>
+    <div class="swatches" role="img" aria-label="Nine shades in the Tide palette" data-swatches>
+      {Array.from({ length: 9 }, (_, index) => (
+        <span style={`--swatch: ${color(index + 1)}`} />
+      ))}
+    </div>
+  </div>
+
+  <section class="detail" aria-live="polite">
+    <div
+      class="big"
+      role="img"
+      aria-label={`Gradient preview: ${initial.name}`}
+      style={`background: ${gradient(initial)}`}
+      data-big
+    />
+    <div class="info">
+      <span class="label" data-family>
+        Conic · 1 layer
+      </span>
+      <h2 data-name>{initial.name}</h2>
+      <p data-note>{initial.note}</p>
+      <pre
+        class="demo-code code"
+        aria-label="CSS for the selected gradient"
+      ><code data-code set:html={formatCode(initial.layers)} /></pre>
+      <div class="copy-row">
+        <button type="button" class="demo-btn" data-copy>
+          Copy CSS
+        </button>
+        <span class="sr-only" role="status" data-copy-status />
+      </div>
+    </div>
+  </section>
+
+  <div class="families">
+    {FAMILIES.map((family) => (
+      <section class="family" aria-label={`${family.name} gradients`}>
+        <div class="fhead">
+          <b>{family.name}</b>
+          <span class="label">from {family.sub}</span>
+        </div>
+        <div class="tiles">
+          {family.items.map((item) => {
+            const specimen = JSON.stringify({ family: family.name, ...item });
+            return (
+              <button
+                type="button"
+                class="tile"
+                aria-label={`${item.name}, ${family.name} gradient`}
+                aria-pressed={item.id === initial.id ? 'true' : 'false'}
+                data-specimen={specimen}
+              >
+                <span class="swatch" style={`background: ${gradient(item)}`} aria-hidden="true" />
+                <span class="nm">
+                  {item.name}
+                  <small>
+                    {item.layers.length > 1 ? `${item.layers.length} layers` : item.layers[0].split('(')[0]}
+                  </small>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </div>
+</div>
+
+<style>
+  .demo {
+    --s1: #1e3a8a;
+    --s2: #e0f2fe;
+    --s3: #0b1f4d;
+    --s4: #38bdf8;
+    --s5: #93c5fd;
+    --s6: #3b82f6;
+    --s7: #60a5fa;
+    --s8: #2563eb;
+    --s9: #172554;
+    --sky: #1d4ed8;
+  }
+
+  .demo[data-palette='sunset'] {
+    --s1: #b22222;
+    --s2: #ffe4e1;
+    --s3: #8b0000;
+    --s4: #ff7f50;
+    --s5: #ffa07a;
+    --s6: #cd5c5c;
+    --s7: #f08080;
+    --s8: #c0392b;
+    --s9: #800000;
+    --sky: #add8e6;
+  }
+
+  .demo[data-palette='mint'] {
+    --s1: #0f766e;
+    --s2: #e6fffb;
+    --s3: #134e4a;
+    --s4: #5eead4;
+    --s5: #99f6e4;
+    --s6: #14b8a6;
+    --s7: #67e8f9;
+    --s8: #0891b2;
+    --s9: #164e63;
+    --sky: #a5f3fc;
+  }
+
+  .demo[data-palette='orchid'] {
+    --s1: #6b21a8;
+    --s2: #f3e8ff;
+    --s3: #3b0764;
+    --s4: #c084fc;
+    --s5: #d8b4fe;
+    --s6: #a855f7;
+    --s7: #e879f9;
+    --s8: #9333ea;
+    --s9: #581c87;
+    --sky: #c4b5fd;
+  }
+
+  .controls {
+    gap: 8px 24px;
+    align-items: center;
+  }
+
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .swatches span {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    background: var(--swatch);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 14%, transparent);
+    transition: background-color 0.35s ease;
+  }
+
+  .detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+
+  .big {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 10%, transparent);
+    transition: background 0.35s ease;
+  }
+
+  .info {
+    display: grid;
+    min-width: 0;
+    gap: 9px;
+    align-content: start;
+  }
+
+  .info h2 {
+    margin: 0;
+    font: 700 20px/1.15 var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  .info p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .code {
+    position: relative;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+  }
+
+  .code .k {
+    color: var(--muted);
+  }
+
+  .code .v {
+    color: var(--accent);
+  }
+
+  .copy-row {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .copy-row button {
+    min-height: 30px;
+    padding-inline: 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+
+  .copy-row button:hover {
+    border-color: var(--accent);
+  }
+
+  .families {
+    display: grid;
+    gap: 18px;
+  }
+
+  .family {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .family + .family {
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .fhead {
+    display: grid;
+    gap: 4px;
+    padding-top: 4px;
+  }
+
+  .fhead b {
+    font: 700 15px/1.2 var(--font-display);
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .tile {
+    display: grid;
+    min-width: 0;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--fg);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .swatch {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 18px;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 8%),
+      0 8px 18px -10px rgb(0 0 0 / 35%);
+    transition:
+      transform 0.5s cubic-bezier(0.3, 0.7, 0.2, 1),
+      border-radius 0.5s;
+  }
+
+  .nm {
+    font: 500 12px/1.35 var(--font-body);
+  }
+
+  .nm small {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font: 400 10px/1.4 var(--font-mono);
+  }
+
+  .tile[aria-pressed='true'] .nm {
+    color: var(--accent);
+  }
+
+  .tile[aria-pressed='true'] .swatch {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .tile:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
+
+  @media (hover: hover) {
+    .tile:hover .swatch {
+      transform: rotate(180deg) scale(1.04);
+      border-radius: 4px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .detail {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .big {
+      max-height: 260px;
+    }
+
+    .family {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .fhead {
+      grid-auto-flow: column;
+      justify-content: start;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .tiles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .swatches {
+      margin-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .big,
+    .swatches span,
+    .swatch {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { onPage } from '../../../scripts/page';
+
+  const escapeHtml = (text: string) =>
+    text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const formatCode = (layers: string[]) => {
+    const highlight = (text: string) =>
+      escapeHtml(text).replace(/var\(--[a-z0-9-]+\)/g, (match) => `<span class="v">${match}</span>`);
+    return `<span class="k">background:</span>\n${layers
+      .map((layer, index) => `  ${highlight(layer)}${index === layers.length - 1 ? ';' : ','}`)
+      .join('\n')}`;
+  };
+
+  // onPage runs after navigation and cleans up when the visitor leaves the study.
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-study="gradient-variations"]');
+    if (!root) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-specimen]')];
+    const paletteButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-palette-choice]')];
+    const big = root.querySelector<HTMLElement>('[data-big]')!;
+    const familyLabel = root.querySelector<HTMLElement>('[data-family]')!;
+    const name = root.querySelector<HTMLElement>('[data-name]')!;
+    const note = root.querySelector<HTMLElement>('[data-note]')!;
+    const code = root.querySelector<HTMLElement>('[data-code]')!;
+    const copy = root.querySelector<HTMLButtonElement>('[data-copy]')!;
+    const copyStatus = root.querySelector<HTMLElement>('[data-copy-status]')!;
+    const swatches = root.querySelector<HTMLElement>('[data-swatches]')!;
+    let selectedLayers: string[] = [];
+    let copyTimer = 0;
+
+    // Update the large specimen, explanation and CSS sample from the selected tile.
+    const select = (button: HTMLButtonElement) => {
+      const specimen = JSON.parse(button.dataset.specimen!) as {
+        family: string;
+        id: string;
+        name: string;
+        note: string;
+        layers: string[];
+      };
+      selectedLayers = specimen.layers;
+      buttons.forEach((tile) => tile.setAttribute('aria-pressed', String(tile === button)));
+      big.style.background = selectedLayers.join(', ');
+      big.setAttribute('aria-label', `${specimen.family} gradient preview: ${specimen.name}`);
+      familyLabel.textContent = `${specimen.family} · ${selectedLayers.length} ${selectedLayers.length === 1 ? 'layer' : 'layers'}`;
+      name.textContent = specimen.name;
+      note.textContent = specimen.note;
+      code.innerHTML = formatCode(selectedLayers);
+    };
+
+    // Palette variables stay on this study so the lab's own theme colors remain unchanged.
+    paletteButtons.forEach((button) =>
+      button.addEventListener(
+        'click',
+        () => {
+          const palette = button.dataset.paletteChoice!;
+          root.dataset.palette = palette;
+          paletteButtons.forEach((choice) => choice.setAttribute('aria-pressed', String(choice === button)));
+          swatches.setAttribute('aria-label', `Nine shades in the ${button.textContent?.trim()} palette`);
+        },
+        { signal },
+      ),
+    );
+
+    // One delegated listener keeps all sixteen tile controls simple.
+    root.querySelector('.families')!.addEventListener(
+      'click',
+      (event) => {
+        const button = (event.target as Element).closest<HTMLButtonElement>('[data-specimen]');
+        if (button) select(button);
+      },
+      { signal },
+    );
+
+    // Copy the selected background rule, with a select-to-copy fallback if clipboard access is blocked.
+    copy.addEventListener(
+      'click',
+      async () => {
+        const text = `background:\n${selectedLayers.map((layer) => `  ${layer}`).join(',\n')};`;
+        try {
+          await navigator.clipboard.writeText(text);
+          copy.textContent = 'Copied';
+          copyStatus.textContent = 'CSS copied';
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(code);
+          const selection = getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          copy.textContent = 'Select CSS';
+          copyStatus.textContent = 'Select the highlighted CSS to copy it';
+        }
+        window.clearTimeout(copyTimer);
+        copyTimer = window.setTimeout(() => {
+          copy.textContent = 'Copy CSS';
+          copyStatus.textContent = '';
+        }, 1400);
+      },
+      { signal },
+    );
+
+    const initial = buttons.find((button) => button.getAttribute('aria-pressed') === 'true');
+    if (initial) select(initial);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(copyTimer);
+    };
+  });
+</script>

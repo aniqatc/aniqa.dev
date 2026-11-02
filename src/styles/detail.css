@@ -486,11 +486,10 @@ body.fs-lock {
     align-items: flex-start;
     gap: 0;
   }
-  /* on a phone the buttons go on their own row under the hint, with a line between them */
+  /* on a phone the buttons go on their own row under the hint */
   .d .stage-bar > span:last-child {
     align-self: stretch;
     margin-top: 10px;
-    border-top: 1px solid var(--line);
     gap: 0 24px;
   }
 }
