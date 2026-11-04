@@ -143,6 +143,37 @@
   .pet-trail-sparkles {
     animation: trail-hold 1s forwards;
   }
+  /* rangoli, dots and four-petal flowers in warm colours (the diya) */
+  .pet-trail-rangoli {
+    width: 4px;
+    height: 4px;
+    margin: calc(-2px + var(--side)) 0 0 -2px;
+    border-radius: 50%;
+    background: var(--c);
+    animation: trail-rangoli 1.3s ease-out forwards;
+  }
+  .pet-trail-rangoli.petal {
+    width: 3px;
+    height: 3px;
+    margin: calc(-1.5px + var(--side)) 0 0 -1.5px;
+    background: #fbf6ea;
+    box-shadow:
+      0 -3px 0 var(--c),
+      3px 0 0 var(--c),
+      0 3px 0 var(--c),
+      -3px 0 0 var(--c);
+  }
+  @keyframes trail-rangoli {
+    from,
+    30% {
+      opacity: 0.95;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+  }
   @keyframes trail-shrink {
     from {
       opacity: 0.55;
@@ -393,6 +424,31 @@
   }
   .pet.hop .pet-flame {
     animation: pet-flare 0.9s ease-out;
+  }
+  /* out of the cyan dot it comes cyan, warms through a pale cream to clay (never grey) and its flame lights */
+  .pet[data-pet='diya'].born .pet-diya-clay {
+    animation: diya-warm 0.65s linear both;
+  }
+  .pet[data-pet='diya'].born .pet-flame {
+    animation: diya-light 0.7s ease-out both;
+  }
+  @keyframes diya-warm {
+    from,
+    25% {
+      fill: var(--pet);
+    }
+    55% {
+      fill: #f4dcae;
+    }
+  }
+  @keyframes diya-light {
+    from,
+    35% {
+      transform: scale(0);
+    }
+    70% {
+      transform: scale(1.35);
+    }
   }
   /* the Lunar New Year lantern sways from its string and glows on a tap */
   .pet[data-pet='lantern'] > svg:first-child {

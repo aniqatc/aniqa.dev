@@ -53,7 +53,11 @@ const SEASONS: Season[] = [
   { on: (d) => nthSunday(d, 6, 3), label: "Father's Day, the 3rd Sunday in June", pet: 'party' },
   { on: (d) => hijri(d, 10, 1), label: 'Eid al-Fitr, 1 Shawwal', pet: 'moon' },
   { on: (d) => hijri(d, 12, 10), label: 'Eid al-Adha, 10 Dhu al-Hijjah', pet: 'moon' },
-  { on: (d) => listed(d, DIWALI), label: 'Diwali, from a list of dates through 2030', pet: 'diya' },
+  {
+    on: (d) => around(d, DIWALI, 2, 2),
+    label: 'Diwali, all five days (Dhanteras to Bhai Dooj): 2 days either side of a listed date through 2030',
+    pet: 'diya',
+  },
   {
     on: (d) => listed(d, LUNAR_NEW_YEAR),
     label: 'Lunar New Year, from a list of dates through 2035',
@@ -96,6 +100,17 @@ const LUNAR_NEW_YEAR = [
 function listed(d: Date, dates: string[]): boolean {
   const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   return dates.includes(ymd);
+}
+
+// Checks if a given date is within `before` days ahead of or `after` days after any listed YYYY-MM-DD date.
+// Counts whole calendar days through Date.UTC, so a daylight-saving change can't shift the window.
+function around(d: Date, dates: string[], before: number, after: number): boolean {
+  const day = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000;
+  return dates.some((ymd) => {
+    const [y, m, dd] = ymd.split('-').map(Number);
+    const diff = day - Date.UTC(y, m - 1, dd) / 86_400_000;
+    return diff >= -before && diff <= after;
+  });
 }
 
 // Checks if a given date is the nth Sunday of a specified month (1–12), for Mother's and Father's Day.
@@ -179,6 +194,9 @@ const YELLOW = '#f2b54b'; // a yellow colour used for beaks and feet
 const BEAK = `<path d="M-1.2 0.4 L1.2 0.4 L0 2.4 Z" fill="${YELLOW}"/>`; // the SVG path for a beak
 const CAP = '#b7834f'; // a brown colour used for caps
 const CAP_LINE = '#8f6237'; // a darker brown used for cap lines
+// the diya: a clay bowl with the site's cyan in its oil well
+const DIYA_CLAY = '#c8693f';
+const DIYA_OIL = 'color-mix(in oklab, var(--pop) 70%, #0b4652)';
 
 // The collection of all pet drawings, indexed by their PetId.
 const PETS: Record<PetId, PetDrawing> = {
@@ -478,18 +496,22 @@ const PETS: Record<PetId, PetDrawing> = {
 
   diya: {
     label: 'Diya',
-    body: `<path d="M-11 -1.6 Q-10.6 8.6 0 9.6 Q10.6 8.6 11 -1.6 Z" fill="var(--pet)"/>
-      <path d="M-11.6 -1.6 L11.6 -1.6" stroke="${SHADE}" stroke-width="1.6" stroke-linecap="round"/>
-      <g fill="${YELLOW}"><circle cx="-7.6" cy="5.4" r=".8"/><circle cx="7.6" cy="5.4" r=".8"/><circle cx="0" cy="8" r=".8"/></g>
+    // a clay lamp seen from the side: a shallow bowl pinched into a raised spout, the flame on its tip
+    body: `<radialGradient id="pet-diya-glow"><stop offset="0" stop-color="#ffd27a" stop-opacity=".5"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+      <g class="awake-only"><circle cx="12" cy="-9" r="7.4" fill="url(#pet-diya-glow)"/></g>
+      <path d="M-11 -1.6 C-11 5.6 -6.4 9 -0.6 9 C4.6 9 7.6 6 9.4 2 L12.4 -3.6 Q12.8 -4.6 11.8 -4.2 L8.2 -2.6 Q-1.4 -0.4 -11 -1.6 Z" fill="${DIYA_CLAY}" class="pet-diya-clay"/>
+      <path d="M-11 -1.6 Q-1.6 -4.6 8.2 -2.6 Q-1.4 0.4 -11 -1.6 Z" fill="${DIYA_OIL}"/>
+      <g fill="${YELLOW}"><circle cx="-6.4" cy="6.2" r=".7"/><circle cx="-3.4" cy="7.4" r=".7"/><circle cx="0" cy="7.8" r=".7"/><circle cx="3.4" cy="7.2" r=".7"/></g>
       <g class="awake-only"><g class="pet-flame"><g class="pet-flicker">
-        <path d="M0 -12 Q2.6 -8 2 -5.6 Q0 -3.2 -2 -5.6 Q-2.6 -8 0 -12 Z" fill="${YELLOW}"/>
-        <ellipse cy="-5.8" rx=".8" ry="1.4" fill="${CREAM}"/></g></g></g>
+        <path d="M12 -15.8 Q15.2 -10.8 14.4 -7.8 Q12 -5 9.6 -7.8 Q8.8 -10.8 12 -15.8 Z" fill="${YELLOW}"/>
+        <ellipse cx="12" cy="-7.8" rx="1" ry="1.8" fill="${CREAM}"/></g></g></g>
       <g class="sleep-only">
-        <path d="M0 -2.4 L0 -3.6" stroke="var(--ink)" stroke-width=".6" stroke-linecap="round"/>
-        <g class="pet-smoke"><path d="M0 -4.4 Q-1.2 -6 0 -7.4 Q1.2 -8.8 0 -10.4" fill="none" stroke="var(--muted)" stroke-width=".7" stroke-linecap="round"/></g>
+        <path d="M12 -4.2 L12 -5.6" stroke="${INK}" stroke-width=".7" stroke-linecap="round"/>
+        <g class="pet-smoke"><path d="M12 -6.6 Q10.6 -8.4 12 -10 Q13.4 -11.6 12 -13.4" fill="none" stroke="var(--muted)" stroke-width=".9" stroke-linecap="round"/></g>
       </g>`,
-    face: { y: 1.4, eyeX: 3.4, blushX: 6.2 },
-    reward: `<svg class="pet-heart" viewBox="0 0 10 10" style="left: 22px; top: 2px"><path d="M5 9 L1.2 5.2 A2.2 2.2 0 0 1 5 2.4 A2.2 2.2 0 0 1 8.8 5.2 Z" fill="var(--blush)"/></svg>`,
+    face: { x: -1.4, y: 1.4, eyeX: 3, blushX: 5.4, blushRx: 1.9 },
+    // the usual heart, on the side away from the flame
+    reward: `<svg class="pet-heart" viewBox="0 0 10 10" style="left: 1px; top: -1px"><path d="M5 9 L1.2 5.2 A2.2 2.2 0 0 1 5 2.4 A2.2 2.2 0 0 1 8.8 5.2 Z" fill="var(--blush)"/></svg>`,
   },
 
   lantern: {

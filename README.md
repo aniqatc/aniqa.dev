@@ -43,7 +43,7 @@ The default is `auto` in `src/lib/pets.ts`. Set `PET` there to a pet name to pin
 | March / April / May / June                              | Chick / bunny / sprout / bee            |
 | July–August / September / October / November / December | Frog / owl / pumpkin / acorn / snowball |
 
-Date overrides: Feb 27 cupcake; Mar 27, May 5, June 26, Oct 18 heart; June 30 and Sep 20 cupcake; Oct 31 ghost; Dec 25 tree; Dec 31 party. Mother's Day and Father's Day use party; Eid uses moon; Diwali uses diya; Lunar New Year uses lantern. Moving-date rules and calendars are in `src/lib/pets.ts`.
+Date overrides: Feb 27 cupcake; Mar 27, May 5, June 26, Oct 18 heart; June 30 and Sep 20 cupcake; Oct 31 ghost; Dec 25 tree; Dec 31 party. Mother's Day and Father's Day use party; Eid uses moon; Diwali uses diya for all five days (2 either side of the main date); Lunar New Year uses lantern. Moving-date rules and calendars are in `src/lib/pets.ts`.
 
 Click the dot by the site name to reveal the pet. It follows pointer movement or taps. Reduced-motion settings reduce its movement and animation.
 

@@ -1,11 +1,11 @@
 // The pet's trail: little marks it leaves behind as it moves, which fade on their own. Each pet leaves its own kind:
-// a bee's dotted flight path, paw prints for the walkers, falling leaves for the plants, a ghost's wisps…
+// a bee's dotted flight path, paw prints for the walkers, falling leaves for the plants, a ghost's wisps, a diya's rangoli…
 // Marks are spaced by distance, not time, so a slow walk leaves a few and a dash leaves a line. pet.ts calls step()
 // every frame; nothing is drawn with reduced motion.
 import type { PetId } from '../lib/pets';
 
 type TrailKind =
-  'dots' | 'flight' | 'prints' | 'leaves' | 'wisps' | 'snow' | 'hearts' | 'confetti' | 'sparkles';
+  'dots' | 'flight' | 'prints' | 'leaves' | 'wisps' | 'snow' | 'hearts' | 'confetti' | 'sparkles' | 'rangoli';
 
 // which trail each pet leaves; anything not listed leaves soft dots
 const KIND_FOR: Partial<Record<PetId, TrailKind>> = {
@@ -25,7 +25,7 @@ const KIND_FOR: Partial<Record<PetId, TrailKind>> = {
   party: 'confetti',
   cupcake: 'confetti',
   moon: 'sparkles',
-  diya: 'sparkles',
+  diya: 'rangoli',
   lantern: 'sparkles',
 };
 
@@ -40,9 +40,12 @@ const SPACING: Record<TrailKind, number> = {
   hearts: 32,
   confetti: 18,
   sparkles: 24,
+  rangoli: 20,
 };
 
 const CONFETTI = ['#f491b2', '#79d3e6', '#f5c451', '#9be38f', '#b79cf2'];
+// marigold, pink and saffron, with the site's cyan now and then
+const RANGOLI = ['#f5b82e', '#ef6fa0', '#f08a3c', '#f5b82e', '#ef6fa0', '#79d3e6'];
 // enough for a long dash; past this, new marks wait for old ones to fade
 const MAX_MARKS = 60;
 
@@ -72,6 +75,13 @@ export function petTrail(pet: HTMLElement) {
       mark.style.setProperty('--side', `${side * 4}px`);
     }
     if (kind === 'confetti') mark.style.setProperty('--c', CONFETTI[count % CONFETTI.length]);
+    // rangoli: dots and the odd four-petal flower, a little either side of the path
+    if (kind === 'rangoli') {
+      side = -side;
+      mark.style.setProperty('--c', RANGOLI[count % RANGOLI.length]);
+      mark.style.setProperty('--side', `${side * 3}px`);
+      if (count % 3 === 1) mark.classList.add('petal');
+    }
     if (kind === 'leaves' || kind === 'confetti')
       mark.style.setProperty('--turn', `${(count % 2 ? 1 : -1) * (90 + (count % 5) * 30)}deg`);
     count++;
