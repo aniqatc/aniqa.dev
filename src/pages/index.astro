@@ -1,16 +1,19 @@
 ---
 import '../styles/portfolio.css';
+import '../styles/review-tiles.css';
 import Base from '../layouts/Base.astro';
-import LatestReview from '../components/LatestReview.astro';
 import NowBuilding from '../components/NowBuilding.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import ReviewTile from '../components/ReviewTile.astro';
 import UpdatesSignup from '../components/UpdatesSignup.astro';
 import WorkPreview from '../components/WorkPreview.astro';
 import { getLab, getSelected, real } from '../lib/projects';
 import { TINKERING } from '../lib/now';
+import { getReviews } from '../lib/reviews';
 
 const selected = await getSelected();
 const lab = await getLab();
+const reviews = await getReviews();
 ---
 
 <Base mode="portfolio">
@@ -35,11 +38,26 @@ const lab = await getLab();
           </dd>
         </div>
         <NowBuilding />
-        <LatestReview />
       </dl>
     </section>
 
     <section class="work" aria-labelledby="pf-work">
+      {/* the reviewed apps' icons, newest first, above the work */}
+      {reviews.length > 0 && (
+        <div class="home-reviews" role="region" aria-labelledby="pf-reviews">
+          <div class="work-head">
+            <h2 class="label" id="pf-reviews">
+              App reviews
+            </h2>
+            <a href="/reviews">All reviews →</a>
+          </div>
+          <ol class="review-wall home-review-wall">
+            {reviews.map((review, i) => (
+              <ReviewTile review={review} newest={i === 0} />
+            ))}
+          </ol>
+        </div>
+      )}
       <div class="work-head">
         <h2 class="label" id="pf-work">
           Selected work

@@ -134,6 +134,46 @@ body:has(.pf) > main {
   color: var(--accent);
 }
 
+/* App reviews: the /reviews logo wall made compact, above the work */
+.home-reviews {
+  margin-bottom: 36px;
+}
+.pf .home-review-wall {
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 18px 8px;
+  padding-top: 20px;
+}
+.pf .home-review-wall .review-tile {
+  gap: 8px;
+}
+.pf .home-review-wall .review-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 22px;
+}
+.pf .home-review-wall .review-name {
+  font-size: 12px;
+}
+.pf .home-review-wall .review-number {
+  margin-top: -5px;
+  font-size: 10px;
+}
+@media (max-width: 600px) {
+  .pf .home-review-wall {
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    gap: 16px 4px;
+  }
+  .pf .home-review-wall .review-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+  }
+  .pf .home-review-wall .review-name {
+    font-size: 11.5px;
+  }
+}
+
 /* ---------- The list: number, title and blurb, year; the whole row opens the case study ---------- */
 .projects {
   list-style: none;
