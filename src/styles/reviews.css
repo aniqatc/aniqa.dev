@@ -758,7 +758,8 @@ html:has(.lightbox[open]) {
 }
 .try-it-text h2 {
   margin: 0;
-  font: 800 26px/1.05 var(--font-display);
+  font: 700 22.5px/1.1 var(--font-display);
+  color: color-mix(in oklab, var(--fg) 82%, var(--muted));
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
@@ -812,6 +813,117 @@ html:has(.lightbox[open]) {
   outline-offset: 2px;
 }
 
+/* the mailing list stub, joined under the Try it card by a perforated edge (pulled up over the page's gap).
+   The seasonal pet shows on wide screens; the text and field sit side by side down to 601px, then stack. */
+.try-it:has(+ .rv-signup) {
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+}
+.rv-signup {
+  display: flex;
+  margin-top: -42px;
+  border: 1px solid var(--line);
+  border-top: 1.5px dashed var(--line);
+  border-radius: 0 0 16px 16px;
+  background: color-mix(in oklab, var(--surface) 55%, var(--bg));
+}
+.rv-signup-side {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding-left: 23px;
+}
+.rv-signup-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr minmax(260px, 340px);
+  gap: 2px;
+  align-items: center;
+  padding: 14px 28px 14px 8px;
+}
+.rv-signup-main > p {
+  grid-column: 1;
+}
+.rv-signup-label {
+  margin: 0 0 2px;
+  font-size: 10px;
+  line-height: 1.3;
+}
+.rv-signup-sub {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: balance;
+}
+.rv-signup-form {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex;
+  min-width: 0;
+}
+.rv-signup-form > form {
+  flex: 1;
+  min-width: 0;
+}
+.rv-signup-form .updates-signup-email {
+  flex: 1 1 auto;
+}
+.rv-signup-form .updates-signup-button {
+  flex: none;
+}
+/* a still picture of the cursor pet */
+.rv-pet {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.rv-pet > svg:first-child {
+  display: block;
+  width: 30px;
+  height: 30px;
+  overflow: visible;
+}
+.rv-pet > :not(svg:first-child),
+.rv-pet .pet-z,
+.rv-pet .pet-heart,
+.rv-pet .sleep-only,
+.rv-pet .hop-only,
+.rv-pet .born-only {
+  display: none;
+}
+@media (max-width: 860px) {
+  .rv-signup-side {
+    display: none;
+  }
+  .rv-signup-main {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+    column-gap: 24px;
+    padding: 16px 28px 18px;
+  }
+}
+/* narrow tablets: a slightly narrower field so the line keeps to two lines; the thanks may run into the padding */
+@media (max-width: 700px) {
+  .rv-signup-main {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    column-gap: 20px;
+  }
+  .rv-signup-form .updates-signup-thanks {
+    margin-right: -24px;
+  }
+}
+@media (max-width: 600px) {
+  .rv-signup-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .rv-signup-sub {
+    margin-bottom: 8px;
+    font-size: 12.5px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .review-logo {
     transition: none;

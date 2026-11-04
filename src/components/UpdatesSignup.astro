@@ -11,6 +11,8 @@ interface Props {
   thanks?: string;
   /** the Buttondown tag for these subscribers, e.g. "reviews" */
   tag?: string;
+  /** 'stub': an outlined button, for the sign-up joined under a review's Try it card */
+  variant?: 'default' | 'stub';
 }
 
 const {
@@ -18,11 +20,12 @@ const {
   // Confirmation happens through Buttondown's welcome automation, if configured.
   thanks = 'Thanks! You’ll hear about new things from me soon',
   tag = 'updates',
+  variant = 'default',
 } = Astro.props;
 ---
 
 <form
-  class="updates-signup"
+  class:list={['updates-signup', { 'updates-signup-stub': variant === 'stub' }]}
   aria-label="Get updates"
   action={SIGNUP_ACTION}
   method="post"
@@ -98,6 +101,23 @@ const {
   .updates-signup-button:hover {
     background: var(--accent);
   }
+  /* the stub: one row, and an outlined button so the app's Try button stays the only filled one */
+  .updates-signup-stub .updates-signup-fields {
+    flex-wrap: nowrap;
+  }
+  .updates-signup-stub .updates-signup-button {
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--fg);
+    transition:
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .updates-signup-stub .updates-signup-button:hover {
+    border-color: var(--accent);
+    background: transparent;
+    color: var(--accent);
+  }
   .updates-signup-email:focus-visible,
   .updates-signup-button:focus-visible {
     outline: 2px solid var(--accent);
@@ -111,6 +131,10 @@ const {
     min-height: 34px;
     font-size: 12.5px;
     color: var(--muted);
+  }
+  /* the stub keeps the default thanks styling, on one line */
+  .updates-signup-stub .updates-signup-thanks {
+    white-space: nowrap;
   }
   .updates-signup-thanks[hidden] {
     display: none;

@@ -5,6 +5,7 @@ import Detail from '../../layouts/Detail.astro';
 import DeviceScreens from '../../components/DeviceScreens.astro';
 import Facts from '../../components/Facts.astro';
 import ImageLightbox from '../../components/ImageLightbox.astro';
+import UpdatesSignup from '../../components/UpdatesSignup.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import SiteScreenshot from '../../components/SiteScreenshot.astro';
 import { pad } from '../../lib/projects';
@@ -130,6 +131,20 @@ const facts = [
     </div>
   </aside>
 
+  {/* the mailing list, joined under the Try it card like a ticket stub */}
+  <section class="rv-signup" aria-label="Mailing list">
+    <div class="rv-signup-side" aria-hidden="true">
+      <span class="rv-pet" data-stub-pet></span>
+    </div>
+    <div class="rv-signup-main">
+      <p class="label rv-signup-label">Mailing list</p>
+      <p class="rv-signup-sub">I’ll send a short note when a new review goes up.</p>
+      <div class="rv-signup-form">
+        <UpdatesSignup variant="stub" placeholder="Your email, for new reviews" tag="reviews" />
+      </div>
+    </div>
+  </section>
+
   {total > 1 && (
     <PrevNext
       label="More reviews"
@@ -139,3 +154,18 @@ const facts = [
     />
   )}
 </Detail>
+
+<script>
+  // the stub shows the same pet as the cursor pet: currentPet() is worked out in the browser from today's date
+  import { currentPet, petMarkup } from '../../lib/pets';
+  import { onPage } from '../../scripts/page';
+  onPage(() => {
+    for (const el of document.querySelectorAll<HTMLElement>('[data-stub-pet]')) {
+      el.dataset.pet = currentPet();
+      el.innerHTML = petMarkup(el.dataset.pet as ReturnType<typeof currentPet>);
+      // pet.ts places the eyes from data-x / data-y as it animates; here they just sit still
+      for (const e of el.querySelectorAll<SVGGElement>('.e'))
+        e.setAttribute('transform', `translate(${e.dataset.x},${e.dataset.y ?? -1})`);
+    }
+  });
+</script>
