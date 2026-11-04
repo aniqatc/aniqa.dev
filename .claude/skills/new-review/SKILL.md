@@ -15,13 +15,14 @@ Confirm the app name, maker, address or store link, device, date tried, and what
 npm run new -- --yes --kind review --app "App name" --maker handle --live example.com
 ```
 
-Use `--device phone` or `--device tablet` for a mobile app. The maker handle is written without `@`. Edit `src/content/reviews/<slug>/index.md` and follow the template sections: First look, What I liked, Small ideas, Who it's for. Keep the writing plain, specific, and concise.
+Use `--device phone` or `--device tablet` for a mobile app, and `--device desktop` for a Mac app (its screenshot is only the app with no background, and the site draws the Mac screen around it; set `desktop: window`, `menubar` or `notch` in `index.md`). The maker handle is written without `@`. Edit `src/content/reviews/<slug>/index.md` and follow the template sections: First look, What I liked, Small ideas, Who it's for. Keep the writing plain, specific, and concise.
 
 ## 2. Add images
 
 - Web app: run `npm run screenshots -- reviews/<slug>` to capture `screenshot.png` and fetch `logo.png` when one is missing.
-- Phone or tablet app: add the screenshots from the device and the app icon as `logo.png`. Phone reviews can include `screenshot-2.png` and `screenshot-3.png`.
+- Phone, tablet or Mac app: add the screenshots from the device and the app icon as `logo.png`. Phone reviews can include `screenshot-2.png` and `screenshot-3.png`.
 - Write useful `screenshotAlt` text for every screen shown.
+- Pictures in the notes: `![alt](./file.png)` under a point, with an optional _italic_ caption line right after. They open full size on click. Crop them to the detail that matters.
 
 ## 3. Finish and check
 

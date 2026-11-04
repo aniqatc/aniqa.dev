@@ -3,7 +3,8 @@
 # src/content/reviews/<slug>/index.md (this file), plus optional files in the same folder:
 #   logo.png        the app's icon on /reviews (square, 300 × 300 or larger); without it, its first letter on `brand`
 #   screenshot.png  the framed screenshot under the facts: 1440 × 900 for a web app, the app's own screen size
-#                   for a phone or iPad app
+#                   for a phone or iPad app, only the app for a Mac app (its window, popover or
+#                   notch panel, with no background), the site draws the Mac screen around it
 #   screenshot-2.png, screenshot-3.png  a phone app's second and third screens, shown side by side
 #   any other images you put under "What I liked"
 #   scorecard.png   the picture for the post on X, made by npm run scorecard -- <slug>
@@ -14,7 +15,12 @@ date: 2026-10-30 # YYYY-MM-DD, the day the review goes up
 type: Web app # Web app, iOS app, Chrome extension, CLI tool…
 triedOn: MacBook, Chrome # where you tried it
 live: example.com # a web app's address, no https://; for a phone or iPad app, its full App Store link
-device: browser # browser (a web app), phone or tablet: the frame around the screenshot
+device: browser # browser (a web app), phone, tablet or desktop (a Mac app): the frame around the screenshot
+# desktop: menubar # optional, for a Mac app: window (the default), menubar (a popover) or notch (a notch panel)
+# shadow: false # optional, for a Mac app: when the capture already has its own shadow
+# price: Free # optional: Free, $4.99 one-time, $3/mo
+# version: 1.2.0 # optional: the version you tried
+# platforms: [Mac, iOS, Web] # optional: where it runs
 # post: https://x.com/aniqatc/status/… # optional: the review's post on X
 summary: One line on what the app does, for the top of the page.
 verdict: Promising # one word for Overall: Promising, Delightful, Solid…
@@ -38,7 +44,8 @@ Two or three sentences on the first five minutes: signing up, the empty state, a
 
 ## What I liked
 
-1. A specific detail that worked well. To show it, leave a blank line, then the image and an _italic_ caption:
+1. A specific detail that worked well. To show it, leave a blank line, then the image (cropped to the detail; it
+   opens full size on click) and an _italic_ caption:
 
    ![What's in the picture](./liked-detail.png)
    _What the picture shows_

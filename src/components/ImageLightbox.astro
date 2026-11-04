@@ -1,0 +1,54 @@
+---
+// Pictures in a review's notes open full size: click one (or focus it and press Enter) and it fills the screen
+// in a <dialog>, at the image's own resolution. Esc, the close button or a click anywhere closes it, and focus
+// goes back to the picture. The screenshot at the top isn't part of this; it links to the app.
+---
+
+<dialog class="lightbox" aria-label="Full size picture">
+  <button class="lightbox-close label" type="button">
+    Close ✕
+  </button>
+  <img class="lightbox-img" alt="" />
+</dialog>
+
+<script>
+  import { onPage } from '../scripts/page';
+
+  onPage(() => {
+    const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
+    const full = dialog?.querySelector<HTMLImageElement>('.lightbox-img');
+    if (!dialog || !full) return;
+    // the pictures in the notes (one per paragraph, or two side by side), not the screenshot at the top
+    const pictures = [...document.querySelectorAll<HTMLImageElement>('.d-rv .sec p > img')];
+    const open = (picture: HTMLImageElement) => {
+      // the picture's own file: Markdown images are converted, not shrunk, so this is the full resolution
+      full.src = picture.currentSrc || picture.src;
+      full.alt = picture.alt;
+      dialog.showModal();
+    };
+    const onClick = (event: Event) => open(event.currentTarget as HTMLImageElement);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      open(event.currentTarget as HTMLImageElement);
+    };
+    for (const picture of pictures) {
+      picture.tabIndex = 0;
+      picture.setAttribute('role', 'button');
+      picture.setAttribute('aria-label', `Open full size: ${picture.alt}`);
+      picture.addEventListener('click', onClick);
+      picture.addEventListener('keydown', onKey);
+    }
+    // any click closes it: the backdrop, the picture or the button (Esc is built in)
+    const close = () => dialog.close();
+    dialog.addEventListener('click', close);
+    return () => {
+      dialog.close();
+      dialog.removeEventListener('click', close);
+      for (const picture of pictures) {
+        picture.removeEventListener('click', onClick);
+        picture.removeEventListener('keydown', onKey);
+      }
+    };
+  });
+</script>

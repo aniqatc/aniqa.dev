@@ -4,6 +4,7 @@ import '../../styles/reviews.css';
 import Detail from '../../layouts/Detail.astro';
 import DeviceScreens from '../../components/DeviceScreens.astro';
 import Facts from '../../components/Facts.astro';
+import ImageLightbox from '../../components/ImageLightbox.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import SiteScreenshot from '../../components/SiteScreenshot.astro';
 import { pad } from '../../lib/projects';
@@ -35,7 +36,8 @@ interface Props {
 }
 
 const { review, total, older, newer } = Astro.props;
-const { app, maker, date, type, triedOn, device, post, summary, verdict } = review.data;
+const { app, maker, date, type, triedOn, price, version, platforms, device, post, summary, verdict } =
+  review.data;
 const { Content } = await render(review);
 const appUrl = appUrlFor(review);
 const scores = scoresFor(review);
@@ -44,6 +46,10 @@ const facts = [
   { label: 'Maker', value: [{ label: `@${maker}`, href: makerUrl(review) }] },
   { label: 'Type', value: type },
   { label: 'Tried on', value: triedOn },
+  // price, version and platforms are optional: left out of the facts when they aren't set
+  ...(version ? [{ label: 'Version', value: version }] : []),
+  ...(platforms?.length ? [{ label: 'Platforms', value: platforms.join(', ') }] : []),
+  ...(price ? [{ label: 'Price', value: price }] : []),
   {
     label: 'Links',
     value: [
@@ -100,6 +106,7 @@ const facts = [
   </section>
 
   <Content />
+  <ImageLightbox />
 
   <aside class="try-it" aria-labelledby="try-it-h">
     <div class="try-it-text">

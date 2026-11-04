@@ -9,8 +9,8 @@
 //   --app      The app's name (required)
 //   --slug     Folder name and URL slug (defaults to the app's name)
 //   --maker    The maker's X handle, without the @ (to link them somewhere else, set makerLink in index.md)
-//   --live     A web app's address (no https://), or a phone / iPad app's App Store link
-//   --device   browser | phone | tablet (browser by default)
+//   --live     A web app's address (no https://), or a phone / iPad / Mac app's App Store link
+//   --device   browser | phone | tablet | desktop (browser by default; desktop is a Mac app)
 //   --type     A label: Web app, iOS app, Chrome extension… (from the device by default)
 //   --summary  One line on what the app does
 //   --yes      Skip prompts and use defaults for anything missing
@@ -22,9 +22,9 @@ import { stdin, stdout, argv, exit } from 'node:process';
 
 const DIR = 'src/content/reviews';
 const TEMPLATE = 'templates/review/index.md';
-const DEVICES = ['browser', 'phone', 'tablet'];
-const TYPES = { browser: 'Web app', phone: 'iOS app', tablet: 'iPad app' };
-const TRIED_ON = { browser: 'MacBook, Chrome', phone: 'iPhone', tablet: 'iPad' };
+const DEVICES = ['browser', 'phone', 'tablet', 'desktop'];
+const TYPES = { browser: 'Web app', phone: 'iOS app', tablet: 'iPad app', desktop: 'Mac app' };
+const TRIED_ON = { browser: 'MacBook, Chrome', phone: 'iPhone', tablet: 'iPad', desktop: 'MacBook' };
 
 // --key value pairs; a bare --flag is true
 const flags = {};
@@ -62,8 +62,12 @@ const app = await ask('app', "App's name", typeof flags.title === 'string' ? fla
 if (!app) fail('The app needs a name: --app "Tallyho"');
 const slug = slugify(await ask('slug', 'Folder name / URL slug', slugify(app)));
 if (existsSync(`${DIR}/${slug}`)) fail(`${DIR}/${slug} already exists`);
-const device = await ask('device', 'Device: browser (web app), phone or tablet', 'browser');
-if (!DEVICES.includes(device)) fail(`--device must be browser, phone or tablet (got "${device}")`);
+const device = await ask(
+  'device',
+  'Device: browser (web app), phone, tablet or desktop (Mac app)',
+  'browser',
+);
+if (!DEVICES.includes(device)) fail(`--device must be browser, phone, tablet or desktop (got "${device}")`);
 const maker = (await ask('maker', "Maker's X handle, without the @")).replace(/^@/, '');
 const live = await ask(
   'live',
@@ -97,11 +101,16 @@ console.log('\nNext:');
 if (device === 'browser') {
   console.log(`  · npm run screenshots -- reviews/${slug}  for screenshot.png and logo.png`);
 } else {
-  console.log(`  · Screenshots from your ${device === 'phone' ? 'phone' : 'iPad'} go in ${DIR}/${slug}/:`);
   console.log(
-    device === 'phone'
-      ? '    screenshot.png, screenshot-2.png, screenshot-3.png (up to three)'
-      : '    screenshot.png, in landscape',
+    `  · Screenshots from your ${{ phone: 'phone', tablet: 'iPad', desktop: 'Mac' }[device]} go in ${DIR}/${slug}/:`,
+  );
+  console.log(
+    {
+      phone: '    screenshot.png, screenshot-2.png, screenshot-3.png (up to three)',
+      tablet: '    screenshot.png, in landscape',
+      desktop:
+        '    screenshot.png: only the app, no background (Cmd+Shift+4, Space, Option-click a window); set desktop: menubar or notch for a popover or notch panel',
+    }[device],
   );
   console.log("  · The app's icon from its App Store page goes in logo.png");
 }

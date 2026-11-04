@@ -68,7 +68,9 @@ const score = z.number().int().min(1).max(5);
 // App reviews: src/content/reviews/<slug>/ → /reviews/<slug>. The frontmatter holds the facts and scores; the
 // ## sections (First look, What I liked, Small ideas, Who it's for) are the review. Optional files in the folder:
 // logo.png (the app's icon on the archive) and screenshot.png (the framed screenshot under the facts). A phone
-// app can add screenshot-2.png and screenshot-3.png to show up to three screens side by side.
+// app can add screenshot-2.png and screenshot-3.png to show up to three screens side by side. A Mac app
+// (device: desktop) is a screenshot of only the app (its window, popover or notch panel), placed on a Mac screen
+// drawn around it.
 const reviews = defineCollection({
   loader: folder('./src/content/reviews'),
   schema: z.object({
@@ -79,7 +81,15 @@ const reviews = defineCollection({
     type: z.string(), // a label: Web app, iOS app, Chrome extension…
     triedOn: z.string(), // where you tried it: "MacBook, Chrome", "iPhone 15"
     live: z.string(), // a web app's address without https:// (tallyho.app), or a full App Store / Google Play link
-    device: z.enum(['browser', 'phone', 'tablet']).default('browser'), // the frame around the screenshot
+    device: z.enum(['browser', 'phone', 'tablet', 'desktop']).default('browser'), // the frame around the screenshot
+    // with device: desktop, the Mac screen drawn around the app (src/components/MacScreen.astro): "window" for an
+    // app's window on the desktop, "menubar" for a popover under its menu bar icon, "notch" for a panel that grows
+    // out of the notch. screenshot.png is only the app, cropped with no background, as a 2× capture.
+    desktop: z.enum(['window', 'menubar', 'notch']).default('window'),
+    shadow: z.boolean().default(true), // with device: desktop, a Mac shadow under the app; false if the capture has one
+    price: z.string().optional(), // what it costs, as you'd say it: Free, $4.99 one-time, $3/mo
+    version: z.string().optional(), // the version you tried, e.g. 1.2.0
+    platforms: z.array(z.string()).optional(), // where it runs, e.g. [Mac, iOS, Web]
     post: z.url().optional(), // the review's post on X
     summary: z.string(), // one line on what the app does: the lede, and the card's description
     verdict: z.string(), // the one-word overall, e.g. Promising, Delightful, Solid
