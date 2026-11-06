@@ -455,6 +455,16 @@
   grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
   gap: 16px 24px;
 }
+/* five across when they fit: each column as wide as its label, the rest shared out */
+.review-scores > div {
+  container-type: inline-size;
+}
+@container (min-width: 560px) {
+  .score-grid {
+    grid-template-columns: repeat(5, minmax(max-content, 1fr));
+    column-gap: 16px;
+  }
+}
 .score-grid > div {
   display: flex;
   flex-direction: column;
@@ -715,7 +725,7 @@ html:has(.lightbox[open]) {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  padding-left: 23px;
+  padding: 0 16px 0 15px;
 }
 .rv-signup-main {
   flex: 1;
@@ -724,7 +734,7 @@ html:has(.lightbox[open]) {
   grid-template-columns: 1fr minmax(260px, 340px);
   gap: 2px;
   align-items: center;
-  padding: 14px 28px 14px 8px;
+  padding: 14px 28px 14px 0;
 }
 .rv-signup-main > p {
   grid-column: 1;

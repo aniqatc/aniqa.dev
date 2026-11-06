@@ -18,14 +18,14 @@ verdict: Delightful # [check: your one word for Overall]
 quote: It literally brings me joy
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
 # stillUsing: true # optional, later: you've kept using it; it gets a star and a place in Still using on /reviews
-brand: '#8b7cf6' # [placeholder: NotchAbove's brand colour]
+brand: '#1a59e4'
 scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   firstImpression: 5
   onboarding: 5
   bestFeature: 5
   easeOfUse: 5
   value: 5 # pricing / value
-screenshotAlt: '[Describe the notch panel in screenshot.png once it is added]'
+screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sitting between its food and water bowls in a sunny room, saying it’s had a quiet day and would like an eye break, with Pet, Feed, Water and Play buttons, today’s care rings for rest, water, focus and a found gift, and one of eight treasures collected. Below it, the toolbar of NotchAbove’s tools, with Pet care selected, and a lock button.'
 draft: true # shows on npm run dev only; delete when it's ready to go up
 ---
 
@@ -68,6 +68,10 @@ can spend that time looking after her, and she peeks out of the notch (if you wa
    instead of joining a call on the MacBook one.
 10. **Make it yours.** There are 21 tabs, which felt like a lot at first, but you can remove what you don't need. Say
     less. You can customise the look and pretty much everything else.
+
+    ![NotchAbove's tab grid: three rows of icons, with the paw-print Pet care tab selected](./tabs.png)
+    _The tab grid, with Pet care open_
+
 11. **Easy permissions.** Granting what it needs was simple.
 
 ## What I didn't use

@@ -99,10 +99,9 @@ const facts = [
           </div>
         ))}
       </dl>
-      <p class="review-note">
-        How the app feels today. Most of these are still being built, so “needs love” just means there’s room
-        to grow.
-      </p>
+      {review.data.stillBuilding && (
+        <p class="review-note">How the app feels today. It’s still being built, so “needs love” just means there’s room to grow.</p>
+      )}
     </div>
   </section>
 
