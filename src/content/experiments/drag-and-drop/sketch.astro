@@ -1,0 +1,470 @@
+---
+// Drag and Drop: drag the ball around a board, with the grab offset drawn over it.
+// left / top place the ball's top-left corner, so dragging has to remember where you grabbed it, or the
+// corner jumps to the pointer. Turn Grab offset off to see the jump.
+---
+
+<div class="demo" data-study="drag-and-drop">
+  <div class="demo-bar">
+    <span class="demo-opts">
+      <label class="demo-check"><input type="checkbox" data-option="offset" checked /> Grab offset</label>
+      <label class="demo-check"><input type="checkbox" data-option="keep-inside" checked /> Keep inside</label>
+      <label class="demo-check"><input type="checkbox" data-option="throw" checked /> Throw</label>
+    </span>
+    <button class="demo-btn reset-button" type="button" data-reset>Reset</button>
+  </div>
+
+  <div class="board" data-board>
+    <span class="board-origin">0, 0</span>
+    <svg class="board-overlay" aria-hidden="true">
+      <g data-trail></g>
+      <rect class="ball-outline" data-outline></rect>
+      <circle class="ball-corner" data-corner r="3"></circle>
+      <line class="offset-line while-dragging" data-offset-line></line>
+      <circle class="pointer-ring while-dragging" data-pointer-ring r="7"></circle>
+      <text data-corner-label></text>
+      <text class="while-dragging" data-offset-label></text>
+    </svg>
+    <div
+      class="ball"
+      data-ball
+      tabindex="0"
+      role="slider"
+      aria-label="Draggable ball. Use the arrow keys to move it."
+    >
+    </div>
+    <span class="board-hint" data-hint>Grab the ball · arrow keys work too</span>
+  </div>
+
+  <div class="readouts">
+    <div class="readout">
+      <span class="label">Pointer</span><b class="demo-out" data-readout="pointer">–</b><small>clientX/Y − board</small>
+    </div>
+    <div class="readout">
+      <span class="label">Offset</span><b class="demo-out" data-readout="offset">–</b><small>set on pointerdown</small>
+    </div>
+    <div class="readout">
+      <span class="label">left, top</span><b class="demo-out" data-readout="position">–</b><small>pointer − offset</small>
+    </div>
+    <div class="readout">
+      <span class="label">Events</span><b class="demo-out" data-readout="events">0 · 0 · 0</b><small>down · move · up</small>
+    </div>
+  </div>
+
+  <p class="formula" data-formula></p>
+</div>
+
+<style>
+  .demo {
+    /* the red for the line you get without the offset */
+    --warning: #c9563a;
+    --board: color-mix(in oklab, var(--surface) 45%, var(--bg));
+  }
+  .reset-button {
+    margin-left: auto;
+  }
+
+  /* the board: a dot grid, with the maths drawn over it in an SVG */
+  .board {
+    position: relative;
+    height: clamp(300px, 56vw, 400px);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background:
+      radial-gradient(circle, var(--line) 1px, transparent 1.5px) 0 0 / 20px 20px,
+      var(--board);
+    touch-action: none;
+  }
+  .board-origin {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    font: 400 10.5px var(--font-mono);
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .board-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font: 400 11px var(--font-mono);
+    color: var(--muted);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .board-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .ball-outline {
+    fill: none;
+    stroke: var(--muted);
+    stroke-dasharray: 3 3;
+    stroke-width: 1;
+  }
+  .ball-corner {
+    fill: var(--fg);
+  }
+  .offset-line {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+  }
+  .offset-line.is-ignored {
+    stroke: var(--warning);
+  }
+  .pointer-ring {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+  .board-overlay :global(.trail-dot) {
+    fill: var(--accent);
+  }
+  .board-overlay text {
+    font: 500 10.5px var(--font-mono);
+    fill: var(--fg);
+    paint-order: stroke;
+    stroke: var(--board);
+    stroke-width: 3px;
+  }
+  /* the pointer and the offset line only show while you're dragging */
+  .while-dragging {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .is-dragging .while-dragging {
+    opacity: 1;
+  }
+
+  .ball {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--fg);
+    cursor: grab;
+    box-shadow: 0 10px 18px -10px color-mix(in oklab, var(--fg) 70%, transparent);
+    transition:
+      background 0.15s,
+      box-shadow 0.15s,
+      scale 0.15s;
+  }
+  .ball::after {
+    content: '';
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: background 0.15s;
+  }
+  .ball:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .is-dragging .ball {
+    cursor: grabbing;
+    background: var(--accent);
+    scale: 1.06;
+    box-shadow: 0 18px 26px -14px color-mix(in oklab, var(--fg) 70%, transparent);
+  }
+  .is-dragging .ball::after {
+    background: var(--board);
+  }
+
+  /* four readouts in a row, two on phones */
+  .readouts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .readout {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    padding: 10px 12px;
+    background: var(--board);
+  }
+  .readout small {
+    font: 400 10.5px var(--font-mono);
+    color: var(--muted);
+  }
+  .formula {
+    margin: 0;
+    font: 400 12px/1.7 var(--font-mono);
+    color: var(--muted);
+  }
+  .formula :global(b) {
+    font-weight: 500;
+    color: var(--fg);
+  }
+  .formula :global(.formula-wrong) {
+    color: var(--warning);
+  }
+
+  @media (max-width: 560px) {
+    .readouts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ball,
+    .ball::after,
+    .board-hint,
+    .while-dragging {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { onPage } from '../../../scripts/page';
+
+  // onPage runs on every page change, so look for this study first and do nothing on other pages
+  onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-study="drag-and-drop"]');
+    if (!root) return;
+    const find = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
+    const board = find<HTMLElement>('[data-board]');
+    const ball = find<HTMLElement>('[data-ball]');
+    const hint = find<HTMLElement>('[data-hint]');
+    const formula = find<HTMLElement>('[data-formula]');
+    const trailGroup = find<SVGGElement>('[data-trail]');
+    const outline = find<SVGRectElement>('[data-outline]');
+    const corner = find<SVGCircleElement>('[data-corner]');
+    const cornerLabel = find<SVGTextElement>('[data-corner-label]');
+    const offsetLine = find<SVGLineElement>('[data-offset-line]');
+    const offsetLabel = find<SVGTextElement>('[data-offset-label]');
+    const pointerRing = find<SVGCircleElement>('[data-pointer-ring]');
+    const readout = (name: string) => find<HTMLElement>(`[data-readout="${name}"]`);
+    const useOffset = find<HTMLInputElement>('[data-option="offset"]');
+    const keepInside = find<HTMLInputElement>('[data-option="keep-inside"]');
+    const throwOnRelease = find<HTMLInputElement>('[data-option="throw"]');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) throwOnRelease.checked = false;
+
+    type Point = { x: number; y: number };
+    const BALL_SIZE = 56;
+    let ballX = 0;
+    let ballY = 0;
+    let grabOffset: Point = { x: 0, y: 0 };
+    let pointer: Point | null = null;
+    let dragging = false;
+    let recentMoves: (Point & { time: number })[] = [];
+    let velocityX = 0;
+    let velocityY = 0;
+    let frame = 0;
+    let eventCounts = { down: 0, move: 0, up: 0 };
+    const trail: Point[] = [];
+
+    const limits = () => ({ width: board.clientWidth - BALL_SIZE, height: board.clientHeight - BALL_SIZE });
+    const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
+    const round = Math.round;
+    const setAttributes = (element: Element, attributes: Record<string, number | string>) => {
+      for (const name in attributes) element.setAttribute(name, String(attributes[name]));
+    };
+    // the pointer relative to the board's top-left corner
+    const onBoard = (event: PointerEvent): Point => {
+      const box = board.getBoundingClientRect();
+      return { x: event.clientX - box.left, y: event.clientY - box.top };
+    };
+
+    function place() {
+      if (keepInside.checked || !dragging) {
+        const { width, height } = limits();
+        ballX = clamp(ballX, 0, width);
+        ballY = clamp(ballY, 0, height);
+      }
+      ball.style.left = `${ballX}px`;
+      ball.style.top = `${ballY}px`;
+      ball.setAttribute('aria-valuetext', `left ${round(ballX)}, top ${round(ballY)}`);
+      draw();
+    }
+
+    // the dashed box, its corner, the offset line from the corner to the pointer, and the readouts
+    function draw() {
+      setAttributes(outline, { x: ballX, y: ballY, width: BALL_SIZE, height: BALL_SIZE });
+      setAttributes(corner, { cx: ballX, cy: ballY });
+      cornerLabel.textContent = `${round(ballX)}, ${round(ballY)}`;
+      setAttributes(cornerLabel, { x: ballX + 6, y: ballY < 20 ? ballY + BALL_SIZE + 14 : ballY - 6 });
+      if (pointer) {
+        setAttributes(offsetLine, { x1: ballX, y1: ballY, x2: pointer.x, y2: pointer.y });
+        offsetLine.classList.toggle('is-ignored', !useOffset.checked);
+        setAttributes(pointerRing, { cx: pointer.x, cy: pointer.y });
+        offsetLabel.textContent = useOffset.checked
+          ? `offset ${round(grabOffset.x)}, ${round(grabOffset.y)}`
+          : 'offset ignored';
+        setAttributes(offsetLabel, { x: pointer.x + 12, y: pointer.y + 18 });
+        readout('pointer').textContent = `${round(pointer.x)}, ${round(pointer.y)}`;
+      }
+      readout('offset').textContent = useOffset.checked ? `${round(grabOffset.x)}, ${round(grabOffset.y)}` : '0, 0';
+      readout('position').textContent = `${round(ballX)}, ${round(ballY)}`;
+      readout('events').textContent = `${eventCounts.down} · ${eventCounts.move} · ${eventCounts.up}`;
+      formula.innerHTML = useOffset.checked
+        ? `left = pointer.x − offset.x = <b>${pointer ? round(pointer.x) : 'x'} − ${round(grabOffset.x)} = ${round(ballX)}</b><br>Without the offset, the corner would snap to the pointer.`
+        : `<span class="formula-wrong">left = pointer.x</span> → the ball's corner jumps to wherever you grabbed it.`;
+    }
+
+    // a fading trail of dots behind the ball
+    function drawTrail() {
+      trailGroup.textContent = '';
+      trail.forEach((point, index) => {
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        setAttributes(dot, {
+          class: 'trail-dot',
+          cx: point.x + BALL_SIZE / 2,
+          cy: point.y + BALL_SIZE / 2,
+          r: 2 + (index / trail.length) * 3,
+          opacity: ((index + 1) / trail.length) * 0.35,
+        });
+        trailGroup.appendChild(dot);
+      });
+    }
+    const addToTrail = () => {
+      trail.push({ x: ballX, y: ballY });
+      if (trail.length > 24) trail.shift();
+    };
+
+    const grab = (event: PointerEvent) => {
+      event.preventDefault();
+      cancelAnimationFrame(frame);
+      ball.setPointerCapture(event.pointerId); // keeps events coming even outside the ball or the window
+      dragging = true;
+      board.classList.add('is-dragging');
+      hint.style.opacity = '0';
+      pointer = onBoard(event);
+      grabOffset = { x: pointer.x - ballX, y: pointer.y - ballY };
+      eventCounts.down++;
+      recentMoves = [{ ...pointer, time: event.timeStamp }];
+      trail.length = 0;
+      drag(event);
+    };
+    const drag = (event: PointerEvent) => {
+      if (!dragging) return;
+      if (event.type === 'pointermove') eventCounts.move++;
+      pointer = onBoard(event);
+      const offset = useOffset.checked ? grabOffset : { x: 0, y: 0 };
+      ballX = pointer.x - offset.x;
+      ballY = pointer.y - offset.y;
+      recentMoves.push({ ...pointer, time: event.timeStamp });
+      if (recentMoves.length > 5) recentMoves.shift();
+      addToTrail();
+      place();
+      drawTrail();
+    };
+    // letting go: with Throw on, the speed of the last few moves carries the ball on
+    const release = () => {
+      if (!dragging) return;
+      dragging = false;
+      eventCounts.up++;
+      board.classList.remove('is-dragging');
+      const first = recentMoves[0];
+      const last = recentMoves[recentMoves.length - 1];
+      const elapsed = Math.max(1, last.time - first.time);
+      velocityX = ((last.x - first.x) / elapsed) * 16;
+      velocityY = ((last.y - first.y) / elapsed) * 16;
+      place();
+      if (throwOnRelease.checked && Math.hypot(velocityX, velocityY) > 1) frame = requestAnimationFrame(glide);
+      else fadeTrail();
+    };
+
+    // slows down a little each frame and bounces off the edges
+    function glide() {
+      const { width, height } = limits();
+      ballX += velocityX;
+      ballY += velocityY;
+      velocityX *= 0.94;
+      velocityY *= 0.94;
+      if (ballX < 0 || ballX > width) {
+        ballX = clamp(ballX, 0, width);
+        velocityX *= -0.7;
+      }
+      if (ballY < 0 || ballY > height) {
+        ballY = clamp(ballY, 0, height);
+        velocityY *= -0.7;
+      }
+      addToTrail();
+      place();
+      drawTrail();
+      if (Math.hypot(velocityX, velocityY) > 0.3) frame = requestAnimationFrame(glide);
+      else fadeTrail();
+    }
+    function fadeTrail() {
+      if (!trail.length || dragging) return;
+      trail.shift();
+      drawTrail();
+      frame = requestAnimationFrame(fadeTrail);
+    }
+
+    // arrow keys move it 10px, 40px with Shift
+    const nudge = (event: KeyboardEvent) => {
+      const step = event.shiftKey ? 40 : 10;
+      const moves: Record<string, [number, number]> = {
+        ArrowLeft: [-step, 0],
+        ArrowRight: [step, 0],
+        ArrowUp: [0, -step],
+        ArrowDown: [0, step],
+      };
+      const move = moves[event.key];
+      if (!move) return;
+      event.preventDefault();
+      cancelAnimationFrame(frame);
+      ballX += move[0];
+      ballY += move[1];
+      place();
+    };
+
+    // back to the middle, with an example grab point so the maths reads before you touch it
+    function reset() {
+      cancelAnimationFrame(frame);
+      trail.length = 0;
+      drawTrail();
+      const { width, height } = limits();
+      ballX = width / 2;
+      ballY = height / 2;
+      grabOffset = { x: 40, y: 34 };
+      pointer = { x: ballX + grabOffset.x, y: ballY + grabOffset.y };
+      eventCounts = { down: 0, move: 0, up: 0 };
+      place();
+    }
+
+    const resetButton = find<HTMLButtonElement>('[data-reset]');
+    ball.addEventListener('pointerdown', grab);
+    ball.addEventListener('pointermove', drag);
+    ball.addEventListener('pointerup', release);
+    ball.addEventListener('pointercancel', release);
+    ball.addEventListener('keydown', nudge);
+    resetButton.addEventListener('click', reset);
+    useOffset.addEventListener('change', place);
+    keepInside.addEventListener('change', place);
+    window.addEventListener('resize', place);
+    reset();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      ball.removeEventListener('pointerdown', grab);
+      ball.removeEventListener('pointermove', drag);
+      ball.removeEventListener('pointerup', release);
+      ball.removeEventListener('pointercancel', release);
+      ball.removeEventListener('keydown', nudge);
+      resetButton.removeEventListener('click', reset);
+      useOffset.removeEventListener('change', place);
+      keepInside.removeEventListener('change', place);
+      window.removeEventListener('resize', place);
+    };
+  });
+</script>
