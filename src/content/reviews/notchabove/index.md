@@ -4,7 +4,7 @@ maker: capt_sherman
 # makerLink: https://bsky.app/profile/handle # optional: link @maker somewhere else instead (Bluesky, Threads, their site…)
 date: 2026-11-06
 type: Mac app
-triedOn: MacBook
+triedOn: MacBook M4 Pro, macOS Golden Gate 27.2
 live: notchabove.xyz
 device: desktop
 desktop: notch
@@ -62,13 +62,17 @@ can spend that time looking after her, and she peeks out of the notch (if you wa
    have to fight it.
 3. **Reminders that don't feel wrong.** I hate water and stand-up reminders in the usual notification spot. NotchAbove
    nudges me gently from the notch
-   ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration"), in the middle of the screen, and I actually take them in instead of closing them.
+   ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration"), in the middle of the screen, and I actually take them in
+   ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png "note: Affirmations arrive the same gentle way")
+   instead of closing them.
    The rest-your-eyes reminder
    ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png "note: Eye breaks every 45 minutes, with short exercises")
    has me blinking more
    ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png "note: The Near & far exercise takes over the whole screen")
-   after long stretches of coding or debugging, and it shows me how
-   much time has passed.
+   after long stretches of coding or debugging
+   ![The eye settings: a shortcut to rest my eyes now, and a note that it's for resting eyes, not treating them](./settings-eye-shortcut.png "note: A shortcut to rest your eyes right away"),
+   and it shows me how much time has passed
+   ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png "note: Screen time today, with battery and system stats").
 4. **Git at a glance.** Lately I'm switching between my portfolio and the projects it ties into, and seeing my Git
    status ![The Git panel: three repositories, all clean and up to date, no open pull requests, and a 14-day commit streak](./git-repos.png "note: Every repo at a glance, plus pull requests and a commit streak")
    means I don't forget to clean a branch up.
@@ -89,6 +93,7 @@ can spend that time looking after her, and she peeks out of the notch (if you wa
 9. **Little extras.** The birthday countdown
    ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png "note: Weather, world clocks and the birthday countdown")
    is awesome, and the camera preview
+   ![The camera check starting up: a mirrored preview of the MacBook Pro camera, with a note that nothing is recorded](./camera-starting.png "note: The camera check starting up, mirrored and never recorded")
    ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png "note: The camera check, with effects and reactions")
    reminds me to switch to my webcam
    instead of joining a call on the MacBook one.
@@ -105,8 +110,12 @@ can spend that time looking after her, and she peeks out of the notch (if you wa
 ## What I didn't use
 
 1. **Window management.** I don't really manage windows anyway.
-2. **Todos.** Glad it's there, but work keeps me on Linear.
-3. **Tools.** Handy if you need exchange rates quickly (they're up to 12 hours old).
+2. **Todos.**
+   ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png "note: The todo list, reminding me to take these screenshots")
+   Glad it's there, but work keeps me on Linear.
+3. **Tools.**
+   ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png "note: The calculator in Tools")
+   Handy if you need exchange rates quickly (they're up to 12 hours old).
 4. **Sales.**
    ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch")
    Not for me yet, but if I ever become an indie builder, a notification for every sale must be a nice
