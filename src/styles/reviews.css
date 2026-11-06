@@ -401,10 +401,16 @@
   background: rgb(255 255 255 / 0.7);
   transform: translateX(-50%);
 }
-/* a menu bar or notch app: just the top of the screen, fading out below the app */
+/* a menu bar or notch app: just the top of the screen, fading out below the app over a long, soft stretch
+   (the bottom of the app dims with it), so it reads as fading into the page rather than cut off */
 .mac-crop .mac-lid {
   padding-bottom: 0;
-  mask-image: linear-gradient(to bottom, #000 var(--fade), transparent);
+  mask-image: linear-gradient(
+    to bottom,
+    #000 calc(var(--fade) - 28%),
+    rgb(0 0 0 / 0.55) calc(var(--fade) - 12%),
+    transparent
+  );
 }
 /* a window: the MacBook's base, a little wider than the lid, with the notch for opening it */
 .mac-base {
