@@ -14,7 +14,7 @@ export const BUILDING: NowItem[] = [
   },
   {
     title: 'For Zayn',
-    blurb: 'A CSS art gallery of things that reminds me of my son.',
+    blurb: 'A little hub for everything I make for my son, starting with a CSS art gallery.',
     href: 'https://zayn.aniqa.dev',
   },
   // next up:
