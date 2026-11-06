@@ -1,16 +1,28 @@
 ---
 import '../styles/portfolio.css';
+import '../styles/review-tiles.css';
 import Base from '../layouts/Base.astro';
 import LatestReview from '../components/LatestReview.astro';
 import NowBuilding from '../components/NowBuilding.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import ReviewTile from '../components/ReviewTile.astro';
 import UpdatesSignup from '../components/UpdatesSignup.astro';
 import WorkPreview from '../components/WorkPreview.astro';
 import { getLab, getSelected, real } from '../lib/projects';
 import { TINKERING } from '../lib/now';
+import { getReviews } from '../lib/reviews';
 
 const selected = await getSelected();
 const lab = await getLab();
+// newest first, as on /reviews
+const reviews = (await getReviews()).reverse();
+// The App reviews row takes over from the intro's Reviewing line once there are enough reviews to fill it.
+// Until then the intro keeps the line for the newest one.
+const REVIEWS_FOR_ROW = 4;
+const showReviewRow = reviews.length >= REVIEWS_FOR_ROW;
+// the row takes up room on the right, so Selected work keeps its first five (by `order`) while it shows
+const WORK_WITH_REVIEW_ROW = 5;
+const shownWork = showReviewRow ? selected.slice(0, WORK_WITH_REVIEW_ROW) : selected;
 ---
 
 <Base mode="portfolio">
@@ -35,11 +47,27 @@ const lab = await getLab();
           </dd>
         </div>
         <NowBuilding />
-        <LatestReview />
+        {!showReviewRow && <LatestReview />}
       </dl>
     </section>
 
     <section class="work" aria-labelledby="pf-work">
+      {/* the reviewed apps' icons, newest first, above the work, once there are REVIEWS_FOR_ROW of them */}
+      {showReviewRow && (
+        <div class="home-reviews" role="region" aria-labelledby="pf-reviews">
+          <div class="work-head">
+            <h2 class="label" id="pf-reviews">
+              App reviews
+            </h2>
+            <a href="/reviews">All reviews →</a>
+          </div>
+          <ol class="review-wall home-review-wall">
+            {reviews.map((review, i) => (
+              <ReviewTile review={review} newest={i === 0} />
+            ))}
+          </ol>
+        </div>
+      )}
       <div class="work-head">
         <h2 class="label" id="pf-work">
           Selected work
@@ -47,7 +75,7 @@ const lab = await getLab();
         <a href="/lab">{real(lab).length} more in the lab →</a>
       </div>
       <ol class="projects">
-        {selected.map((p, i) => (
+        {shownWork.map((p, i) => (
           <ProjectCard project={p} n={i + 1} />
         ))}
       </ol>
