@@ -17,7 +17,7 @@ summary: A Mac notch app that switches your audio, tracks your AI coding tools a
 verdict: Delightful # [check: your one word for Overall]
 quote: It literally brings me joy
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
-# stillUsing: true # optional, later: you've kept using it; it gets a star and a place in Still using on /reviews
+stillUsing: true # optional, later: you've kept using it; it gets a star and a place in Still using on /reviews
 brand: '#1a59e4'
 scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   firstImpression: 5
@@ -26,7 +26,7 @@ scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   easeOfUse: 5
   value: 5 # pricing / value
 screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sitting between its food and water bowls in a sunny room, saying it’s had a quiet day and would like an eye break, with Pet, Feed, Water and Play buttons, today’s care rings for rest, water, focus and a found gift, and one of eight treasures collected. Below it, the toolbar of NotchAbove’s tools, with Pet care selected, and a lock button.'
-draft: true # shows on npm run dev only; delete when it's ready to go up
+draft: false # shows on npm run dev only; delete when it's ready to go up
 ---
 
 ## TL;DR
