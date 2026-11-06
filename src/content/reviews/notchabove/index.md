@@ -14,10 +14,10 @@ version: 1.3.5
 platforms: [Mac]
 # post: https://x.com/aniqatc/status/… # optional: the review's post on X
 summary: A Mac notch app that switches your audio, tracks your AI coding tools and Git, and comes with a pet to look after.
-verdict: Delightful # [check: your one word for Overall]
+verdict: Delightful
 quote: It literally brings me joy
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
-stillUsing: true # optional, later: you've kept using it; it gets a star and a place in Still using on /reviews
+stillUsing: true
 brand: '#1a59e4'
 scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   firstImpression: 5
@@ -26,7 +26,6 @@ scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   easeOfUse: 5
   value: 5 # pricing / value
 screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sitting between its food and water bowls in a sunny room, saying it’s had a quiet day and would like an eye break, with Pet, Feed, Water and Play buttons, today’s care rings for rest, water, focus and a found gift, and one of eight treasures collected. Below it, the toolbar of NotchAbove’s tools, with Pet care selected, and a lock button.'
-draft: false # shows on npm run dev only; delete when it's ready to go up
 ---
 
 ## TL;DR
