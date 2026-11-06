@@ -16,7 +16,8 @@ const updated = updatedSet(lab);
 const s = stats(lab);
 // how favorites show above the archive: 'group' is rows under a Favorites heading, 'shelf' is screenshot cards.
 // either way each one also stays in its year, with a sparkle
-const FAVORITES_LOOK: 'group' | 'shelf' = 'group';
+// (`as` keeps both choices in the type, so TypeScript doesn't flag the 'shelf' check as impossible)
+const FAVORITES_LOOK = 'group' as 'group' | 'shelf';
 // my favorites, newest first
 const favorites = byYear(lab)
   .flatMap(([, entries]) => entries)
