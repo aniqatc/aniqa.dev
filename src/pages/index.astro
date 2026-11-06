@@ -20,6 +20,9 @@ const reviews = (await getReviews()).reverse();
 // Until then the intro keeps the line for the newest one.
 const REVIEWS_FOR_ROW = 4;
 const showReviewRow = reviews.length >= REVIEWS_FOR_ROW;
+// the row takes up room in the right column, so Selected work keeps its first five (by `order`) when it's showing
+const WORK_WITH_REVIEW_ROW = 5;
+const shownWork = showReviewRow ? selected.slice(0, WORK_WITH_REVIEW_ROW) : selected;
 ---
 
 <Base mode="portfolio">
@@ -72,7 +75,7 @@ const showReviewRow = reviews.length >= REVIEWS_FOR_ROW;
         <a href="/lab">{real(lab).length} more in the lab →</a>
       </div>
       <ol class="projects">
-        {selected.map((p, i) => (
+        {shownWork.map((p, i) => (
           <ProjectCard project={p} n={i + 1} />
         ))}
       </ol>
