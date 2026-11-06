@@ -22,7 +22,8 @@ Use `--device phone` or `--device tablet` for a mobile app, and `--device deskto
 - Web app: run `npm run screenshots -- reviews/<slug>` to capture `screenshot.png` and fetch `logo.png` when one is missing.
 - Phone, tablet or Mac app: add the screenshots from the device and the app icon as `logo.png`. Phone reviews can include `screenshot-2.png` and `screenshot-3.png`.
 - Write useful `screenshotAlt` text for every screen shown.
-- Pictures in the notes: `![alt](./file.png)` under a point, with an optional _italic_ caption line right after. They open full size on click. Crop them to the detail that matters.
+- Pictures in the notes: `![alt](./file.png)` under a point, with an optional _italic_ caption line right after. They open full size on click, with the caption. Crop them to the detail that matters.
+- Picture notes: when the user wants a picture behind a small chip in the text instead, write it inline after the words it shows with the title `"note"` or `"note: caption"`, e.g. `21 tabs ![The tab grid](./tabs.png "note: The tab grid")`. Use whichever the user asks for; framed is the default.
 
 ## 3. Finish and check
 

@@ -175,7 +175,9 @@ npm run new -- --kind review --app "App name" --maker handle --live example.com
 ```
 
 1. Fill in the review's date, `triedOn`, scores, verdict, and brand colour in `index.md`.
-2. Write `First look`, `What I liked`, `Small ideas`, and `Who it's for`. Use concrete details from trying the app; keep suggestions kind and specific. To show a detail, put a screenshot in the review folder and add `![alt](./file.png)` under the point. An _italic_ line right after it becomes the caption, and two images on one line sit side by side (phone screens). Clicking a picture opens it full size. Crop to the part that matters; the picture sits in a narrow frame.
+2. Write `First look`, `What I liked`, `Small ideas`, and `Who it's for`. Use concrete details from trying the app; keep suggestions kind and specific. To show a detail, put a screenshot in the review folder and add `![alt](./file.png)` under the point. An _italic_ line right after it becomes the caption, and two images on one line sit side by side (phone screens). Clicking a picture opens it full size, with its caption underneath. Crop to the part that matters; the picture sits in a narrow frame.
+
+   For a picture that shouldn't interrupt the text, make it a **picture note**: give the image the title `"note"` and put it right after the words it shows, like `There are 21 tabs ![The tab grid](./tabs.png "note"), which…`. It shows as a small chip in the line that opens the picture full size. Add a caption after a colon: `"note: The tab grid, with Pet care open"`. Any other title leaves the picture inline, so you can mix both in one review.
 3. For a web app, run `npm run screenshots -- reviews/<slug>` to capture the app and its icon. For a phone or tablet app, add screenshots from the device and set `device` to `phone` or `tablet`; for a Mac app, see [Mac apps](#mac-apps). Optional `price`, `version` and `platforms` show with the facts.
 4. Run `npm run scorecard -- <slug>` to make the share image. Check the draft locally, remove `draft: true` when ready, then run `npm run og` for the review's link preview.
 

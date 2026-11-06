@@ -56,7 +56,11 @@ Two or three sentences on the first five minutes: signing up, the empty state, a
    ![The first screen](./phone-before.png) ![The second screen](./phone-after.png)
    _What changes between the two_
 
-3. A point doesn't need a picture.
+3. Or keep the picture out of the way: a picture note is a small chip right after the words it shows
+   ![What's in the picture](./liked-detail.png "note: What the picture shows") that opens it full size.
+   Write the image with the title "note", or "note: its caption".
+
+4. A point doesn't need a picture.
 
 ## Small ideas
 

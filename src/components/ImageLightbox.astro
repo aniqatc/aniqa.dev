@@ -1,7 +1,9 @@
 ---
-// Pictures in a review's notes open full size: click one (or focus it and press Enter) and it fills the screen
-// in a <dialog>, at the image's own resolution. Esc, the close button or a click anywhere closes it, and focus
-// goes back to the picture. The screenshot at the top isn't part of this; it links to the app.
+// Pictures in a review's notes open full size: click one (or focus it and press Enter) and it fills
+// the screen in a <dialog>, at the image's own resolution, with its caption underneath. Picture notes (an
+// image titled "note" in the Markdown, a chip in the line of text; see src/lib/md-sections.mjs) open the
+// same way. Esc, the close button or a click anywhere closes it, and focus goes back to the picture. The
+// screenshot at the top isn't part of this; it links to the app.
 ---
 
 <dialog class="lightbox" aria-label="Full size picture">
@@ -9,6 +11,7 @@
     Close ✕
   </button>
   <img class="lightbox-img" alt="" />
+  <p class="lightbox-caption" hidden></p>
 </dialog>
 
 <script>
@@ -17,27 +20,44 @@
   onPage(() => {
     const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
     const full = dialog?.querySelector<HTMLImageElement>('.lightbox-img');
-    if (!dialog || !full) return;
+    const caption = dialog?.querySelector<HTMLParagraphElement>('.lightbox-caption');
+    if (!dialog || !full || !caption) return;
     // the pictures in the notes (one per paragraph, or two side by side), not the screenshot at the top
     const pictures = [...document.querySelectorAll<HTMLImageElement>('.d-rv .sec p > img')];
-    const open = (picture: HTMLImageElement) => {
+    // picture notes already have their role, label and tab stop from the Markdown
+    const notes = [...document.querySelectorAll<HTMLElement>('.d-rv .sec .picture-note')];
+    const triggers: HTMLElement[] = [...pictures, ...notes];
+    const imageFor = (trigger: HTMLElement) =>
+      trigger instanceof HTMLImageElement ? trigger : trigger.querySelector<HTMLImageElement>('img');
+    // a note's caption is in its data-caption; an inline picture's is the _italic_ line after it
+    const captionFor = (trigger: HTMLElement) =>
+      trigger instanceof HTMLImageElement
+        ? (trigger.parentElement?.querySelector(':scope > em')?.textContent?.trim() ?? '')
+        : (trigger.dataset.caption ?? '');
+    const open = (trigger: HTMLElement) => {
+      const picture = imageFor(trigger);
+      if (!picture) return;
       // the picture's own file: Markdown images are converted, not shrunk, so this is the full resolution
       full.src = picture.currentSrc || picture.src;
       full.alt = picture.alt;
+      caption.textContent = captionFor(trigger);
+      caption.hidden = !caption.textContent;
       dialog.showModal();
     };
-    const onClick = (event: Event) => open(event.currentTarget as HTMLImageElement);
+    const onClick = (event: Event) => open(event.currentTarget as HTMLElement);
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      open(event.currentTarget as HTMLImageElement);
+      open(event.currentTarget as HTMLElement);
     };
     for (const picture of pictures) {
       picture.tabIndex = 0;
       picture.setAttribute('role', 'button');
       picture.setAttribute('aria-label', `Open full size: ${picture.alt}`);
-      picture.addEventListener('click', onClick);
-      picture.addEventListener('keydown', onKey);
+    }
+    for (const trigger of triggers) {
+      trigger.addEventListener('click', onClick);
+      trigger.addEventListener('keydown', onKey);
     }
     // any click closes it: the backdrop, the picture or the button (Esc is built in)
     const close = () => dialog.close();
@@ -45,9 +65,9 @@
     return () => {
       dialog.close();
       dialog.removeEventListener('click', close);
-      for (const picture of pictures) {
-        picture.removeEventListener('click', onClick);
-        picture.removeEventListener('keydown', onKey);
+      for (const trigger of triggers) {
+        trigger.removeEventListener('click', onClick);
+        trigger.removeEventListener('keydown', onKey);
       }
     };
   });

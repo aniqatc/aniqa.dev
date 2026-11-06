@@ -21,9 +21,67 @@ const isExternalLink = (node) =>
   /^https?:\/\//.test(String(node.properties.href ?? '')) &&
   !/^https?:\/\/(www\.)?aniqa\.dev(\/|$)/.test(String(node.properties.href));
 
+// A picture note: an image whose title is "note" (or "note: its caption") becomes a small chip in the line of
+// text that opens the picture full size (ImageLightbox.astro), instead of a framed picture under the point.
+// The <img> stays inside the chip, hidden, so Astro still finds and processes the file.
+const PICTURE_NOTE_TITLE = /^note(?::\s*(.*))?$/s;
+
+const PICTURE_ICON = {
+  type: 'element',
+  tagName: 'svg',
+  properties: { viewBox: '0 0 16 16', ariaHidden: 'true' },
+  children: [
+    {
+      type: 'element',
+      tagName: 'rect',
+      properties: { x: 1.5, y: 2.5, width: 13, height: 11, rx: 2.5 },
+      children: [],
+    },
+    { type: 'element', tagName: 'circle', properties: { cx: 5.5, cy: 6.5, r: 1.3 }, children: [] },
+    { type: 'element', tagName: 'path', properties: { d: 'M2.5 12l3.6-3.6 2.4 2.4 2-2 3 3' }, children: [] },
+  ],
+};
+
+/**
+ * Turns an image titled "note" into a picture note chip, or returns undefined for any other node.
+ * @param node The node to check.
+ * @returns The chip element, or undefined.
+ */
+const pictureNote = (node) => {
+  if (node.tagName !== 'img') return undefined;
+  const match = PICTURE_NOTE_TITLE.exec(String(node.properties.title ?? '').trim());
+  if (!match) return undefined;
+  const imageProperties = { ...node.properties };
+  delete imageProperties.title;
+  const caption = match[1]?.trim();
+  return {
+    type: 'element',
+    tagName: 'span',
+    properties: {
+      className: ['picture-note'],
+      role: 'button',
+      tabIndex: 0,
+      ariaLabel: `Open picture: ${imageProperties.alt ?? ''}`,
+      ...(caption ? { dataCaption: caption } : {}),
+    },
+    children: [
+      structuredClone(PICTURE_ICON),
+      {
+        type: 'element',
+        tagName: 'span',
+        properties: { ariaHidden: 'true' },
+        children: [{ type: 'text', value: '↗' }],
+      },
+      { type: 'element', tagName: 'img', properties: { ...imageProperties, hidden: true }, children: [] },
+    ],
+  };
+};
+
 // Creates a plain copy of a node, with external links modified to open in a new tab.
 const plain = (n) => {
   if (n.type === 'element') {
+    const note = pictureNote(n);
+    if (note) return note;
     const properties = { ...n.properties };
     if (isExternalLink(n)) {
       properties.target = '_blank';
