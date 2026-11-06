@@ -84,7 +84,8 @@ can spend that time looking after her, and she peeks out of the notch (if you wa
    helps.
 8. **Clipboard history and notes.** I was reluctantly using Raycast for these, but it's built around keyboard
    shortcuts and I never enjoyed it, so I deleted it
-   ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png "note: Clipboard history, newest first").
+   ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png "note: Clipboard history, newest first")
+   ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png "note: It skips passwords and anything that looks like a key").
 9. **Little extras.** The birthday countdown
    ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png "note: Weather, world clocks and the birthday countdown")
    is awesome, and the camera preview
@@ -106,9 +107,13 @@ can spend that time looking after her, and she peeks out of the notch (if you wa
 1. **Window management.** I don't really manage windows anyway.
 2. **Todos.** Glad it's there, but work keeps me on Linear.
 3. **Tools.** Handy if you need exchange rates quickly (they're up to 12 hours old).
-4. **Sales.** Not for me yet, but if I ever become an indie builder, a notification for every sale must be a nice
+4. **Sales.**
+   ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch")
+   Not for me yet, but if I ever become an indie builder, a notification for every sale must be a nice
    dopamine hit.
-5. **Games.** I've been busy with my pet, but the holidays are our slower season, so I'll try them and update this.
+5. **Games.**
+   ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png "note: Five games, all still at a best score of 0")
+   I've been busy with my pet, but the holidays are our slower season, so I'll try them and update this.
 
 ## Small ideas
 
