@@ -3,6 +3,7 @@ import '../../styles/lab.css';
 import Base from '../../layouts/Base.astro';
 import Dice from '../../components/Dice.astro';
 import Facts from '../../components/Facts.astro';
+import FavoritesShelf from '../../components/FavoritesShelf.astro';
 import HoverPreview from '../../components/HoverPreview.astro';
 import LabRow from '../../components/LabRow.astro';
 import NextEntry from '../../components/NextEntry.astro';
@@ -13,7 +14,10 @@ import { byYear, fmtMonth, getLab, pad, stats } from '../../lib/projects';
 const lab = await getLab();
 const updated = updatedSet(lab);
 const s = stats(lab);
-// my favorites, newest first, pinned above the years (each also stays in its year)
+// how favorites show above the archive: 'group' is rows under a Favorites heading, 'shelf' is screenshot cards.
+// either way each one also stays in its year, with a sparkle
+const FAVORITES_LOOK: 'group' | 'shelf' = 'group';
+// my favorites, newest first
 const favorites = byYear(lab)
   .flatMap(([, entries]) => entries)
   .filter((e) => e.data.favorite);
@@ -43,8 +47,10 @@ const facts = [
       </div>
     </section>
 
+    {favorites.length > 0 && FAVORITES_LOOK === 'shelf' && <FavoritesShelf favorites={favorites} />}
+
     <section class="archive" aria-label="Archive">
-      {favorites.length > 0 && (
+      {favorites.length > 0 && FAVORITES_LOOK === 'group' && (
         <>
           <h3 class="year label year-favorites">
             <Sparkle />

@@ -1,0 +1,43 @@
+---
+// Favorites as a shelf above the archive: each one's screenshot, title, type and year, three across (two on phones)
+import { Image } from 'astro:assets';
+import Sparkle from './Sparkle.astro';
+import { year, type LabEntry } from '../lib/projects';
+import { screenshotFor } from '../lib/screenshots';
+
+interface Props {
+  /** newest first */
+  favorites: LabEntry[];
+}
+
+const { favorites } = Astro.props;
+---
+
+<section class="shelf" aria-labelledby="shelf-h">
+  <h2 class="year label year-favorites" id="shelf-h">
+    <Sparkle />
+    Favorites
+  </h2>
+  <ul class="shelf-grid">
+    {
+      favorites.map((entry) => {
+        const screenshot = screenshotFor(entry);
+        return (
+          <li>
+            <a class="shelf-card" href={`/lab/${entry.id}`}>
+              <figure>
+                {screenshot && (
+                  <Image src={screenshot} alt="" width={480} format="webp" loading="lazy" />
+                )}
+              </figure>
+              <b>{entry.data.title}</b>
+              <span class="label">
+                {entry.data.type} · {year(entry)}
+              </span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
