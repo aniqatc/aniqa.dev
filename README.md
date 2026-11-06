@@ -175,11 +175,59 @@ npm run new -- --kind review --app "App name" --maker handle --live example.com
 ```
 
 1. Fill in the review's date, `triedOn`, scores, verdict, and brand colour in `index.md`.
-2. Write `First look`, `What I liked`, `Small ideas`, and `Who it's for`. Use concrete details from trying the app; keep suggestions kind and specific. To show a detail, put a screenshot in the review folder and add `![alt](./file.png)` under the point. An _italic_ line right after it becomes the caption, and two images on one line sit side by side (phone screens). Clicking a picture opens it full size, with its caption underneath. Crop to the part that matters; the picture sits in a narrow frame.
-
-   For a picture that shouldn't interrupt the text, make it a **picture note**: give the image the title `"note"` and put it right after the words it shows, like `There are 21 tabs ![The tab grid](./tabs.png "note"), which…`. It shows as a small chip in the line that opens the picture full size. Add a caption after a colon: `"note: The tab grid, with Pet care open"`. Any other title leaves the picture inline, so you can mix both in one review.
+2. Write `First look`, `What I liked`, `Small ideas`, and `Who it's for`. Use concrete details from trying the app; keep suggestions kind and specific. To show a detail, put a screenshot in the review folder and add it to the point, either framed under it or as a picture note in the text (see [Pictures in a review](#pictures-in-a-review)).
 3. For a web app, run `npm run screenshots -- reviews/<slug>` to capture the app and its icon. For a phone or tablet app, add screenshots from the device and set `device` to `phone` or `tablet`; for a Mac app, see [Mac apps](#mac-apps). Optional `price`, `version` and `platforms` show with the facts.
 4. Run `npm run scorecard -- <slug>` to make the share image. Check the draft locally, remove `draft: true` when ready, then run `npm run og` for the review's link preview.
+
+#### Pictures in a review
+
+There are two ways to show a picture in a review's notes. Both open it full size when clicked (or focused and
+opened with Enter), with its caption under it, and you can mix them in one review. Crop to the part that matters.
+
+**Framed**, under the point: the picture sits in a narrow frame below the text. Leave a blank line before it.
+
+```md
+1. **Make it yours.** There are 21 tabs, but you can remove what you don't need.
+
+   ![The tab grid, with the Pet care tab selected](./tabs.png)
+```
+
+Add a caption with an _italic_ line straight after the image. It shows in a strip along the bottom of the frame.
+
+```md
+   ![The tab grid, with the Pet care tab selected](./tabs.png)
+   _The tab grid, with Pet care open_
+```
+
+Two images on one line sit side by side, for phone screens, and share one caption.
+
+```md
+   ![The empty state](./phone-before.png) ![The first entry](./phone-after.png)
+   _Before and after the first entry_
+```
+
+**Picture note**, in the text: give the image the title `"note"` and put it right after the words it shows. It
+becomes a small chip in the line, so the sentence keeps reading normally.
+
+```md
+1. **Make it yours.** There are 21 tabs ![The tab grid](./tabs.png "note"), but you can remove what you don't need.
+```
+
+Add a caption after a colon in the title. It shows under the picture when it opens.
+
+```md
+1. **The pet.** Bombay ![The pet care panel](./pet.png "note: Bombay, between her food and water bowls") peeks
+   out of the notch.
+```
+
+| You write                              | It shows as                               | Caption from                |
+| -------------------------------------- | ----------------------------------------- | --------------------------- |
+| `![alt](./file.png)`                   | A framed picture under the point          | An _italic_ line after it   |
+| `![alt](./a.png) ![alt](./b.png)`      | Two framed pictures side by side          | An _italic_ line after them |
+| `![alt](./file.png "note")`            | A chip in the text that opens the picture | None                        |
+| `![alt](./file.png "note: A caption")` | A chip in the text that opens the picture | The text after `note:`      |
+
+The alt text describes the picture for screen readers either way; any other title leaves a picture framed.
 
 #### Mac apps
 
