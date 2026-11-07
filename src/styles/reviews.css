@@ -643,16 +643,33 @@
   border: 0;
   background: none;
   cursor: zoom-out;
-}
-.lightbox[open] {
-  display: grid;
+  /* the layout lives here, not on [open], so the picture stays centred while it fades out after closing */
   place-items: center;
   align-content: center;
   gap: 12px;
+  /* fades in and out: @starting-style sets where opening starts, and allow-discrete keeps the dialog (and its
+     place in the top layer) until the fade out ends. Browsers without these just open and close at once. */
+  opacity: 0;
+  transition:
+    opacity 0.28s ease,
+    display 0.28s allow-discrete,
+    overlay 0.28s allow-discrete;
+}
+.lightbox[open] {
+  display: grid;
+  opacity: 1;
 }
 .lightbox::backdrop {
   background: color-mix(in oklab, var(--bg) 92%, transparent);
   backdrop-filter: blur(6px);
+  opacity: 0;
+  transition:
+    opacity 0.28s ease,
+    display 0.28s allow-discrete,
+    overlay 0.28s allow-discrete;
+}
+.lightbox[open]::backdrop {
+  opacity: 1;
 }
 .lightbox-img {
   max-width: 100%;
@@ -662,6 +679,27 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface);
+  /* the picture eases up from a little smaller as it opens, and settles back as it closes */
+  transform: translateY(8px) scale(0.96);
+  transition: transform 0.34s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.lightbox[open] .lightbox-img {
+  transform: none;
+}
+@starting-style {
+  .lightbox[open],
+  .lightbox[open]::backdrop {
+    opacity: 0;
+  }
+  .lightbox[open] .lightbox-img {
+    transform: translateY(8px) scale(0.96);
+  }
+}
+/* the global reduced-motion rule doesn't reach ::backdrop */
+@media (prefers-reduced-motion: reduce) {
+  .lightbox::backdrop {
+    transition: none;
+  }
 }
 /* the picture's caption under it: the note's own, or the italic line under a framed picture */
 .lightbox-caption {

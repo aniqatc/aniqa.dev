@@ -122,8 +122,9 @@ if (existsSync('src/content/reviews')) {
 
 let server = null;
 let base = 'http://localhost:4321';
+// a server that hangs counts as down (5s), so a stuck dev server can't freeze the script
 const up = (url) =>
-  fetch(url)
+  fetch(url, { signal: AbortSignal.timeout(5000) })
     .then((r) => r.ok)
     .catch(() => false);
 if (!(await up(`${base}/lab`))) {
