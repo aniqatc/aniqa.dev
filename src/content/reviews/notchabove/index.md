@@ -13,9 +13,9 @@ price: $9.99 one-time
 version: 1.3.5
 platforms: [Mac]
 # post: https://x.com/aniqatc/status/… # optional: the review's post on X
-summary: A Mac notch app that handles your audio, AI coding tools, Git, file shelf and clipboard history, plus a pet to look after.
+summary: A Mac notch app that handles audio, AI coding tools, Git, a file shelf and clipboard history, plus a pet to look after.
 verdict: Delightful
-quote: Best all-in-one productivity tool
+quote: Finally, a use for my MacBook notch
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
 stillUsing: true
 brand: '#1a59e4'
@@ -34,9 +34,12 @@ I never really used the MacBook notch. I didn't even know it could do more than 
 clock to give my menu bar icons more room.
 
 NotchAbove fills it with the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a
-shelf for files and a (cute) black cat named Bombay. It's packed with features ![NotchAbove's list of features, each with a blue icon: Output, Auto-Switch, Scenes, Calls, Apps, Focus, Windows, System, Coding, Affirmations, Eyes, Shelf, Clipboard, Todo, World, Camera, Tools, Notes, Pet care, Git, Sales and Games](./feature-list.png 'note: Every feature, from Output to Games') but feels light and
-native, it's one of the few apps that genuinely brings me joy, and it's easy to fit into your workflow. It also freed
-up my menu bar straight away: I deleted Raycast and Vorssaint.
+shelf for files and a (cute) black cat named Bombay. It has a lot of features, more than I'll ever use ![NotchAbove's list of features, each with a blue icon: Output, Auto-Switch, Scenes, Calls, Apps, Focus, Windows, System, Coding, Affirmations, Eyes, Shelf, Clipboard, Todo, World, Camera, Tools, Notes, Pet care, Git, Sales and Games](./feature-list.png 'note: Every feature, from Output to Games'), but feels light and
+native, it's one of the few apps that genuinely brings me joy, and it slotted right into my day. It also freed up my
+menu bar straight away: I deleted Raycast and Vorssaint.
+
+I've used it for about two weeks and can see it sticking around long term, so I'll add an update in a month or so. I
+got it on a founder's sale, I don't know the maker, and nobody asked me to write this.
 
 ## First look
 
@@ -44,11 +47,11 @@ The download instructions were easy, but I had to strip the quarantine flag befo
 That's happened with almost every indie or non-App Store app I've tried, so it's not a knock on NotchAbove.
 
 I first downloaded NotchAbove for the calendar view, volume control, webcam preview and a notch I could style. I was
-hooked halfway through the landing page and never read the rest, so I missed a dozen other useful features. That many
-features would usually overwhelm me, but each one is opt-in ![NotchAbove's Tabs in the notch settings, 15 on: Output, Calls, Apps, Coding and Eyes switched on, and Media, Focus, Windows and Affirmations switched off, each with what it includes underneath](./settings-tabs.png 'note: Switching tabs on and off, 15 on here'), so I keep just what I use.
+hooked halfway through the landing page and never read the rest, so I missed a dozen other useful features. There are
+plenty I'll never touch, and that many would usually overwhelm me, but each one is opt-in ![NotchAbove's Tabs in the notch settings, 15 on: Output, Calls, Apps, Coding and Eyes switched on, and Media, Focus, Windows and Affirmations switched off, each with what it includes underneath](./settings-tabs.png 'note: Switching tabs on and off, 15 on here'), so I keep just what I use.
 
 Finding Bombay, a cat companion, was also such a pleasant surprise. Instead of opening my phone for half a TikTok
-between meetings, I can spend that time looking after her, and she peeks out of the notch (if you want her to) without
+between meetings, I can spend that time looking after her, and she peeks out of the notch (when I let her) without
 being distracting.
 
 ## What I liked
@@ -67,9 +70,11 @@ being distracting.
 3. **Reminders that don't feel wrong.** Other apps have reminders too, but I hate getting water and stand-up reminders
    in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove
    nudges me gently from the notch, and I actually take them in (even if I finish what I'm doing first).
-   - Water sits next to a Pomodoro timer, a countdown and a stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration').
-     The water reminder has made a real difference: I often don't reach for water until I'm already dehydrated, and
-     now I actually sip through the day.
+   - Water sits with the Pomodoro timer, countdown and stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration'),
+     which is my one gripe: I don't use Pomodoro, so I'd rather have water in its own tab, or a Health tab that combines
+     it with the eye breaks. That being said, the water reminder has made a real difference: I often don't reach for
+     water until I'm already dehydrated, and now I actually sip through the day. I'll be convincing my husband to give
+     it a try.
    - On days my chronic dry eyes are more strained, the eye breaks are something I will try reaching for ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises'). After long stretches of coding or debugging, the
      reminder gets me blinking again, and it comes with short exercises ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png 'note: The Near & far exercise takes over the whole screen').
    - I can also see where my time goes ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png 'note: Screen time today, with battery and system stats'): how long I've been on screen today, and in which apps.
@@ -87,8 +92,8 @@ being distracting.
 9. **Little extras.** The birthday countdown ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png 'note: Weather, world clocks and the birthday countdown (my age blurred)') is awesome, and the camera preview
    ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png 'note: The camera check, with effects and reactions') reminds me to switch to my webcam and check my lighting before a call.
 10. **Make it yours.** There are 21 tabs, and most of them I'd actually use, with a core few already in my day to
-    day. It felt like a lot at first, but you can remove what you don't need. You can customize the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png 'note: Notch settings, from the corners to the shine border') and pretty much everything else, and add
-    shortcuts if you want them _(I won't)_ ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png 'note: Shortcuts, like cycling the output device from any app').
+    day. It felt like a lot at first, but I turned off what I don't need and customized the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png 'note: Notch settings, from the corners to the shine border') and pretty much everything else. I could add
+    shortcuts too _(I won't)_ ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png 'note: Shortcuts, like cycling the output device from any app').
 
     ![NotchAbove's tab grid: three rows of icons, with the paw-print Pet care tab selected](./tabs.png)
     _The tab grid, with Pet care open_
@@ -99,21 +104,22 @@ being distracting.
 2. **Music.** Controls and lyrics in the notch ![The lyrics view in the notch, the lines blurred, with a husky companion peeking up from the bottom and singing along](./music-lyrics-husky.png 'note: Lyrics in the notch, with the husky singing along (the words blurred)') are super cool, but for my work laptop, a quick
    play and pause is good enough.
 3. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png 'note: The todo list, reminding me to take these screenshots') Glad it's there, but work keeps me on Linear and my personal tasks live on my phone.
-4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png 'note: The calculator in Tools') Handy if you need exchange rates quickly (they're up to 12 hours old). I like that
+4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png 'note: The calculator in Tools') Handy for quick exchange rates (they're up to 12 hours old). I like that
    conversions get their own space, whereas Raycast folds them into its search.
 5. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png 'note: Sales from Dodo Payments, with alerts in the notch') Not for me yet, but if I ever become an indie builder, a notification for every sale
    must be a nice dopamine hit.
 6. **Games.** ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png 'note: Five games, all still at a best score of 0') I've been busy with my pet, but as a gamer, I'll reach for these once I'm bored
    enough.
-7. **Affirmations.** ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png 'note: An affirmation, shown every 2 hours') Nice if you want a little encouragement throughout the day, but personally, I'd
+7. **Affirmations.** ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png 'note: An affirmation, shown every 2 hours') Nice for a little encouragement throughout the day, but personally, I'd
    rather not add the noise.
 
 ## Small ideas
 
 1. Show usage for more than one account. I'd love to see my AI agent usage across accounts, like my personal and work
    Claude accounts, side by side.
-2. Save notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png 'note: Notes, typed or dictated') as Markdown files. I take notes in Obsidian, like so many people with Markdown editors. Having
-   these land as Markdown files in my own notes would be awesome, and they'd sync to my phone and iPad.
+2. Save notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png 'note: Notes, typed or dictated') as Markdown files. Right now they stay inside NotchAbove and save to a JSON file, so I don't use them. I take notes in Obsidian, like so many people with Markdown editors. Having
+   these land as Markdown files in my own notes would be awesome, and they'd sync to my phone and iPad. Syntax
+   highlighting for code snippets would be nice too.
 3. Add app management. An uninstaller, a cache cleaner and app updates would make it an even fuller replacement for
    Vorssaint. That's what originally appealed to me about it, so it's all I'm missing at the moment.
 
