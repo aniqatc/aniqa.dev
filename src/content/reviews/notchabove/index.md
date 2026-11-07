@@ -2,7 +2,7 @@
 app: NotchAbove
 maker: capt_sherman
 # makerLink: https://bsky.app/profile/handle # optional: link @maker somewhere else instead (Bluesky, Threads, their site…)
-date: 2026-11-06
+date: 2026-11-09
 type: Mac app
 triedOn: MacBook M4 Pro, macOS Golden Gate 27.2
 live: notchabove.xyz
@@ -50,7 +50,7 @@ I first downloaded NotchAbove for the calendar view, volume control, webcam prev
 hooked halfway through the landing page and never read the rest, so I missed a dozen other useful features. There are
 plenty I'll never touch, and that many would usually overwhelm me, but each one is opt-in ![NotchAbove's Tabs in the notch settings, 15 on: Output, Calls, Apps, Coding and Eyes switched on, and Media, Focus, Windows and Affirmations switched off, each with what it includes underneath](./settings-tabs.png 'note: Switching tabs on and off, 15 on here'), so I keep just what I use.
 
-Finding Bombay, a cat companion, was also such a pleasant surprise. Instead of opening my phone for half a TikTok
+Finding Bombay, a cat companion, was also such a pleasant surprise. Instead of opening my phone for TikTok videos
 between meetings, I can spend that time looking after her, and she peeks out of the notch _(when I let her)_ without
 being distracting.
 
@@ -58,7 +58,7 @@ being distracting.
 
 1. **The pet.** I'm a sucker for a good mascot or companion _(you might have noticed the one on this site)_. I like my
    tools minimal, but a well-done Easter egg brings real joy, and the pet care is my favorite part ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png 'note: Bombay on a rainy day, just after a pet').
-   Collecting gifts for Bombay gives me a reason to come back and not lose time doomscrolling.
+   Collecting gifts for Bombay gives me a reason to come back and not lose time mindlessly doomscrolling.
 
    ![NotchAbove's companion picker: Bombay (selected), Turkish Van, Orange Tabby, Silver Tabby, Golden Retriever, Husky, Labrador, Shiba Inu, Capybara, Ghost, Penguin, Baby Dragon, Fox, Bunny, Red Panda and Panda](./companions.png)
    _All sixteen companions, from Bombay to a baby dragon_
