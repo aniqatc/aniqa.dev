@@ -71,7 +71,7 @@ being distracting.
    in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove
    nudges me gently from the notch, and I actually take them in _(even if I finish what I'm doing first)_.
    - Water sits with the Pomodoro timer, countdown and stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration'),
-     which is my main gripe, since I don't use Pomodoro. That being said, the water reminder has made a real difference: I often don't reach for
+     which is actually my main gripe: I don't use Pomodoro, so I only use part of that view. That being said, the water reminder has made a real difference: I often don't reach for
      water until I'm already dehydrated, and now I actually sip through the day. I'll be convincing my husband to give
      it a try.
    - On days my chronic dry eyes are more strained, the eye breaks help ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises'). After long stretches of coding or debugging, the
