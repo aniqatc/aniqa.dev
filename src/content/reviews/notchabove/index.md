@@ -34,7 +34,7 @@ I never really used the MacBook notch. I didn't even know it could do more than 
 clock to give my menu bar icons more room.
 
 NotchAbove fills it with the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a
-shelf for files and a (cute) black cat named Bombay. It has a lot of features, more than I'll ever use ![NotchAbove's list of features, each with a blue icon: Output, Auto-Switch, Scenes, Calls, Apps, Focus, Windows, System, Coding, Affirmations, Eyes, Shelf, Clipboard, Todo, World, Camera, Tools, Notes, Pet care, Git, Sales and Games](./feature-list.png 'note: Every feature, from Output to Games'), but feels light and
+shelf for files and a _(cute)_ black cat named Bombay. It has a lot of features, more than I'll ever use ![NotchAbove's list of features, each with a blue icon: Output, Auto-Switch, Scenes, Calls, Apps, Focus, Windows, System, Coding, Affirmations, Eyes, Shelf, Clipboard, Todo, World, Camera, Tools, Notes, Pet care, Git, Sales and Games](./feature-list.png 'note: Every feature, from Output to Games'), but feels light and
 native, it's one of the few apps that genuinely brings me joy, and it slotted right into my day. It also freed up my
 menu bar straight away: I deleted Raycast and Vorssaint.
 
@@ -51,7 +51,7 @@ hooked halfway through the landing page and never read the rest, so I missed a d
 plenty I'll never touch, and that many would usually overwhelm me, but each one is opt-in ![NotchAbove's Tabs in the notch settings, 15 on: Output, Calls, Apps, Coding and Eyes switched on, and Media, Focus, Windows and Affirmations switched off, each with what it includes underneath](./settings-tabs.png 'note: Switching tabs on and off, 15 on here'), so I keep just what I use.
 
 Finding Bombay, a cat companion, was also such a pleasant surprise. Instead of opening my phone for half a TikTok
-between meetings, I can spend that time looking after her, and she peeks out of the notch (when I let her) without
+between meetings, I can spend that time looking after her, and she peeks out of the notch _(when I let her)_ without
 being distracting.
 
 ## What I liked
@@ -69,7 +69,7 @@ being distracting.
    I don't have to fight it.
 3. **Reminders that don't feel wrong.** Other apps have reminders too, but I hate getting water and stand-up reminders
    in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove
-   nudges me gently from the notch, and I actually take them in (even if I finish what I'm doing first).
+   nudges me gently from the notch, and I actually take them in _(even if I finish what I'm doing first)_.
    - Water sits with the Pomodoro timer, countdown and stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration'),
      which is my one gripe: I don't use Pomodoro, so I'd rather have water in its own tab, or a Health tab that combines
      it with the eye breaks. That being said, the water reminder has made a real difference: I often don't reach for
@@ -104,7 +104,7 @@ being distracting.
 2. **Music.** Controls and lyrics in the notch ![The lyrics view in the notch, the lines blurred, with a husky companion peeking up from the bottom and singing along](./music-lyrics-husky.png 'note: Lyrics in the notch, with the husky singing along (the words blurred)') are super cool, but for my work laptop, a quick
    play and pause is good enough.
 3. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png 'note: The todo list, reminding me to take these screenshots') Glad it's there, but work keeps me on Linear and my personal tasks live on my phone.
-4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png 'note: The calculator in Tools') Handy for quick exchange rates (they're up to 12 hours old). I like that
+4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png 'note: The calculator in Tools') Handy for quick exchange rates _(they're up to 12 hours old)_. I like that
    conversions get their own space, whereas Raycast folds them into its search.
 5. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png 'note: Sales from Dodo Payments, with alerts in the notch') Not for me yet, but if I ever become an indie builder, a notification for every sale
    must be a nice dopamine hit.
