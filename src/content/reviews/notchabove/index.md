@@ -121,6 +121,6 @@ being distracting.
 
 ## Who it's for
 
-Anyone, technical or not, whose notch is going to waste, who wants a calm, native-feeling home for everyday tools, and
-especially anyone who loves a good mascot. I'm shocked one person made something this thoughtful. It's my favorite
-all-in-one productivity tool for 2026 and likely 2027.
+Anyone, technical or not, who has a notch going to waste, wants a native-feeling productivity hub with a myriad of
+useful tools, and loves a good mascot. I'm shocked one person made something this thoughtful. It's my favorite
+all-in-one tool for 2026, and likely 2027.
