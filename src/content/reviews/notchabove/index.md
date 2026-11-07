@@ -56,7 +56,7 @@ without being distracting.
 ## What I liked
 
 1. **The pet.** I'm a sucker for a good mascot or companion (you might have noticed the one on this site). I like my
-   tools minimal, but a well-done Easter egg brings real joy, and pet care is my favourite part ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png "note: Bombay on a rainy day, just after a pet").
+   tools minimal, but a well-done Easter egg brings real joy, and the pet care is my favourite part ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png "note: Bombay on a rainy day, just after a pet").
    Collecting gifts for Bombay gives me a reason to come back, and it's a healthier break than doomscrolling. Not a
    cat person? There are fifteen others.
 
@@ -67,8 +67,7 @@ without being distracting.
    Loom videos on bug reports change it again, and moving between my laptop and desktop makes it worse. Here I can set
    each device's volume before I switch ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png "note: Shortcuts, like cycling the output device from any app") and get back to it with a hover and a click. It's
    clearer than the Mac's own volume handling, and I don't have to fight it.
-3. **Reminders that don't feel wrong.** I hate water and stand-up reminders in the usual notification spot; they
-   shouldn't take the same space as an iMessage. NotchAbove nudges me gently from the notch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration"), in the
+3. **Reminders that don't feel wrong.** I hate water and stand-up reminders in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove nudges me gently from the notch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration"), in the
    middle of the screen, and I actually take them in ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png "note: Affirmations arrive the same gentle way") instead of closing them, even if I finish what
    I'm doing first. The rest-your-eyes reminder ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png "note: Eye breaks every 45 minutes, with short exercises") has me blinking more ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png "note: The Near & far exercise takes over the whole screen") after
    long stretches of coding or debugging ![The eye settings: a shortcut to rest my eyes now, and a note that it's for resting eyes, not treating them](./settings-eye-shortcut.png "note: A shortcut to rest your eyes right away"), which matters with my chronic dry eyes, and it
@@ -78,17 +77,15 @@ without being distracting.
 5. **AI agent usage.** Tracking Claude Code, Codex and Cursor in one place ![The Coding panel for Codex: a weekly usage limit at 100%, an activity heatmap, 3.7M tokens, and no sessions right now](./coding-usage.png "note: Usage limits and an activity heatmap, per tool") is major. A quick look at
    my limits keeps me on track.
 6. **The shelf.** I handle files for different clients at work, and my Downloads folder gets ugly fast. Now I put
-   what I need for the day or week on the shelf ![The shelf holding two documents, with Drag all, AirDrop and Clear buttons](./shelf.png "note: The shelf, with two files on it (their names blurred)") instead of sifting through Downloads. When I was emailing
-   some insurance documents, everything was right there.
-7. **Calendar view.** Work has my day time-blocked, so having it in the notch ![The Calls panel: a camera check, no more meetings today, a November calendar with Monday's meetings, and a list of microphones](./calls-calendar.png "note: The calendar with a camera check and microphones (meeting names blurred)") helps.
-8. **Clipboard history.** I was reluctantly using Raycast for this, but it's built around keyboard shortcuts and I
-   never enjoyed it, so I deleted it. Now my history is a hover away ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png "note: Clipboard history, newest first") ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png "note: It skips passwords and anything that looks like a key").
+   what I need for the day or week on the shelf ![The shelf holding two documents, with Drag all, AirDrop and Clear buttons](./shelf.png "note: The shelf, with two files on it (their names blurred)") instead of sifting through Downloads.
+7. **Calendar view.** Work has my day time-blocked to the minute, so having it in the notch ![The Calls panel: a camera check, no more meetings today, a November calendar with Monday's meetings, and a list of microphones](./calls-calendar.png "note: The calendar with a camera check and microphones (meeting names blurred)") helps.
+8. **Clipboard history.** I was reluctantly using Raycast for this. It's built around keyboard shortcuts, and I
+   never enjoyed it because I'd always use Spotlight to find my clipboard history anyway. Now my history is a hover
+   away in the notch ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png "note: Clipboard history, newest first") ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png "note: It skips passwords and anything that looks like a key").
 9. **Little extras.** The birthday countdown ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png "note: Weather, world clocks and the birthday countdown") is awesome, and the camera preview
    ![The camera check starting up: a mirrored preview of the MacBook Pro camera, with a note that nothing is recorded](./camera-starting.png "note: The camera check starting up, mirrored and never recorded") ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png "note: The camera check, with effects and reactions") reminds me to switch to my webcam instead of joining a call on the MacBook
    one, and to check my lighting.
-10. **Make it yours.** There are 21 tabs, which felt like a lot at first, but you can remove what you don't need. Say
-    less. You can customise the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png "note: Notch settings, from the corners to the shine border") and pretty much everything else, and add shortcuts if you
-    want them (I won't).
+10. **Make it yours.** There are 21 tabs, which felt like a lot at first, but you can remove what you don't need. You can customise the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png "note: Notch settings, from the corners to the shine border") and pretty much everything else, and add shortcuts if you want them (it's clear that I won't).
 
     ![NotchAbove's tab grid: three rows of icons, with the paw-print Pet care tab selected](./tabs.png)
     _The tab grid, with Pet care open_
