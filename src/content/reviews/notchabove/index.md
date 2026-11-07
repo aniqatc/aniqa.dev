@@ -30,83 +30,88 @@ screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sit
 
 ## TL;DR
 
-The notch has always been underused for me; I only kept the time there so my menu bar had room. NotchAbove freed up
-that room straight away, letting me delete Vorssaint and Raycast, and fills the notch with
-the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a shelf for files and a
-black cat named Bombay. It's packed with features but feels light and native, and it's one of the few apps that
-genuinely brings me joy.
+The notch has always been underused for me; I only kept the time there so my menu bar had room. NotchAbove fills it
+with the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a shelf for files and
+a black cat named Bombay. It's packed with features but feels light and native, and it's one of the few apps that
+genuinely brings me joy. It freed up my menu bar straight away, too: I deleted Raycast and Vorssaint.
 
 ## First look
 
-Downloading it took one extra step: I had to strip the quarantine flag before macOS would open it. That's happened
-with almost every indie app I've tried, so it's not a knock on NotchAbove.
+Downloading it took one extra step: I had to strip the quarantine flag before macOS would let it open on my MacBook.
+That's happened with almost every indie app I've tried, so it's not a knock on NotchAbove.
 
-I came for the calendar view, volume control, webcam preview and a notch I could style. I'd only read half the
-landing page, so finding Bombay, and about a dozen other features, was a pleasant surprise. That many features would
-usually overwhelm me, but each one is opt-in, so I kept what I'll actually use.
+I came for the calendar view, volume control, webcam preview and a notch I could style. I downloaded NotchAbove
+halfway through its landing page, so I missed that it comes with a companion and about a dozen other features.
+Finding Bombay, a beautiful black cat, was such a pleasant surprise. Instead of opening my phone for half a TikTok
+between meetings, I can spend that time looking after her, and she peeks out of the notch (if you want her to)
+without being distracting. That many features would usually overwhelm me, but each one is opt-in, so I kept what I'll
+actually use.
 
 ## What I liked
 
-1. **The pet.** I'm a sucker for a good mascot (you might have noticed the one on this site). Looking after Bombay
-   ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png "note: Bombay on a rainy day, just after a pet") and collecting her gifts gives me a reason to come back, and it beats half a TikTok between
-   meetings: a healthy break with a dose of cuteness. Not a cat person? There are fifteen others.
+1. **The pet.** I'm a sucker for a good mascot or companion (you might have noticed the one on this site). I like my
+   tools minimal, but a well-done Easter egg brings real joy, and pet care is my favourite part ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png "note: Bombay on a rainy day, just after a pet").
+   Collecting gifts for Bombay gives me a reason to come back, and it's a healthier break than doomscrolling. Not a
+   cat person? There are fifteen others.
 
    ![NotchAbove's companion picker: Bombay (selected), Turkish Van, Orange Tabby, Silver Tabby, Golden Retriever, Husky, Labrador, Shiba Inu, Capybara, Ghost, Penguin, Baby Dragon, Fox, Bunny, Red Panda and Panda](./companions.png)
    _All sixteen companions, from Bombay to a baby dragon_
 
-2. **Volume control.** Zoom, Spotify and Loom videos on bug reports keep changing my audio, and moving between my
-   laptop and desktop makes it worse. Here I set each device's volume once ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png "note: Shortcuts, like cycling the output device from any app") and get back to it
-   with a hover and a click. It's clearer than the Mac's own volume handling, and I don't have to fight it.
-3. **Reminders that don't feel wrong.** A water or stand-up reminder shouldn't take the same space as an iMessage,
-   and the loud ones I end up tuning out. NotchAbove nudges me from the notch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration") ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png "note: Affirmations arrive the same gentle way"), so
-   I remember to take a break but can finish what I'm doing first. With chronic dry eyes, the eye breaks
-   ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png "note: Eye breaks every 45 minutes, with short exercises") ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png "note: The Near & far exercise takes over the whole screen") ![The eye settings: a shortcut to rest my eyes now, and a note that it's for resting eyes, not treating them](./settings-eye-shortcut.png "note: A shortcut to rest your eyes right away") have me blinking more after long stretches of
-   coding, and show me how much time has passed ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png "note: Screen time today, with battery and system stats").
-4. **Git at a glance.** I've been cleaning up old projects for my portfolio, and seeing my Git status ![The Git panel: three repositories, all clean and up to date, no open pull requests, and a 14-day commit streak](./git-repos.png "note: Every repo at a glance, plus pull requests and a commit streak")
-   means I don't forget to commit or clean up a branch.
-5. **AI agent usage.** A quick look at my Claude Code, Codex and Cursor limits in one place ![The Coding panel for Codex: a weekly usage limit at 100%, an activity heatmap, 3.7M tokens, and no sessions right now](./coding-usage.png "note: Usage limits and an activity heatmap, per tool") keeps
-   me on track.
-6. **The shelf.** My Downloads folder gets ugly fast, with client files at work and personal projects at home. Now
-   what I need for the week sits on the shelf ![The shelf holding two documents, with Drag all, AirDrop and Clear buttons](./shelf.png "note: The shelf, with two files on it (their names blurred)"); when I was emailing some insurance documents, everything
-   was right there.
-7. **Calendar view.** I time-block my work days, so having them in the notch ![The Calls panel: a camera check, no more meetings today, a November calendar with Monday's meetings, and a list of microphones](./calls-calendar.png "note: The calendar with a camera check and microphones (meeting names blurred)") helps.
-8. **Clipboard history.** I kept Raycast around reluctantly for this, since it's built around shortcuts I never
-   enjoyed. Now my history is a hover away ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png "note: Clipboard history, newest first") ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png "note: It skips passwords and anything that looks like a key"), and Raycast is gone.
+2. **Volume control.** This is what got me interested. Switching between Zoom and Spotify keeps changing my audio,
+   Loom videos on bug reports change it again, and moving between my laptop and desktop makes it worse. Here I can set
+   each device's volume before I switch ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png "note: Shortcuts, like cycling the output device from any app") and get back to it with a hover and a click. It's
+   clearer than the Mac's own volume handling, and I don't have to fight it.
+3. **Reminders that don't feel wrong.** I hate water and stand-up reminders in the usual notification spot; they
+   shouldn't take the same space as an iMessage. NotchAbove nudges me gently from the notch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration"), in the
+   middle of the screen, and I actually take them in ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png "note: Affirmations arrive the same gentle way") instead of closing them, even if I finish what
+   I'm doing first. The rest-your-eyes reminder ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png "note: Eye breaks every 45 minutes, with short exercises") has me blinking more ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png "note: The Near & far exercise takes over the whole screen") after
+   long stretches of coding or debugging ![The eye settings: a shortcut to rest my eyes now, and a note that it's for resting eyes, not treating them](./settings-eye-shortcut.png "note: A shortcut to rest your eyes right away"), which matters with my chronic dry eyes, and it
+   shows me how much time has passed ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png "note: Screen time today, with battery and system stats").
+4. **Git at a glance.** Lately I'm cleaning up old projects for my portfolio, and seeing my Git status
+   ![The Git panel: three repositories, all clean and up to date, no open pull requests, and a 14-day commit streak](./git-repos.png "note: Every repo at a glance, plus pull requests and a commit streak") means I don't forget to commit or clean a branch up.
+5. **AI agent usage.** Tracking Claude Code, Codex and Cursor in one place ![The Coding panel for Codex: a weekly usage limit at 100%, an activity heatmap, 3.7M tokens, and no sessions right now](./coding-usage.png "note: Usage limits and an activity heatmap, per tool") is major. A quick look at
+   my limits keeps me on track.
+6. **The shelf.** I handle files for different clients at work, and my Downloads folder gets ugly fast. Now I put
+   what I need for the day or week on the shelf ![The shelf holding two documents, with Drag all, AirDrop and Clear buttons](./shelf.png "note: The shelf, with two files on it (their names blurred)") instead of sifting through Downloads. When I was emailing
+   some insurance documents, everything was right there.
+7. **Calendar view.** Work has my day time-blocked, so having it in the notch ![The Calls panel: a camera check, no more meetings today, a November calendar with Monday's meetings, and a list of microphones](./calls-calendar.png "note: The calendar with a camera check and microphones (meeting names blurred)") helps.
+8. **Clipboard history.** I was reluctantly using Raycast for this, but it's built around keyboard shortcuts and I
+   never enjoyed it, so I deleted it. Now my history is a hover away ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png "note: Clipboard history, newest first") ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png "note: It skips passwords and anything that looks like a key").
 9. **Little extras.** The birthday countdown ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png "note: Weather, world clocks and the birthday countdown") is awesome, and the camera preview
-   ![The camera check starting up: a mirrored preview of the MacBook Pro camera, with a note that nothing is recorded](./camera-starting.png "note: The camera check starting up, mirrored and never recorded") ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png "note: The camera check, with effects and reactions") reminds me to switch to my webcam and check my lighting before a call.
-10. **Make it yours.** Twenty-one tabs felt like a lot at first, but you can hide what you don't need, restyle the
-    notch ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png "note: Notch settings, from the corners to the shine border") and add shortcuts if you like. It's all there, and just as easy to ignore.
+   ![The camera check starting up: a mirrored preview of the MacBook Pro camera, with a note that nothing is recorded](./camera-starting.png "note: The camera check starting up, mirrored and never recorded") ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png "note: The camera check, with effects and reactions") reminds me to switch to my webcam instead of joining a call on the MacBook
+   one, and to check my lighting.
+10. **Make it yours.** There are 21 tabs, which felt like a lot at first, but you can remove what you don't need. Say
+    less. You can customise the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png "note: Notch settings, from the corners to the shine border") and pretty much everything else, and add shortcuts if you
+    want them (I won't).
 
     ![NotchAbove's tab grid: three rows of icons, with the paw-print Pet care tab selected](./tabs.png)
     _The tab grid, with Pet care open_
 
-11. **Easy permissions.** Granting what it needs was simple, with no guesswork.
+11. **Easy permissions.** Granting what it needs was simple.
 
 ## What I didn't use
 
-1. **Window management.** My desktop has enough room that I haven't needed it.
+1. **Window management.** I don't really manage windows anyway.
 2. **Music.** Controls and lyrics in the notch ![The lyrics view in the notch, the lines blurred, with a husky companion peeking up from the bottom and singing along](./music-lyrics-husky.png "note: Lyrics in the notch, with the husky singing along (the words blurred)") are super cool, but not for my work laptop,
    beyond a quick play or pause.
-3. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png "note: The todo list, reminding me to take these screenshots") Work runs on Linear, and my personal tasks live on my phone.
-4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png "note: The calculator in Tools") Handy for quick maths or exchange rates (they're up to 12 hours old).
-   I like that conversions get a dedicated space of their own, where Raycast folds them into its search.
-5. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch") Not for me yet, but a notification for every sale must be a nice dopamine hit.
-6. **Games.** ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png "note: Five games, all still at a best score of 0") I've been busy with my pet, but as a gamer, I'll reach for these when I finally get
-   a day to be bored.
-
-Even the ones I haven't needed are nice to have.
+3. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png "note: The todo list, reminding me to take these screenshots") Glad it's there, but work keeps me on Linear and my personal tasks live on my phone.
+4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png "note: The calculator in Tools") Handy if you need exchange rates quickly (they're up to 12 hours old). I like that
+   conversions get their own space, where Raycast folds them into its search.
+5. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch") Not for me yet, but if I ever become an indie builder, a notification for every sale
+   must be a nice dopamine hit.
+6. **Games.** ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png "note: Five games, all still at a best score of 0") I've been busy with my pet, but as a gamer, I'll reach for these when I finally get a
+   day to be bored.
 
 ## Small ideas
 
-1. **Lightweight snippets.** I dictated a few notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png "note: Notes, typed or dictated") and could see saving code snippets or prompts there
-   too, with syntax highlighting you can turn on per note.
-2. **Notes as Markdown files.** Saving them into my Obsidian folder would put them alongside everything else and sync
-   them to my phone and iPad.
-3. **App management.** An uninstaller, a cache cleaner, app updates and a Homebrew manager would make it an even
+1. Expand notes and snippets in a lightweight way. I dictated a few notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png "note: Notes, typed or dictated"), and I could see saving code
+   snippets for debugging or useful prompts there too, with syntax highlighting you can turn on per note.
+2. Save notes as Markdown files. I take notes in Obsidian, and so many people use Markdown editors; having dictated
+   notes land as Markdown files inside my own notes system would be awesome, and they'd sync to my phone and iPad.
+3. Add app management. An uninstaller, a cache cleaner, app updates and a Homebrew manager would make it an even
    fuller replacement for Vorssaint.
 
 ## Who it's for
 
-Anyone, technical or not, whose notch is going to waste and who wants everyday tools in one native-feeling spot
-without learning a new setup, especially anyone who loves a good mascot. I'm shocked one person made something this
-thoughtful.
+Anyone, technical or not, whose notch is going to waste, who wants a calm, native-feeling home for everyday tools, and
+especially anyone who loves a good mascot. I'm shocked one person made something this thoughtful.
