@@ -108,12 +108,14 @@ one and keep only what you'll actually use.
 ## What I didn't use
 
 1. **Window management.** I don't really manage my windows. My desktop has enough space that I haven't needed it.
-2. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png "note: The todo list, reminding me to take these screenshots") Glad it's there, but work keeps me on Linear, and my personal tasks live on my phone anyway.
-3. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png "note: The calculator in Tools") Handy if you need exchange rates quickly (they're up to 12 hours old) or some quick
+2. **Music.** You can control what's playing and see the lyrics appear in the notch. Super cool, but not something
+   I'll use on my work laptop, though I might use it to quickly play or pause.
+3. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png "note: The todo list, reminding me to take these screenshots") Glad it's there, but work keeps me on Linear, and my personal tasks live on my phone anyway.
+4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png "note: The calculator in Tools") Handy if you need exchange rates quickly (they're up to 12 hours old) or some quick
    maths.
-4. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch") Not for me yet, but if I ever become an indie builder, a notification for every
+5. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch") Not for me yet, but if I ever become an indie builder, a notification for every
    sale must be a nice dopamine hit.
-5. **Games.** ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png "note: Five games, all still at a best score of 0") I've been busy with my pet, but as an avid gamer, I know I'll reach for these when I
+6. **Games.** ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png "note: Five games, all still at a best score of 0") I've been busy with my pet, but as an avid gamer, I know I'll reach for these when I
    finally get a day to be bored.
 
 Even the things I haven't needed are nice to have.
