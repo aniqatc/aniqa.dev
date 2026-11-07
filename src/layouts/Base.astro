@@ -18,6 +18,8 @@ interface Props {
   noindex?: boolean;
   /** this page's own link-preview card, e.g. /og/projects/weather.png; defaults to the portfolio or lab card */
   ogImage?: string;
+  /** an article (an app review): og:type article, with the day it went up as YYYY-MM-DD */
+  published?: string;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   description = 'Aniqa started building to see how things work, and now builds to solve real problems.',
   noindex = false,
   ogImage,
+  published,
 } = Astro.props;
 const fullTitle = title ? `${title} — aniqa.dev` : 'aniqa.dev';
 // link previews: each page's own address, and its card from `npm run og` (an entry's own, or the portfolio / lab one)
@@ -56,7 +59,9 @@ const themeColor = mode === 'lab' ? '#f1efea' : '#16151b';
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- link previews (iMessage, Slack, LinkedIn, X…) -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={published ? 'article' : 'website'} />
+    {published && <meta property="article:published_time" content={published} />}
+    {published && <meta property="article:author" content="https://aniqa.dev" />}
     <meta property="og:site_name" content="aniqa.dev" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -89,6 +94,8 @@ const themeColor = mode === 'lab' ? '#f1efea' : '#16151b';
         document.head.append(ga);
       }
     </script>
+    <!-- anything else a page adds to the head, e.g. a review's structured data -->
+    <slot name="head" />
     <!-- links swap pages in place with a cross-fade, so portfolio ↔ lab fades between night and day -->
     <ClientRouter />
   </head>

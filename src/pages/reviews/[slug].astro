@@ -15,6 +15,7 @@ import {
   fmtDay,
   getReviews,
   makerUrl,
+  reviewJsonLd,
   scoresFor,
   type Review,
 } from '../../lib/reviews';
@@ -42,6 +43,11 @@ const { app, maker, date, type, triedOn, price, version, platforms, device, post
 const { Content } = await render(review);
 const appUrl = appUrlFor(review);
 const scores = scoresFor(review);
+// structured data for search results; < is escaped so nothing in the text can close the script tag
+const jsonLd = JSON.stringify(reviewJsonLd(review, new URL(Astro.url.pathname, Astro.site))).replace(
+  /</g,
+  '\\u003c',
+);
 const facts = [
   { label: 'Date', value: fmtDay(date) },
   { label: 'Maker', value: [{ label: `@${maker}`, href: makerUrl(review) }] },
@@ -67,6 +73,8 @@ const facts = [
   mode="portfolio"
   variant="rv"
   title={app}
+  pageTitle={`${app} review`}
+  published={date}
   lede={summary}
   back={{ href: '/reviews', label: '← All reviews' }}
   position={`${pad(review.number)} / ${pad(total)}`}
@@ -74,6 +82,7 @@ const facts = [
   <Fragment slot="eyebrow">
     App review <b>{pad(review.number)}</b>
   </Fragment>
+  <script slot="head" type="application/ld+json" is:inline set:html={jsonLd} />
   <Facts slot="facts" class="review-facts" items={facts} />
   {device === 'browser' ? (
     screenshotFor(review) && <SiteScreenshot entry={review} />

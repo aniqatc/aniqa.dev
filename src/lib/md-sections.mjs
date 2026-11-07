@@ -77,6 +77,63 @@ const pictureNote = (node) => {
   };
 };
 
+const isNote = (n) => n.type === 'element' && n.properties.className?.includes('picture-note');
+
+/**
+ * Keeps each picture note on the same line as the word before it and the punctuation after it, so a line never
+ * starts with a lone chip or a full stop. Splits those off the neighbouring text into a span that doesn't wrap.
+ * @param children The converted children of one element.
+ * @returns The children, with each chip wrapped together with its neighbours.
+ */
+const glueNotes = (children) => {
+  const out = [];
+  for (let i = 0; i < children.length; i++) {
+    const n = children[i];
+    if (!isNote(n)) {
+      out.push(n);
+      continue;
+    }
+    const glued = [];
+    // the last word of the text before, with its space before the chip, or a whole _italic_ or **bold** bit
+    // right before it, like "(I won't)"
+    const before = out.at(-1);
+    if (before?.type === 'element' && ['em', 'strong'].includes(before.tagName)) {
+      glued.push(out.pop());
+    } else if (
+      before?.type === 'text' &&
+      /^\s+$/.test(before.value) &&
+      ['em', 'strong'].includes(out.at(-2)?.tagName)
+    ) {
+      glued.push(...out.splice(-2));
+    } else if (before?.type === 'text') {
+      const match = /\S+\s*$/.exec(before.value);
+      if (match) {
+        before.value = before.value.slice(0, match.index);
+        if (!before.value) out.pop();
+        glued.push({ type: 'text', value: match[0] });
+      }
+    }
+    glued.push(n);
+    // punctuation straight after the chip: . , : ; ) and the like
+    const after = children[i + 1];
+    if (after?.type === 'text') {
+      const match = /^[.,:;!?)\]…’”]+/.exec(after.value);
+      if (match) {
+        glued.push({ type: 'text', value: match[0] });
+        after.value = after.value.slice(match[0].length);
+        if (!after.value) i++;
+      }
+    }
+    out.push({
+      type: 'element',
+      tagName: 'span',
+      properties: { className: ['picture-note-glue'] },
+      children: glued,
+    });
+  }
+  return out;
+};
+
 // Creates a plain copy of a node, with external links modified to open in a new tab.
 const plain = (n) => {
   if (n.type === 'element') {
@@ -93,7 +150,7 @@ const plain = (n) => {
       type: 'element',
       tagName: n.tagName,
       properties,
-      children: n.children.map(plain),
+      children: glueNotes(n.children.map(plain)),
     };
   }
 

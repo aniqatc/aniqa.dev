@@ -195,28 +195,28 @@ opened with Enter), with its caption under it, and you can mix them in one revie
 Add a caption with an _italic_ line straight after the image. It shows in a strip along the bottom of the frame.
 
 ```md
-   ![The tab grid, with the Pet care tab selected](./tabs.png)
-   _The tab grid, with Pet care open_
+![The tab grid, with the Pet care tab selected](./tabs.png)
+_The tab grid, with Pet care open_
 ```
 
 Two images on one line sit side by side, for phone screens, and share one caption.
 
 ```md
-   ![The empty state](./phone-before.png) ![The first entry](./phone-after.png)
-   _Before and after the first entry_
+![The empty state](./phone-before.png) ![The first entry](./phone-after.png)
+_Before and after the first entry_
 ```
 
 **Picture note**, in the text: give the image the title `"note"` and put it right after the words it shows. It
 becomes a small chip in the line, so the sentence keeps reading normally.
 
 ```md
-1. **Make it yours.** There are 21 tabs ![The tab grid](./tabs.png "note"), but you can remove what you don't need.
+1. **Make it yours.** There are 21 tabs ![The tab grid](./tabs.png 'note'), but you can remove what you don't need.
 ```
 
 Add a caption after a colon in the title. It shows under the picture when it opens.
 
 ```md
-1. **The pet.** Bombay ![The pet care panel](./pet.png "note: Bombay, between her food and water bowls") peeks
+1. **The pet.** Bombay ![The pet care panel](./pet.png 'note: Bombay, between her food and water bowls') peeks
    out of the notch.
 ```
 

@@ -15,15 +15,20 @@ interface Props {
   position?: string;
   /** the entry, to find its own link-preview card in public/og/ */
   entry: { collection: string; id: string };
+  /** the browser tab and search result title when it should differ from the heading, e.g. "Tally review" */
+  pageTitle?: string;
+  /** an article's day, YYYY-MM-DD (reviews) */
+  published?: string;
 }
 
-const { mode, variant, title, lede, back, position, entry } = Astro.props;
+const { mode, variant, title, lede, back, position, entry, pageTitle, published } = Astro.props;
 // the entry's card from `npm run og`, if it has been made; Base falls back to the general card otherwise
 const card = `/og/${entry.collection}/${entry.id}.png`;
 const ogImage = existsSync(`public${card}`) ? card : undefined;
 ---
 
-<Base mode={mode} title={title} description={lede} ogImage={ogImage}>
+<Base mode={mode} title={pageTitle ?? title} description={lede} ogImage={ogImage} published={published}>
+  <slot name="head" slot="head" />
   <main class="wrap detail">
     <article class={`d d-${variant}`}>
       <div class="d-top label">

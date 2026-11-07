@@ -92,3 +92,43 @@ export function appLinkLabel(review: Review) {
 
 /** Where @maker links: `makerLink` when it's set (Bluesky, Threads, their site…), otherwise their profile on X. */
 export const makerUrl = (review: Review) => review.data.makerLink ?? `https://x.com/${review.data.maker}`;
+
+/** The price as a number for structured data: "Free" → 0, "$9.99 one-time" → 9.99; undefined if it isn't in dollars. */
+function priceIn(price: string | undefined) {
+  if (!price) return undefined;
+  if (/^free\b/i.test(price.trim())) return 0;
+  const match = /^\$(\d+(?:\.\d+)?)/.exec(price.trim());
+  return match ? Number(match[1]) : undefined;
+}
+
+/** The overall rating out of 5: the five scores averaged, to one decimal place. */
+export const overallScore = (review: Review) =>
+  Math.round((Object.values(review.data.scores).reduce((sum, value) => sum + value, 0) / 5) * 10) / 10;
+
+/**
+ * schema.org structured data for a review page (a Review of a SoftwareApplication), so search engines can show
+ * the rating, price and date. `url` is the review's own address.
+ */
+export function reviewJsonLd(review: Review, url: URL) {
+  const { app, date, summary, platforms, price } = review.data;
+  const amount = priceIn(price);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    name: `${app} review`,
+    url: url.href,
+    datePublished: date,
+    description: summary,
+    inLanguage: 'en',
+    author: { '@type': 'Person', name: 'Aniqa', url: 'https://aniqa.dev' },
+    publisher: { '@type': 'Person', name: 'Aniqa', url: 'https://aniqa.dev' },
+    reviewRating: { '@type': 'Rating', ratingValue: overallScore(review), bestRating: 5, worstRating: 1 },
+    itemReviewed: {
+      '@type': 'SoftwareApplication',
+      name: app,
+      url: appUrlFor(review),
+      ...(platforms?.length ? { operatingSystem: platforms.join(', ') } : {}),
+      ...(amount !== undefined ? { offers: { '@type': 'Offer', price: amount, priceCurrency: 'USD' } } : {}),
+    },
+  };
+}

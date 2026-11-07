@@ -19,25 +19,21 @@ const { favorites } = Astro.props;
     Favorites
   </h2>
   <ul class="shelf-grid">
-    {
-      favorites.map((entry) => {
-        const screenshot = screenshotFor(entry);
-        return (
-          <li>
-            <a class="shelf-card" href={`/lab/${entry.id}`}>
-              <figure>
-                {screenshot && (
-                  <Image src={screenshot} alt="" width={480} format="webp" loading="lazy" />
-                )}
-              </figure>
-              <b>{entry.data.title}</b>
-              <span class="label">
-                {entry.data.type} · {year(entry)}
-              </span>
-            </a>
-          </li>
-        );
-      })
-    }
+    {favorites.map((entry) => {
+      const screenshot = screenshotFor(entry);
+      return (
+        <li>
+          <a class="shelf-card" href={`/lab/${entry.id}`}>
+            <figure>
+              {screenshot && <Image src={screenshot} alt="" width={480} format="webp" loading="lazy" />}
+            </figure>
+            <b>{entry.data.title}</b>
+            <span class="label">
+              {entry.data.type} · {year(entry)}
+            </span>
+          </a>
+        </li>
+      );
+    })}
   </ul>
 </section>

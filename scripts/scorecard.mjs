@@ -9,9 +9,10 @@
 // `--day` or `--night` makes that one instead. The review page's link preview is the same card at 1200 × 630,
 // made with the others by `npm run og`.
 // Uses Playwright's Chromium and reuses the dev server on port 4321 when available.
-// Otherwise, starts a temporary server on port 4399.
+// Otherwise, starts a temporary server on a free port.
 import { spawn } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { createServer } from 'node:net';
 import { argv } from 'node:process';
 import { chromium } from 'playwright';
 
@@ -32,38 +33,77 @@ for (const slug of only) {
     console.error(`✗ no review at src/content/reviews/${slug}`);
 }
 
-// ---------- the dev server: reuse one on 4321, or start one on 4399 (stopped at the end) ----------
+// ---------- the dev server: reuse one on 4321, or start one on a free port (stopped at the end) ----------
 let server = null;
-let base = 'http://localhost:4321';
-// a server that hangs counts as down (5s), so a stuck dev server can't freeze the script
-const up = (url) =>
-  fetch(url, { signal: AbortSignal.timeout(5000) })
-    .then((r) => r.ok)
-    .catch(() => false);
-if (!(await up(`${base}/lab`))) {
-  base = 'http://localhost:4399';
-  server = spawn('npx', ['astro', 'dev', '--port', '4399', '--ignore-lock'], {
-    stdio: 'ignore',
-    detached: true,
-  });
-  for (let i = 0; i < 60 && !(await up(`${base}/lab`)); i++) await new Promise((r) => setTimeout(r, 1000));
-}
-
-// ---------- shoot each card ----------
-const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1200, height: 675 }, deviceScaleFactor: 2 });
-for (const { slug, theme } of reviews) {
-  const out = `src/content/reviews/${slug}/scorecard.png`;
-  const res = await page.goto(`${base}/dev/scorecard/${theme}/${slug}`, { waitUntil: 'networkidle' });
-  if (!res?.ok()) {
-    console.error(`✗ ${out}: scorecard page returned ${res?.status()}`);
-    process.exitCode = 1;
-    continue;
+let browser;
+const stop = () => {
+  if (!server) return;
+  try {
+    process.kill(-server.pid); // the whole group: npm exec and astro under it
+  } catch (error) {
+    if (error.code !== 'ESRCH') throw error;
   }
-  await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: out });
-  console.log(`✓ ${out} (${theme})`);
-}
+  server = null;
+};
+// Ctrl+C or a crash must still stop the server, or it lingers and blocks the next run
+process.once('SIGINT', () => {
+  stop();
+  process.exit(130);
+});
 
-await browser.close();
-if (server) process.kill(-server.pid); // stop the dev server this run started
+const freePort = () =>
+  new Promise((resolve, reject) => {
+    const listener = createServer();
+    listener.once('error', reject);
+    listener.listen(0, '127.0.0.1', () => {
+      const { port } = listener.address();
+      listener.close(() => resolve(port));
+    });
+  });
+
+try {
+  let base = 'http://localhost:4321';
+  // a server that hangs counts as down (5s), so a stuck dev server can't freeze the script
+  const up = (url) =>
+    fetch(url, { signal: AbortSignal.timeout(5000) })
+      .then((r) => r.ok)
+      .catch(() => false);
+  if (!(await up(`${base}/lab`))) {
+    const port = await freePort();
+    base = `http://127.0.0.1:${port}`;
+    console.log(`… no dev server on 4321, starting one on ${port} (stopped again at the end)`);
+    server = spawn('npx', ['astro', 'dev', '--host', '127.0.0.1', '--port', String(port), '--ignore-lock'], {
+      stdio: 'ignore',
+      detached: true,
+    });
+    let ready = false;
+    for (let i = 0; i < 60; i++) {
+      if (server.exitCode !== null || server.signalCode !== null)
+        throw new Error(
+          `the dev server exited before it was ready (${server.exitCode ?? server.signalCode})`,
+        );
+      if ((ready = await up(`${base}/lab`))) break;
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    if (!ready) throw new Error(`the dev server never came up at ${base}`);
+  }
+
+  // ---------- shoot each card ----------
+  browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1200, height: 675 }, deviceScaleFactor: 2 });
+  for (const { slug, theme } of reviews) {
+    const out = `src/content/reviews/${slug}/scorecard.png`;
+    const res = await page.goto(`${base}/dev/scorecard/${theme}/${slug}`, { waitUntil: 'networkidle' });
+    if (!res?.ok()) {
+      console.error(`✗ ${out}: scorecard page returned ${res?.status()}`);
+      process.exitCode = 1;
+      continue;
+    }
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: out });
+    console.log(`✓ ${out} (${theme})`);
+  }
+} finally {
+  await browser?.close();
+  stop();
+}

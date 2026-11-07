@@ -23,6 +23,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { createServer } from 'node:net';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 
@@ -65,6 +66,20 @@ const icon = () => `<!doctype html><html><head><style>
   img { width: 128px; height: 128px; }
 </style></head><body><img src="data:image/svg+xml;base64,${readFileSync('public/favicon.svg').toString('base64')}"></body></html>`;
 
+const getAvailablePort = async () => {
+  const listener = createServer();
+  await new Promise((resolve, reject) => {
+    listener.once('error', reject);
+    listener.listen(0, '127.0.0.1', resolve);
+  });
+  const address = listener.address();
+  if (!address || typeof address === 'string') throw new Error('Could not get an available port');
+  await new Promise((resolve, reject) => {
+    listener.close((error) => (error ? reject(error) : resolve()));
+  });
+  return address.port;
+};
+
 // ---------- pages to render ----------
 const pages = [
   {
@@ -87,72 +102,114 @@ const pages = [
 
 // ---------- temporary directory and browser setup ----------
 const dir = mkdtempSync(join(tmpdir(), 'og-'));
-const browser = await chromium.launch();
-for (const { out, size, html } of pages) {
-  const file = join(dir, 'page.html');
-  writeFileSync(file, html);
-  const page = await browser.newPage({ viewport: { width: size[0], height: size[1] } });
-  await page.goto(pathToFileURL(file).href);
-  await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: out });
-  await page.close();
-  console.log(`✓ ${out} (${size.join(' × ')})`);
-}
-// This section generates individual Open Graph images for each published entry.
-const entries = ['projects', 'experiments'].flatMap((collection) =>
-  readdirSync(`src/content/${collection}`)
-    .filter((slug) => existsSync(`src/content/${collection}/${slug}/index.md`))
-    // drafts get no card: public/ files are reachable even when the page is hidden
-    .filter(
-      (slug) => !/^draft:\s*true/m.test(readFileSync(`src/content/${collection}/${slug}/index.md`, 'utf8')),
-    )
-    .map((slug) => ({ collection, slug, path: `/dev/og/${collection}/${slug}` })),
-);
-// reviews: the scorecard, in the review's own theme (night unless cardTheme says day)
-if (existsSync('src/content/reviews')) {
-  for (const slug of readdirSync('src/content/reviews')) {
-    const file = `src/content/reviews/${slug}/index.md`;
-    if (!existsSync(file)) continue;
-    const text = readFileSync(file, 'utf8');
-    if (/^draft:\s*true/m.test(text)) continue;
-    const theme = text.match(/^cardTheme:\s*['"]?(night|day)/m)?.[1] ?? 'night';
-    entries.push({ collection: 'reviews', slug, path: `/dev/scorecard/${theme}/${slug}` });
-  }
-}
-
+let browser;
 let server = null;
-let base = 'http://localhost:4321';
-// a server that hangs counts as down (5s), so a stuck dev server can't freeze the script
-const up = (url) =>
-  fetch(url, { signal: AbortSignal.timeout(5000) })
-    .then((r) => r.ok)
-    .catch(() => false);
-if (!(await up(`${base}/lab`))) {
-  base = 'http://localhost:4399';
-  console.log('… no dev server on 4321, starting one on 4399 (stopped again at the end)');
-  server = spawn('npx', ['astro', 'dev', '--port', '4399', '--ignore-lock'], {
-    stdio: 'ignore',
-    detached: true,
-  });
-  for (let i = 0; i < 60 && !(await up(`${base}/lab`)); i++) await new Promise((r) => setTimeout(r, 1000));
-}
+let interrupted = false;
+const onSigint = () => {
+  interrupted = true;
+  process.exitCode = 130;
+  void browser?.close();
+};
+process.once('SIGINT', onSigint);
 
-// ---------- clean up old cards and generate new ones ----------
-rmSync('public/og', { recursive: true, force: true }); // start clean, so deleted entries lose their cards
-const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-for (const { collection, slug, path } of entries) {
-  const out = `public/og/${collection}/${slug}.png`;
-  mkdirSync(`public/og/${collection}`, { recursive: true });
-  const res = await page.goto(`${base}${path}`, { waitUntil: 'networkidle' });
-  if (!res?.ok()) {
-    console.error(`✗ ${out}: card page returned ${res?.status()}`);
-    process.exitCode = 1;
-    continue;
+try {
+  browser = await chromium.launch();
+  for (const { out, size, html } of pages) {
+    if (interrupted) throw new Error('Generation interrupted');
+    const file = join(dir, 'page.html');
+    writeFileSync(file, html);
+    const page = await browser.newPage({ viewport: { width: size[0], height: size[1] } });
+    await page.goto(pathToFileURL(file).href);
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: out });
+    await page.close();
+    console.log(`✓ ${out} (${size.join(' × ')})`);
   }
-  await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: out });
-  console.log(`✓ ${out}`);
-}
+  // This section generates individual Open Graph images for each published entry.
+  const entries = ['projects', 'experiments'].flatMap((collection) =>
+    readdirSync(`src/content/${collection}`)
+      .filter((slug) => existsSync(`src/content/${collection}/${slug}/index.md`))
+      // drafts get no card: public/ files are reachable even when the page is hidden
+      .filter(
+        (slug) => !/^draft:\s*true/m.test(readFileSync(`src/content/${collection}/${slug}/index.md`, 'utf8')),
+      )
+      .map((slug) => ({ collection, slug, path: `/dev/og/${collection}/${slug}` })),
+  );
+  // reviews: the scorecard, in the review's own theme (night unless cardTheme says day)
+  if (existsSync('src/content/reviews')) {
+    for (const slug of readdirSync('src/content/reviews')) {
+      const file = `src/content/reviews/${slug}/index.md`;
+      if (!existsSync(file)) continue;
+      const text = readFileSync(file, 'utf8');
+      if (/^draft:\s*true/m.test(text)) continue;
+      const theme = text.match(/^cardTheme:\s*['"]?(night|day)/m)?.[1] ?? 'night';
+      entries.push({ collection: 'reviews', slug, path: `/dev/scorecard/${theme}/${slug}` });
+    }
+  }
 
-await browser.close();
-if (server) process.kill(-server.pid); // stop the dev server this run started
+  let base = 'http://localhost:4321';
+  // a server that hangs counts as down (5s), so a stuck dev server can't freeze the script
+  const up = (url) =>
+    fetch(url, { signal: AbortSignal.timeout(5000) })
+      .then((r) => r.ok)
+      .catch(() => false);
+  if (!(await up(`${base}/lab`))) {
+    const port = await getAvailablePort();
+    base = `http://127.0.0.1:${port}`;
+    console.log(`… no dev server on 4321, starting one on ${port} (stopped again at the end)`);
+    server = spawn('npx', ['astro', 'dev', '--host', '127.0.0.1', '--port', String(port), '--ignore-lock'], {
+      stdio: 'ignore',
+      detached: true,
+    });
+    let ready = false;
+    for (let i = 0; i < 60 && !interrupted; i++) {
+      if (server.exitCode !== null || server.signalCode !== null) {
+        throw new Error(
+          `Astro dev server exited before becoming ready (${server.exitCode ?? server.signalCode})`,
+        );
+      }
+      if (await up(`${base}/lab`)) {
+        ready = true;
+        break;
+      }
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    if (interrupted) throw new Error('Generation interrupted');
+    if (!ready) throw new Error(`Astro dev server did not become ready at ${base}`);
+  }
+
+  // ---------- clean up old cards and generate new ones ----------
+  if (interrupted) throw new Error('Generation interrupted');
+  rmSync('public/og', { recursive: true, force: true }); // start clean, so deleted entries lose their cards
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
+  for (const { collection, slug, path } of entries) {
+    if (interrupted) throw new Error('Generation interrupted');
+    const out = `public/og/${collection}/${slug}.png`;
+    mkdirSync(`public/og/${collection}`, { recursive: true });
+    const res = await page.goto(`${base}${path}`, { waitUntil: 'networkidle' });
+    if (!res?.ok()) {
+      console.error(`✗ ${out}: card page returned ${res?.status()}`);
+      process.exitCode = 1;
+      continue;
+    }
+    await page.evaluate(() => document.fonts.ready);
+    await page.screenshot({ path: out });
+    console.log(`✓ ${out}`);
+  }
+} catch (error) {
+  if (!interrupted) throw error;
+} finally {
+  process.off('SIGINT', onSigint);
+  try {
+    await browser?.close();
+  } finally {
+    if (server) {
+      try {
+        process.kill(-server.pid);
+      } catch (error) {
+        if (error.code !== 'ESRCH') throw error;
+      }
+    }
+    rmSync(dir, { recursive: true, force: true });
+  }
+}

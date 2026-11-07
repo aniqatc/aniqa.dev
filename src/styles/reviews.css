@@ -619,6 +619,10 @@
   fill: currentColor;
   stroke: none;
 }
+/* a chip with the word before it and the punctuation after it (md-sections.mjs), so they wrap as one */
+.d-rv .sec .picture-note-glue {
+  white-space: nowrap;
+}
 /* the picture itself only shows in the lightbox */
 .d-rv .sec .picture-note img {
   display: none;

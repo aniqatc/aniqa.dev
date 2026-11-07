@@ -13,7 +13,7 @@ price: $9.99 one-time
 version: 1.3.5
 platforms: [Mac]
 # post: https://x.com/aniqatc/status/… # optional: the review's post on X
-summary: A Mac notch app that switches your audio, tracks your AI coding tools and Git, and comes with a pet to look after.
+summary: A Mac notch app that handles your audio, AI coding tools, Git, file shelf and clipboard history, plus a pet to look after.
 verdict: Delightful
 quote: Best all-in-one productivity tool
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
@@ -68,9 +68,11 @@ being distracting.
    in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove
    nudges me gently from the notch, and I actually take them in (even if I finish what I'm doing first).
    - Water sits next to a Pomodoro timer, a countdown and a stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration').
-   - The eye breaks matter most, since I have chronic dry eyes. After long stretches of coding or debugging, the
-     reminder has me blinking more, and it comes with short exercises ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises') ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png 'note: The Near & far exercise takes over the whole screen').
-   - I can also see where my time goes: how long I've been on screen today, and in which apps ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png 'note: Screen time today, with battery and system stats').
+     The water reminder has made a real difference: I often don't reach for water until I'm already dehydrated, and
+     now I actually sip through the day.
+   - On days my chronic dry eyes are more strained, the eye breaks are something I will try reaching for ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises'). After long stretches of coding or debugging, the
+     reminder gets me blinking again, and it comes with short exercises ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png 'note: The Near & far exercise takes over the whole screen').
+   - I can also see where my time goes ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png 'note: Screen time today, with battery and system stats'): how long I've been on screen today, and in which apps.
 4. **Git at a glance.** Lately I'm cleaning up old projects for my portfolio, and seeing my Git status ![The Git panel: three repositories, all clean and up to date, no open pull requests, and a 14-day commit streak](./git-repos.png 'note: Every repo at a glance, plus pull requests and a commit streak')
    means I don't forget to commit or clean a branch up.
 5. **AI agent usage.** Tracking Claude Code, Codex and Cursor in one place ![The Coding panel for Codex: a weekly usage limit at 100%, an activity heatmap, 3.7M tokens, and no sessions right now](./coding-usage.png 'note: Usage limits and an activity heatmap, per tool') is major. A quick look at

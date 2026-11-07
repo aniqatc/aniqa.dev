@@ -7,11 +7,19 @@
 <div class="demo" data-study="drag-and-drop">
   <div class="demo-bar">
     <span class="demo-opts">
-      <label class="demo-check"><input type="checkbox" data-option="offset" checked /> Grab offset</label>
-      <label class="demo-check"><input type="checkbox" data-option="keep-inside" checked /> Keep inside</label>
-      <label class="demo-check"><input type="checkbox" data-option="throw" checked /> Throw</label>
+      <label class="demo-check">
+        <input type="checkbox" data-option="offset" checked /> Grab offset
+      </label>
+      <label class="demo-check">
+        <input type="checkbox" data-option="keep-inside" checked /> Keep inside
+      </label>
+      <label class="demo-check">
+        <input type="checkbox" data-option="throw" checked /> Throw
+      </label>
     </span>
-    <button class="demo-btn reset-button" type="button" data-reset>Reset</button>
+    <button class="demo-btn reset-button" type="button" data-reset>
+      Reset
+    </button>
   </div>
 
   <div class="board" data-board>
@@ -31,23 +39,40 @@
       tabindex="0"
       role="slider"
       aria-label="Draggable ball. Use the arrow keys to move it."
-    >
-    </div>
-    <span class="board-hint" data-hint>Grab the ball · arrow keys work too</span>
+    ></div>
+    <span class="board-hint" data-hint>
+      Grab the ball · arrow keys work too
+    </span>
   </div>
 
   <div class="readouts">
     <div class="readout">
-      <span class="label">Pointer</span><b class="demo-out" data-readout="pointer">–</b><small>clientX/Y − board</small>
+      <span class="label">Pointer</span>
+      <b class="demo-out" data-readout="pointer">
+        –
+      </b>
+      <small>clientX/Y − board</small>
     </div>
     <div class="readout">
-      <span class="label">Offset</span><b class="demo-out" data-readout="offset">–</b><small>set on pointerdown</small>
+      <span class="label">Offset</span>
+      <b class="demo-out" data-readout="offset">
+        –
+      </b>
+      <small>set on pointerdown</small>
     </div>
     <div class="readout">
-      <span class="label">left, top</span><b class="demo-out" data-readout="position">–</b><small>pointer − offset</small>
+      <span class="label">left, top</span>
+      <b class="demo-out" data-readout="position">
+        –
+      </b>
+      <small>pointer − offset</small>
     </div>
     <div class="readout">
-      <span class="label">Events</span><b class="demo-out" data-readout="events">0 · 0 · 0</b><small>down · move · up</small>
+      <span class="label">Events</span>
+      <b class="demo-out" data-readout="events">
+        0 · 0 · 0
+      </b>
+      <small>down · move · up</small>
     </div>
   </div>
 
@@ -311,7 +336,9 @@
         setAttributes(offsetLabel, { x: pointer.x + 12, y: pointer.y + 18 });
         readout('pointer').textContent = `${round(pointer.x)}, ${round(pointer.y)}`;
       }
-      readout('offset').textContent = useOffset.checked ? `${round(grabOffset.x)}, ${round(grabOffset.y)}` : '0, 0';
+      readout('offset').textContent = useOffset.checked
+        ? `${round(grabOffset.x)}, ${round(grabOffset.y)}`
+        : '0, 0';
       readout('position').textContent = `${round(ballX)}, ${round(ballY)}`;
       readout('events').textContent = `${eventCounts.down} · ${eventCounts.move} · ${eventCounts.up}`;
       formula.innerHTML = useOffset.checked
@@ -378,7 +405,8 @@
       velocityX = ((last.x - first.x) / elapsed) * 16;
       velocityY = ((last.y - first.y) / elapsed) * 16;
       place();
-      if (throwOnRelease.checked && Math.hypot(velocityX, velocityY) > 1) frame = requestAnimationFrame(glide);
+      if (throwOnRelease.checked && Math.hypot(velocityX, velocityY) > 1)
+        frame = requestAnimationFrame(glide);
       else fadeTrail();
     };
 
