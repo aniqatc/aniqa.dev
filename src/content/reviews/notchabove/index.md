@@ -89,6 +89,7 @@ usually overwhelm me, but each one is opt-in, so I kept what I'll actually use.
    beyond a quick play or pause.
 3. **Todos.** ![The todo panel: a task to take screenshots of notchabove.xyz with a 3:07 PM reminder, and writing this review done today](./todo.png "note: The todo list, reminding me to take these screenshots") Work runs on Linear, and my personal tasks live on my phone.
 4. **Tools.** ![The calculator in Tools: 95,000 + 346,000 = 441,000, with a Copy button](./calculator.png "note: The calculator in Tools") Handy for quick maths or exchange rates (they're up to 12 hours old).
+   I like that conversions get a dedicated space of their own, where Raycast folds them into its search.
 5. **Sales.** ![Sales settings: a Dodo Payments API key and mode, and new-sale alerts that show in the notch](./settings-sales.png "note: Sales from Dodo Payments, with alerts in the notch") Not for me yet, but a notification for every sale must be a nice dopamine hit.
 6. **Games.** ![The games: Dragon Flap, Stack, 404 Run, Sky Hop and Treat Catch, each with a best score of 0](./settings-games.png "note: Five games, all still at a best score of 0") I've been busy with my pet, but as a gamer, I'll reach for these when I finally get
    a day to be bored.
@@ -101,6 +102,8 @@ Even the ones I haven't needed are nice to have.
    too, with syntax highlighting you can turn on per note.
 2. **Notes as Markdown files.** Saving them into my Obsidian folder would put them alongside everything else and sync
    them to my phone and iPad.
+3. **App management.** An uninstaller, a cache cleaner, app updates and a Homebrew manager would make it an even
+   fuller replacement for Vorssaint.
 
 ## Who it's for
 
