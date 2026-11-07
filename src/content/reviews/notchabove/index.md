@@ -30,10 +30,13 @@ screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sit
 
 ## TL;DR
 
-The notch has always been underused for me; I only kept the time there so the menu bar icons on the right side could have extra room. NotchAbove fills it
-with the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a shelf for files and
-a black cat named Bombay. It's packed with features but feels light and native, and it's one of the few apps that
-genuinely brings me joy. After setting it up, I felt confident enough to delete Raycast and Vorssaint.
+The notch has always been overlooked by me. I had only kept the time visible in the notch so the menu bar icons on
+the right side could have extra room, and didn't think more of it.
+
+NotchAbove fills it with the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a
+shelf for files and a (cute) black cat named Bombay. It's packed with features but feels light and native, it's one of
+the few apps that genuinely brings me joy, and it's easy to fit into your workflow. It also freed up my menu bar
+straight away: I deleted Raycast and Vorssaint.
 
 ## First look
 
