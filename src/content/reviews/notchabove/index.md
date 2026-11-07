@@ -86,14 +86,12 @@ being distracting.
    ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png 'note: It skips passwords and anything that looks like a key').
 9. **Little extras.** The birthday countdown ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png 'note: Weather, world clocks and the birthday countdown (my age blurred)') is awesome, and the camera preview
    ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png 'note: The camera check, with effects and reactions') reminds me to switch to my webcam and check my lighting before a call.
-10. **Make it yours.** There are 21 tabs with truly useful features. It felt like a lot at first, but you can remove
-    what you don't need. You can customize the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png 'note: Notch settings, from the corners to the shine border') and pretty much everything else, and add
+10. **Make it yours.** There are 21 tabs, and most of them I'd actually use, with a core few already in my day to
+    day. It felt like a lot at first, but you can remove what you don't need. You can customize the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png 'note: Notch settings, from the corners to the shine border') and pretty much everything else, and add
     shortcuts if you want them _(I won't)_ ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png 'note: Shortcuts, like cycling the output device from any app').
 
     ![NotchAbove's tab grid: three rows of icons, with the paw-print Pet care tab selected](./tabs.png)
     _The tab grid, with Pet care open_
-
-11. **Easy permissions.** Granting what it needs was simple.
 
 ## What I didn't use
 
