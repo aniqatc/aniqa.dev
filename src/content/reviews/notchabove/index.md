@@ -71,11 +71,10 @@ being distracting.
    in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove
    nudges me gently from the notch, and I actually take them in _(even if I finish what I'm doing first)_.
    - Water sits with the Pomodoro timer, countdown and stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration'),
-     which is my one gripe: I don't use Pomodoro, so I'd rather have water in its own tab, or a Health tab that combines
-     it with the eye breaks. That being said, the water reminder has made a real difference: I often don't reach for
+     which is my main gripe, since I don't use Pomodoro. That being said, the water reminder has made a real difference: I often don't reach for
      water until I'm already dehydrated, and now I actually sip through the day. I'll be convincing my husband to give
      it a try.
-   - On days my chronic dry eyes are more strained, the eye breaks are something I will try reaching for ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises'). After long stretches of coding or debugging, the
+   - On days my chronic dry eyes are more strained, the eye breaks help ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises'). After long stretches of coding or debugging, the
      reminder gets me blinking again, and it comes with short exercises ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png 'note: The Near & far exercise takes over the whole screen').
    - I can also see where my time goes ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png 'note: Screen time today, with battery and system stats'): how long I've been on screen today, and in which apps.
 4. **Git at a glance.** Lately I'm cleaning up old projects for my portfolio, and seeing my Git status ![The Git panel: three repositories, all clean and up to date, no open pull requests, and a 14-day commit streak](./git-repos.png 'note: Every repo at a glance, plus pull requests and a commit streak')
@@ -120,8 +119,11 @@ being distracting.
 2. Save notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png 'note: Notes, typed or dictated') as Markdown files. Right now they stay inside NotchAbove and save to a JSON file, so I don't use them. I take notes in Obsidian, like so many people with Markdown editors. Having
    these land as Markdown files in my own notes would be awesome, and they'd sync to my phone and iPad. Syntax
    highlighting for code snippets would be nice too.
-3. Add app management. An uninstaller, a cache cleaner and app updates would make it an even fuller replacement for
-   Vorssaint. That's what originally appealed to me about it, so it's all I'm missing at the moment.
+3. Give water its own tab. I don't use Pomodoro, so I'd rather have water on its own, or in a Health tab that
+   combines it with the eye breaks.
+4. Add app management. An uninstaller, a cache cleaner and app updates are what I'm missing since deleting Vorssaint,
+   but they weren't worth keeping it around for. I'll either find a standalone tool or it'd be cool to see them here,
+   but it's not a must.
 
 ## Who it's for
 
