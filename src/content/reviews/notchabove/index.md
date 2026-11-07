@@ -9,7 +9,7 @@ live: notchabove.xyz
 device: desktop
 desktop: notch
 # shadow: false # optional, for a Mac app: when the capture already has its own shadow
-price: $9.99
+price: $9.99 one-time
 version: 1.3.5
 platforms: [Mac]
 # post: https://x.com/aniqatc/status/… # optional: the review's post on X
@@ -30,7 +30,7 @@ screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sit
 
 ## TL;DR
 
-The notch has always been overlooked by me. I had only kept the time visible in the notch so the menu bar icons on
+I'd always overlooked the notch. I had only kept the time visible in the notch so the menu bar icons on
 the right side could have extra room, and didn't think more of it.
 
 NotchAbove fills it with the things I reach for all day: audio switching, my AI coding tools, Git, gentle reminders, a
@@ -56,7 +56,7 @@ without being distracting.
 ## What I liked
 
 1. **The pet.** I'm a sucker for a good mascot or companion _(you might have noticed the one on this site)_. I like my
-   tools minimal, but a well-done Easter egg brings real joy, and the pet care is my favourite part ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png 'note: Bombay on a rainy day, just after a pet').
+   tools minimal, but a well-done Easter egg brings real joy, and the pet care is my favorite part ![Bombay the black cat licking a paw in a rainy room, saying "...thank you. Don't tell anyone.", above the Pet, Feed, Water and Play buttons and today's care rings](./pet-care-rain.png 'note: Bombay on a rainy day, just after a pet').
    Collecting gifts for Bombay gives me a reason to come back, and it's a healthier break than doomscrolling.
 
    ![NotchAbove's companion picker: Bombay (selected), Turkish Van, Orange Tabby, Silver Tabby, Golden Retriever, Husky, Labrador, Shiba Inu, Capybara, Ghost, Penguin, Baby Dragon, Fox, Bunny, Red Panda and Panda](./companions.png)
@@ -72,7 +72,7 @@ without being distracting.
    shouldn't take the same space as a message or calendar event. NotchAbove nudges me gently from the notch, in the
    middle of the screen, and I actually take them in instead of closing them (even if I finish what I'm doing first).
    - Water sits next to a Pomodoro timer, a countdown and a stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration').
-   - The eye breaks matter most to me, because I have chronic dry eyes. After long stretches of coding or debugging, the reminder has me blinking more and it comes with short exercises ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises')
+   - The eye breaks matter most to me, because I have chronic dry eyes. After long stretches of coding or debugging, the reminder has me blinking more, and it comes with short exercises ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises')
      ![The Near & far exercise filling the screen: a glowing yellow dot on a grid that runs to the horizon, with the instruction to look at your thumb a hand's length away](./eye-exercise-near-far.png 'note: The Near & far exercise takes over the whole screen').
    - I can also see where my time goes: how long I've been on screen today, and in which apps
      ![The system panel: battery at 99%, CPU, memory and disk rings, keep awake, and 1h 29m on screen today across Arc, Visual Studio Code and GitHub](./system-stats.png 'note: Screen time today, with battery and system stats').
@@ -88,7 +88,7 @@ without being distracting.
    away in the notch ![The clipboard panel: recent copies from Visual Studio Code and Arc, including a localhost link, a branch name and git commands](./clipboard.png 'note: Clipboard history, newest first') ![Clipboard settings: keep clipboard history, keep the last 100 items, and a note that it never keeps passwords or keys and stays on this Mac](./settings-clipboard.png 'note: It skips passwords and anything that looks like a key').
 9. **Little extras.** The birthday countdown ![The weather panel: heavy rain at 65°, an hourly forecast, clocks for New York and San Francisco, and an age counter with days to my birthday](./weather-clocks-birthday.png 'note: Weather, world clocks and the birthday countdown') is awesome, and the camera preview ![The camera check with the camera off, and its effects and reactions: hearts, likes, balloons, rain, confetti, fireworks and lasers](./camera-effects.png 'note: The camera check, with effects and reactions') reminds me to switch to my webcam instead of joining a call on the MacBook
    one, and to check my lighting.
-10. **Make it yours.** There are 21 tabs, which felt like a lot at first, but you can remove what you don't need. You can customise the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png 'note: Notch settings, from the corners to the shine border') and pretty much everything else, and add shortcuts if you want them _(I won't)_ ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png 'note: Shortcuts, like cycling the output device from any app').
+10. **Make it yours.** There are 21 tabs, which felt like a lot at first, but you can remove what you don't need. You can customize the look ![NotchAbove's settings window on the Notch page: curved or square corners, hiding the notch, how the panel closes, and the shine border](./settings-notch.png 'note: Notch settings, from the corners to the shine border') and pretty much everything else, and add shortcuts if you want them _(I won't)_ ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png 'note: Shortcuts, like cycling the output device from any app').
 
     ![NotchAbove's tab grid: three rows of icons, with the paw-print Pet care tab selected](./tabs.png)
     _The tab grid, with Pet care open_
@@ -122,4 +122,4 @@ without being distracting.
 ## Who it's for
 
 Anyone, technical or not, whose notch is going to waste, who wants a calm, native-feeling home for everyday tools, and
-especially anyone who loves a good mascot. I'm shocked one person made something this thoughtful. It is my favorite all-in-one productivity tool for 2026 and likely, 2027.
+especially anyone who loves a good mascot. I'm shocked one person made something this thoughtful. It is my favorite all-in-one productivity tool for 2026 and likely 2027.
