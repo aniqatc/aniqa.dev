@@ -107,12 +107,15 @@ without being distracting.
 
 ## Small ideas
 
-1. Expand notes and snippets in a lightweight way. I dictated a few notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png "note: Notes, typed or dictated"), and I could see saving code
+1. Show usage for more than one account. I'd love to see my AI agent usage across accounts, like my personal and work
+   Claude accounts, side by side.
+2. Expand notes and snippets in a lightweight way. I dictated a few notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png "note: Notes, typed or dictated"), and I could see saving code
    snippets for debugging or useful prompts there too, with syntax highlighting you can turn on per note.
-2. Save notes as Markdown files. I take notes in Obsidian, and so many people use Markdown editors; having dictated
-   notes land as Markdown files inside my own notes system would be awesome, and they'd sync to my phone and iPad.
-3. Add app management. An uninstaller, a cache cleaner, app updates and a Homebrew manager would make it an even
-   fuller replacement for Vorssaint.
+3. Save notes as Markdown files. I take notes in Obsidian, and so many people use Markdown editors as well; having
+   these notes land as Markdown files inside my own notes system would be awesome, and they'd sync to my phone and
+   iPad.
+4. Add app management. An uninstaller, a cache cleaner and app updates would make it an even fuller replacement for
+   Vorssaint (this is what appealed to me about it).
 
 ## Who it's for
 
