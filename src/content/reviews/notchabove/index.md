@@ -40,15 +40,18 @@ straight away: I deleted Raycast and Vorssaint.
 
 ## First look
 
-Downloading it took one extra step: I had to strip the quarantine flag before macOS would let it open on my MacBook.
-That's happened with almost every indie app I've tried, so it's not a knock on NotchAbove.
+The download instructions were easy, but I had to take an extra step and strip the quarantine flag before the app would
+open on my MacBook. That's happened with almost every indie or non-App Store app I've tried, so it's not a knock on
+NotchAbove.
 
-I came for the calendar view, volume control, webcam preview and a notch I could style. I downloaded NotchAbove
-halfway through its landing page, so I missed that it comes with a companion and about a dozen other features.
-Finding Bombay, a beautiful black cat, was such a pleasant surprise. Instead of opening my phone for half a TikTok
-between meetings, I can spend that time looking after her, and she peeks out of the notch (if you want her to)
-without being distracting. That many features would usually overwhelm me, but each one is opt-in, so I kept what I'll
-actually use.
+I first downloaded NotchAbove for the calendar view, volume control, webcam preview and a notch I could style. I
+actually missed that it comes with a dozen other useful features, because I was hooked halfway through the landing
+page and didn't bother reading the rest. That many features would usually overwhelm me, but each one is opt-in, so I
+can easily keep just what I'll use.
+
+Finding Bombay, a beautiful black cat, was also such a pleasant surprise. Instead of opening my phone for half a
+TikTok between meetings, I can spend that time looking after her, and she peeks out of the notch (if you want her to)
+without being distracting.
 
 ## What I liked
 
