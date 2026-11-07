@@ -65,7 +65,9 @@ without being distracting.
 
 2. **Volume control.** This is what got me interested. Switching between Zoom and Spotify keeps changing my audio,
    Loom videos on bug reports change it again, and moving between my laptop and desktop makes it worse. Here I can set
-   each device's volume before I switch ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png "note: Shortcuts, like cycling the output device from any app") and get back to it with a hover and a click. It's
+   each device's volume before I switch
+   ![The Output panel: MacBook Pro Speakers, Microsoft Teams Audio, LoomAudioDevice and ZoomAudioDevice, each with its own volume slider, a saved "meetings" scene, the output locked to the speakers, and AirPods ready to connect](./output-volume.png "note: Every output with its own volume, plus saved scenes")
+   and get back to it with a hover and a click ![NotchAbove's shortcut settings: cycle output device set to Option Command O, and open the notch, quick switcher, mute microphone and show or hide lyrics waiting for a shortcut](./settings-shortcuts.png "note: Shortcuts, like cycling the output device from any app"). It's
    clearer than the Mac's own volume handling, and I don't have to fight it.
 3. **Reminders that don't feel wrong.** I hate water and stand-up reminders in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove nudges me gently from the notch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png "note: Pomodoro, countdown, stopwatch and hydration"), in the
    middle of the screen, and I actually take them in ![The affirmation panel: "Keep going. You're closer than it feels.", shown every 2 hours, with Show now and Another buttons and a box to write your own](./affirmations.png "note: Affirmations arrive the same gentle way") instead of closing them, even if I finish what
