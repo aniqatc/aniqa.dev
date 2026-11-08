@@ -1,10 +1,10 @@
 ---
 // The label/value row: lab stats, detail page meta.
-// A value is text, or a list of links (empty list shows a dash).
+// A value is text, or a list of links (empty list shows a dash). An optional note sits under the value, quieter.
 type Value = string | { label: string; href: string }[];
 
 interface Props {
-  items: { label: string; value: Value }[];
+  items: { label: string; value: Value; note?: string }[];
   /** fixed column count; omit for 4, dropping to 2 on narrow screens */
   cols?: number;
   class?: string;
@@ -14,7 +14,7 @@ const { items, cols, class: className } = Astro.props;
 ---
 
 <dl class:list={['facts', className]} style={cols ? `--cols:${cols}` : undefined}>
-  {items.map(({ label, value }) => (
+  {items.map(({ label, value, note }) => (
     <div>
       <dt class="label">{label}</dt>
       <dd>
@@ -27,6 +27,7 @@ const { items, cols, class: className } = Astro.props;
                 </a>
               ))
             : '—'}
+        {note && <span class="fact-note">{note}</span>}
       </dd>
     </div>
   ))}

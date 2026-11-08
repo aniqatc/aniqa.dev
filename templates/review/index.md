@@ -28,6 +28,7 @@ verdict: Promising # one word for Overall: Promising, Delightful, Solid…
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
 # stillBuilding: true # optional: the app is still being built; adds a note under the scores that “needs love” means room to grow
 # stillUsing: true # optional, later: you've kept using it; it gets a star and a place in Still using on /reviews
+# updated: 2026-12-12 # optional, later: the day of your latest ## Update (see Updating a review in the README)
 # tryIt: That's how it went for me. Everyone works differently, so you might land somewhere else. # optional: the Try it card's line, instead of the usual "Give it a go…" (for a mixed review or a big company's app)
 # featured: true # optional: the home page intro shows this review under Hooked on instead of the newest one
 brand: '#8b7cf6' # the app's brand colour, in quotes

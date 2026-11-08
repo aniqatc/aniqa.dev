@@ -78,6 +78,7 @@ const reviews = defineCollection({
     maker: z.string().regex(/^[A-Za-z0-9_.-]+$/, 'The handle without the @'), // the maker's handle, shown as @maker
     makerLink: z.url().optional(), // where @maker links; their X profile (x.com/<maker>) when left out
     date: day, // the day the review went up
+    updated: day.optional(), // the day of the latest ## Update: shown under the date, and to search engines
     type: z.string(), // a label: Web app, iOS app, Chrome extension…
     triedOn: z.string(), // where you tried it: "MacBook, Chrome", "iPhone 15"
     live: z.string(), // a web app's address without https:// (tallyho.app), or a full App Store / Google Play link

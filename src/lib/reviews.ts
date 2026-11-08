@@ -122,7 +122,7 @@ export const overallScore = (review: Review) =>
  * the rating, price and date. `url` is the review's own address.
  */
 export function reviewJsonLd(review: Review, url: URL) {
-  const { app, date, summary, platforms, price } = review.data;
+  const { app, date, updated, summary, platforms, price } = review.data;
   const amount = priceIn(price);
   return {
     '@context': 'https://schema.org',
@@ -130,6 +130,7 @@ export function reviewJsonLd(review: Review, url: URL) {
     name: `${app} review`,
     url: url.href,
     datePublished: date,
+    ...(updated ? { dateModified: updated } : {}),
     description: summary,
     inLanguage: 'en',
     author: { '@type': 'Person', name: 'Aniqa', url: 'https://aniqa.dev' },

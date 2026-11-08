@@ -183,6 +183,39 @@ The Try it card at the end of a review says “Give it a go, and if you like it,
 
 The home page intro shows one review: the newest, under **Reviewing**. To keep one there instead, add `featured: true` to its frontmatter and it shows under **Hooked on** (the newest featured one wins if there are several).
 
+#### Updating a review
+
+When an app changes after you've reviewed it (the maker took your feedback, or a gripe went away), add to the
+review instead of rewriting it, so readers can see what changed and what you thought before.
+
+1. **Date it.** Add `updated: YYYY-MM-DD` to the frontmatter. It shows under the review's date in the facts, and
+   search engines get it as the modified date. Bump `version` (and `triedOn`, if your Mac or phone changed).
+2. **Write an Update section** right after the TL;DR, so returning readers see it first. Start it with the date and
+   version in italics; that line shows small and grey, like the facts. Say what changed and which score moved.
+   For a second update later, add a new `## Update` above the old one, newest first.
+
+   ```md
+   ## Update
+
+   _Dec 12, 2026 · version 1.4_
+
+   @capt_sherman shipped a Health tab, so water and the eye breaks now live together. That was my main gripe, so
+   ease of use goes from 4 to 5.
+   ```
+
+3. **Change the scores** in the frontmatter. Don't strike them out; the Update says what moved and why.
+4. **Strike what's no longer true** with `~~ ~~`, and put a tag after it in backticks. Keep it to the sentence or
+   clause that changed, not whole paragraphs; it shows grey and still readable.
+
+   ```md
+   Water sits with the Pomodoro timer, ~~which is actually my main gripe~~ `Fixed in 1.4`. That being said…
+   ```
+
+5. **Tag shipped ideas** in Small ideas without striking them, since the idea is still what you asked for:
+   `` `Shipped in 1.4` `` at the end of the point. Both tags get a ✓ and look the same; only the word changes.
+6. **Refresh the images:** `npm run scorecard -- <slug>` and `npm run og`, so the share card and link preview show
+   the new scores. On X, quote-post your original post with the update.
+
 #### Pictures in a review
 
 There are two ways to show a picture in a review's notes. Both open it full size when clicked (or focused and

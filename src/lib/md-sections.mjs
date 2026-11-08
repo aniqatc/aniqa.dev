@@ -77,6 +77,61 @@ const pictureNote = (node) => {
   };
 };
 
+// An update tag: inline code that reads "Shipped in 1.4" or "Fixed in 1.4" becomes a small tag with a tick
+// (styled in reviews.css), for an idea the maker built or a gripe that's gone after a review's update.
+const UPDATE_TAG = /^(Shipped|Fixed) in \S.*$/;
+
+/**
+ * Turns inline code reading "Shipped in …" or "Fixed in …" into an update tag, or returns undefined for any other node.
+ * @param node The node to check.
+ * @returns The tag element, or undefined.
+ */
+const updateTag = (node) => {
+  if (node.tagName !== 'code' || node.children.length !== 1 || node.children[0].type !== 'text') return undefined;
+  const text = node.children[0].value.trim();
+  if (!UPDATE_TAG.test(text)) return undefined;
+  return {
+    type: 'element',
+    tagName: 'span',
+    properties: { className: ['update-tag'] },
+    children: [{ type: 'text', value: `${text} ✓` }],
+  };
+};
+
+/**
+ * Wraps text between ~~ and ~~ in <del>, for a line that's no longer true after an update. The struck part can
+ * hold other inline bits (a link, a picture note). An opening ~~ with no closing one is left as written.
+ * (If the Markdown processor already made <del> from ~~, there's no ~~ left and this changes nothing.)
+ * @param children The converted children of one element.
+ * @returns The children, with each struck part inside a <del>.
+ */
+const strikeThrough = (children) => {
+  if (!children.some((n) => n.type === 'text' && n.value.includes('~~'))) return children;
+  const out = [];
+  let del = null; // the open <del>, between a ~~ and its closing ~~
+  const add = (n) => (del ? del.children : out).push(n);
+  for (const n of children) {
+    if (n.type !== 'text') {
+      add(n);
+      continue;
+    }
+    n.value.split('~~').forEach((part, i) => {
+      if (i > 0) {
+        if (del) {
+          out.push(del);
+          del = null;
+        } else {
+          del = { type: 'element', tagName: 'del', properties: {}, children: [] };
+        }
+      }
+      if (part) add({ type: 'text', value: part });
+    });
+  }
+  // no closing ~~: put the text back the way it was written
+  if (del) out.push({ type: 'text', value: '~~' }, ...del.children);
+  return out;
+};
+
 const isNote = (n) => n.type === 'element' && n.properties.className?.includes('picture-note');
 
 /**
@@ -139,6 +194,8 @@ const plain = (n) => {
   if (n.type === 'element') {
     const note = pictureNote(n);
     if (note) return note;
+    const tag = updateTag(n);
+    if (tag) return tag;
     const properties = { ...n.properties };
     if (isExternalLink(n)) {
       properties.target = '_blank';
@@ -150,12 +207,24 @@ const plain = (n) => {
       type: 'element',
       tagName: n.tagName,
       properties,
-      children: glueNotes(n.children.map(plain)),
+      children: glueNotes(strikeThrough(n.children.map(plain))),
     };
   }
 
   // Return a plain copy of a non-element node (e.g., text node).
   return { type: n.type, value: n.value };
+};
+
+/**
+ * Checks if a node is a paragraph that's only one _italic_ bit: an Update section's first line, its date and
+ * version, like "_Dec 12, 2026 · version 1.4_".
+ * @param node The node to check.
+ * @returns True if the paragraph is only an <em>, false otherwise.
+ */
+const isItalicLine = (node) => {
+  if (node.type !== 'element' || node.tagName !== 'p') return false;
+  const parts = node.children.filter((n) => !(n.type === 'text' && /^\s*$/.test(n.value)));
+  return parts.length === 1 && parts[0].type === 'element' && parts[0].tagName === 'em';
 };
 
 /** @type {import('@astrojs/markdown-satteri').SatteriProcessorOptions['hastPlugins'][number]} */
@@ -166,6 +235,7 @@ export const sections = {
   after(root, ctx) {
     const out = [];
     let body = null;
+    let isUpdate = false; // the current section is an ## Update
     // Iterate over each child node of the root
     for (const child of root.children) {
       // Create a plain copy of the current child node.
@@ -177,6 +247,7 @@ export const sections = {
         node.properties.className = ['label'];
         // Create a new body container for the section content.
         body = { type: 'element', tagName: 'div', properties: {}, children: [] };
+        isUpdate = slugify(ctx.textContent(child)) === 'update';
         // Push the new section to the output array.
         out.push({
           type: 'element',
@@ -185,6 +256,10 @@ export const sections = {
           children: [node, body],
         });
       } else if (body) {
+        // An ## Update section's first line, in italics, is its date and version: shown like the facts.
+        if (isUpdate && body.children.every((n) => n.type === 'text') && isItalicLine(node)) {
+          node.properties.className = ['update-date'];
+        }
         // Append the current node to the body of the active section.
         body.children.push(node);
       } else {

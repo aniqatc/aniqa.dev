@@ -38,7 +38,7 @@ interface Props {
 }
 
 const { review, total, older, newer } = Astro.props;
-const { app, maker, date, type, triedOn, price, version, platforms, device, post, summary, verdict, tryIt } =
+const { app, maker, date, updated, type, triedOn, price, version, platforms, device, post, summary, verdict, tryIt } =
   review.data;
 const { Content } = await render(review);
 const appUrl = appUrlFor(review);
@@ -49,7 +49,8 @@ const jsonLd = JSON.stringify(reviewJsonLd(review, new URL(Astro.url.pathname, A
   '\\u003c',
 );
 const facts = [
-  { label: 'Date', value: fmtDay(date) },
+  // after an update, its day sits under the date
+  { label: 'Date', value: fmtDay(date), ...(updated ? { note: `Updated ${fmtDay(updated)}` } : {}) },
   { label: 'Maker', value: [{ label: `@${maker}`, href: makerUrl(review) }] },
   { label: 'Type', value: type },
   { label: 'Tried on', value: triedOn },
