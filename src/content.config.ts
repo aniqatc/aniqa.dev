@@ -97,7 +97,7 @@ const reviews = defineCollection({
     cardTheme: z.enum(['night', 'day']).default('night'), // the scorecard's and link preview's look
     stillBuilding: z.boolean().default(false), // an app still being built: a note under the scores that "needs love" means room to grow
     stillUsing: z.boolean().default(false), // still using it since the review: a star, and a place in Still using
-    tryIt: z.string().optional(), // the Try it card's line under the maker; a neutral line that fits any verdict when left out
+    tryIt: z.string().optional(), // the Try it card's line under the maker, instead of the usual "Give it a go…" (e.g. for a mixed review or a big company's app)
     featured: z.boolean().default(false), // the home page intro shows this review under "Hooked on" instead of the newest
     brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // the app's brand colour
     scores: z.object({

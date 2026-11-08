@@ -19,7 +19,6 @@ quote: Finally, a use for my MacBook notch
 # cardTheme: day # optional: the scorecard and link preview in the lab's light colours (night by default)
 stillUsing: true
 featured: true
-tryIt: If your notch is going to waste, give it a go, and if you like it, let him know. Kind words mean a lot to a solo maker.
 brand: '#1a59e4'
 scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   firstImpression: 5

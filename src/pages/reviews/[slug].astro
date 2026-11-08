@@ -129,7 +129,10 @@ const facts = [
         </a>
         .
       </h2>
-      <p>{tryIt ?? 'That’s how it went for me. Everyone works differently, so you might land somewhere else.'}</p>
+      <p>
+        {tryIt ??
+          'Give it a go, and if you like it, let them know. Early feedback means a lot when you’re building something new.'}
+      </p>
     </div>
     <div class="try-it-actions">
       <a class="try-it-button" href={appUrl} target="_blank" rel="noopener">
