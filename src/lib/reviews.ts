@@ -58,7 +58,7 @@ export const reviewNumber = (review: Review) => `No. ${pad(review.number)}`;
 const SCORE_LABELS = {
   firstImpression: 'First impression',
   onboarding: 'Onboarding',
-  bestFeature: 'Best feature',
+  usefulness: 'Usefulness',
   easeOfUse: 'Ease of use',
   value: 'Pricing / value',
 } as const;

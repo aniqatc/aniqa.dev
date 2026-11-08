@@ -104,7 +104,7 @@ const reviews = defineCollection({
     scores: z.object({
       firstImpression: score,
       onboarding: score,
-      bestFeature: score,
+      usefulness: score, // does it do the job you'd get it for
       easeOfUse: score,
       value: score, // pricing / value
     }),

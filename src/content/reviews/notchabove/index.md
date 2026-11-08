@@ -23,7 +23,7 @@ brand: '#1a59e4'
 scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   firstImpression: 5
   onboarding: 4
-  bestFeature: 5
+  usefulness: 5
   easeOfUse: 4
   value: 5 # pricing / value
 screenshotAlt: 'The NotchAbove pet panel hanging from the notch: a black cat sitting between its food and water bowls in a sunny room, saying it’s had a quiet day and would like an eye break, with Pet, Feed, Water and Play buttons, today’s care rings for rest, water, focus and a found gift, and one of eight treasures collected. Below it, the toolbar of NotchAbove’s tools, with Pet care selected, and a lock button.'

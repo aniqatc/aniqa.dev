@@ -35,7 +35,7 @@ brand: '#8b7cf6' # the app's brand colour, in quotes
 scores: # 1 to 5: 4–5 shows as Polished, 3 Getting there, 1–2 Needs love
   firstImpression: 4
   onboarding: 3
-  bestFeature: 5
+  usefulness: 5 # does it do the job you'd get it for
   easeOfUse: 4
   value: 3 # pricing / value
 screenshotAlt: What's on screen in screenshot.png, and the other screens for a phone app. # delete if there's no screenshot
