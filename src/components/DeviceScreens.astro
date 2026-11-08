@@ -1,14 +1,15 @@
 ---
 // A phone, iPad or Mac app's screenshots in device frames, at the top of its review: up to three phones side by
-// side, one iPad in landscape, or a Mac app on a Mac screen drawn around it (MacScreen). The whole frame opens the
-// app's store page. Web apps use SiteScreenshot instead.
+// side, one iPad in landscape, a Mac app on a Mac screen drawn around it (MacScreen), or for a PC or console game
+// (device: screen) one plain 16:9 screenshot with no device around it. The whole frame opens the app's store page.
+// Web apps use SiteScreenshot instead.
 import { Image } from 'astro:assets';
 import MacScreen from './MacScreen.astro';
 import { appLinkLabel, appUrlFor, screensFor, type Review } from '../lib/reviews';
 
 interface Props {
   review: Review;
-  device: 'phone' | 'tablet' | 'desktop';
+  device: 'phone' | 'tablet' | 'desktop' | 'screen';
 }
 
 const { review, device } = Astro.props;
@@ -17,13 +18,16 @@ const { app, screenshotAlt } = review.data;
 if (!screenshotAlt) throw new Error(`reviews/${review.id}: add screenshotAlt to its index.md`);
 const isPhone = device === 'phone';
 const isDesktop = device === 'desktop';
+const isScreen = device === 'screen';
 const shown = isPhone ? screensFor(review).slice(0, 3) : screensFor(review).slice(0, 1);
 const href = appUrlFor(review);
 const caption = isPhone
   ? `${app} on a phone${shown.length > 1 ? `, ${shown.length} screens` : ''}`
   : isDesktop
     ? `${app} on a Mac`
-    : `${app} on iPad`;
+    : isScreen
+      ? `${app}, played on ${review.data.triedOn}`
+      : `${app} on iPad`;
 ---
 
 {shown.length > 0 && (
@@ -37,8 +41,8 @@ const caption = isPhone
                 class="device-screen"
                 src={screen}
                 alt={index === 0 ? screenshotAlt : ''}
-                widths={isPhone ? [240, 480] : [640, 1280]}
-                sizes={isPhone ? '200px' : '(max-width: 700px) 100vw, 600px'}
+                widths={isPhone ? [240, 480] : isScreen ? [800, 1600] : [640, 1280]}
+                sizes={isPhone ? '200px' : isScreen ? '(max-width: 840px) 100vw, 800px' : '(max-width: 700px) 100vw, 600px'}
               />
             </span>
           ))}

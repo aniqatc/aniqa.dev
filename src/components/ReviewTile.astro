@@ -3,7 +3,7 @@
 // a dot in the accent, an app you're still using gets a star, and one updated in the last 30 days gets a refresh
 // badge on the other bottom corner. The legend in the All reviews heading on /reviews explains them.
 import { Image } from 'astro:assets';
-import { logoFor, reviewNumber, updatedLately, type Review } from '../lib/reviews';
+import { logoFor, reviewNumber, stillUsingLabel, updatedLately, type Review } from '../lib/reviews';
 
 interface Props {
   review: Review;
@@ -14,6 +14,8 @@ const { review, newest = false } = Astro.props;
 const { app, brand, stillUsing } = review.data;
 const logo = logoFor(review);
 const updated = updatedLately(review);
+// "Still using it", or "Still playing it" for a game
+const stillLabel = stillUsingLabel(review);
 ---
 
 <li>
@@ -26,7 +28,7 @@ const updated = updatedLately(review);
       )}
       {newest && <i class="review-new" title="Newest" />}
       {stillUsing && (
-        <span class="review-star" title="Still using it">
+        <span class="review-star" title={stillLabel}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" />
           </svg>
@@ -42,7 +44,7 @@ const updated = updatedLately(review);
     </span>
     <span class="review-name">
       {app}
-      {stillUsing && <span class="sr-only">, still using it</span>}
+      {stillUsing && <span class="sr-only">, {stillLabel.toLowerCase()}</span>}
       {updated && <span class="sr-only">, updated lately</span>}
     </span>
     <span class="review-number">{reviewNumber(review)}</span>

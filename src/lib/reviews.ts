@@ -54,13 +54,22 @@ export const updatedLately = (review: Review) =>
 /** "No. 06" */
 export const reviewNumber = (review: Review) => `No. ${pad(review.number)}`;
 
-// The five scores, in the order they're shown, with the label for each.
+// The five scores, in the order they're shown, with the label for each: an app's, and a game's.
 const SCORE_LABELS = {
-  firstImpression: 'First impression',
-  onboarding: 'Onboarding',
-  usefulness: 'Usefulness',
-  easeOfUse: 'Ease of use',
-  value: 'Pricing / value',
+  app: {
+    firstImpression: 'First impression',
+    onboarding: 'Onboarding',
+    usefulness: 'Usefulness',
+    easeOfUse: 'Ease of use',
+    value: 'Pricing / value',
+  },
+  game: {
+    firstImpression: 'First impression',
+    learningCurve: 'Learning curve',
+    fun: 'Fun',
+    feel: 'Feel',
+    value: 'Pricing / value',
+  },
 } as const;
 
 type ScoreStatus = 'polished' | 'getting-there' | 'needs-love';
@@ -76,12 +85,20 @@ const statusFor = (value: number): ScoreStatus =>
 
 /** The review's scores, ready to show: label, value, status and its word. */
 export function scoresFor(review: Review) {
-  return (Object.keys(SCORE_LABELS) as (keyof typeof SCORE_LABELS)[]).map((key) => {
-    const value = review.data.scores[key];
+  const scores = review.data.scores as Record<string, number>;
+  return Object.entries(SCORE_LABELS[review.data.kind]).map(([key, label]) => {
+    const value = scores[key];
     const status = statusFor(value);
-    return { label: SCORE_LABELS[key], value, status, statusLabel: STATUS_LABELS[status] };
+    return { label, value, status, statusLabel: STATUS_LABELS[status] };
   });
 }
+
+/** "App review" or "Game review", for the review page's eyebrow. */
+export const reviewKindLabel = (review: Review) => (review.data.kind === 'game' ? 'Game review' : 'App review');
+
+/** What the star on a tile means: "Still using it", or "Still playing it" for a game. */
+export const stillUsingLabel = (review: Review) =>
+  review.data.kind === 'game' ? 'Still playing it' : 'Still using it';
 
 // The app's icon: src/content/reviews/<slug>/logo.png. Without one, the archive shows the app's first letter
 // on its brand colour.
@@ -105,11 +122,13 @@ export const screensFor = (review: Review) =>
 export const appUrlFor = (review: Review) =>
   /^https?:\/\//.test(review.data.live) ? review.data.live : `https://${review.data.live}`;
 
-/** What the app's link says: App Store ↗, Google Play ↗ or App ↗. */
+/** What the app's link says: App Store ↗, Google Play ↗, Steam ↗, itch.io ↗ or App ↗. */
 export function appLinkLabel(review: Review) {
   const url = appUrlFor(review);
   if (/apps\.apple\.com/.test(url)) return 'App Store ↗';
   if (/play\.google\.com/.test(url)) return 'Google Play ↗';
+  if (/store\.steampowered\.com/.test(url)) return 'Steam ↗';
+  if (/itch\.io/.test(url)) return 'itch.io ↗';
   return 'App ↗';
 }
 
@@ -133,7 +152,7 @@ export const overallScore = (review: Review) =>
  * the rating, price and date. `url` is the review's own address.
  */
 export function reviewJsonLd(review: Review, url: URL) {
-  const { app, date, updated, summary, platforms, price } = review.data;
+  const { app, kind, date, updated, summary, platforms, price } = review.data;
   const amount = priceIn(price);
   return {
     '@context': 'https://schema.org',
@@ -148,7 +167,7 @@ export function reviewJsonLd(review: Review, url: URL) {
     publisher: { '@type': 'Person', name: 'Aniqa', url: 'https://aniqa.dev' },
     reviewRating: { '@type': 'Rating', ratingValue: overallScore(review), bestRating: 5, worstRating: 1 },
     itemReviewed: {
-      '@type': 'SoftwareApplication',
+      '@type': kind === 'game' ? 'VideoGame' : 'SoftwareApplication',
       name: app,
       url: appUrlFor(review),
       ...(platforms?.length ? { operatingSystem: platforms.join(', ') } : {}),

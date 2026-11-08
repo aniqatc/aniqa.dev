@@ -1,16 +1,20 @@
 #!/usr/bin/env node
-// Create an app review from templates/review/, with interactive prompts or CLI flags.
+// Create an app review from templates/review/, or a game review from templates/review-game/ with --game, with
+// interactive prompts or CLI flags.
 // Run through `npm run new` (pick "review"), or straight away:
 //
 //   npm run new -- --kind review --app "Tallyho" --maker tallyhoapp --live tallyho.app
 //   npm run new -- --kind review --app "Tallyho" --device phone --live https://apps.apple.com/app/id123
+//   npm run new -- --kind review --game --app "Lumen" --maker lumenstudio --live https://store.steampowered.com/app/123
 //
 // Options:
 //   --app      The app's name (required)
 //   --slug     Folder name and URL slug (defaults to the app's name)
 //   --maker    The maker's X handle, without the @ (to link them somewhere else, set makerLink in index.md)
 //   --live     A web app's address (no https://), or a phone / iPad / Mac app's App Store link
-//   --device   browser | phone | tablet | desktop (browser by default; desktop is a Mac app)
+//   --game     A game review: game scores, "Played on" and "Game review" (asked when it isn't given)
+//   --device   browser | phone | tablet | desktop | screen (browser by default for an app, screen for a game;
+//              desktop is a Mac app or game, screen a PC or console game's plain 16:9 screenshot)
 //   --type     A label: Web app, iOS app, Chrome extension… (from the device by default)
 //   --summary  One line on what the app does
 //   --yes      Skip prompts and use defaults for anything missing
@@ -21,10 +25,13 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout, argv, exit } from 'node:process';
 
 const DIR = 'src/content/reviews';
-const TEMPLATE = 'templates/review/index.md';
-const DEVICES = ['browser', 'phone', 'tablet', 'desktop'];
-const TYPES = { browser: 'Web app', phone: 'iOS app', tablet: 'iPad app', desktop: 'Mac app' };
-const TRIED_ON = { browser: 'MacBook, Chrome', phone: 'iPhone', tablet: 'iPad', desktop: 'MacBook' };
+const TEMPLATES = { app: 'templates/review/index.md', game: 'templates/review-game/index.md' };
+const DEVICES = ['browser', 'phone', 'tablet', 'desktop', 'screen'];
+const TYPES = {
+  app: { browser: 'Web app', phone: 'iOS app', tablet: 'iPad app', desktop: 'Mac app', screen: 'App' },
+  game: { browser: 'Browser game', phone: 'iOS game', tablet: 'iPad game', desktop: 'Mac game', screen: 'PC game' },
+};
+const TRIED_ON = { browser: 'MacBook, Chrome', phone: 'iPhone', tablet: 'iPad', desktop: 'MacBook', screen: 'PC' };
 
 // --key value pairs; a bare --flag is true
 const flags = {};
@@ -58,23 +65,40 @@ async function ask(key, question, fallback = '') {
 }
 
 // ---------- answers ----------
-const app = await ask('app', "App's name", typeof flags.title === 'string' ? flags.title : '');
+// an app or a game: --game, or asked (an app by default)
+const kind =
+  flags.game || (rl && !flags.app && (await ask('game', 'An app or a game?', 'app')).toLowerCase() === 'game')
+    ? 'game'
+    : 'app';
+const noun = kind === 'game' ? 'game' : 'app';
+const app = await ask('app', `The ${noun}'s name`, typeof flags.title === 'string' ? flags.title : '');
 if (!app) fail('The app needs a name: --app "Tallyho"');
 const slug = slugify(await ask('slug', 'Folder name / URL slug', slugify(app)));
 if (existsSync(`${DIR}/${slug}`)) fail(`${DIR}/${slug} already exists`);
 const device = await ask(
   'device',
-  'Device: browser (web app), phone, tablet or desktop (Mac app)',
-  'browser',
+  kind === 'game'
+    ? 'Device: screen (PC or console), phone, tablet, desktop (Mac) or browser'
+    : 'Device: browser (web app), phone, tablet or desktop (Mac app)',
+  kind === 'game' ? 'screen' : 'browser',
 );
-if (!DEVICES.includes(device)) fail(`--device must be browser, phone, tablet or desktop (got "${device}")`);
+if (!DEVICES.includes(device))
+  fail(`--device must be browser, phone, tablet, desktop or screen (got "${device}")`);
 const maker = (await ask('maker', "Maker's X handle, without the @")).replace(/^@/, '');
 const live = await ask(
   'live',
-  device === 'browser' ? "The app's address, no https://" : "The app's App Store link",
+  kind === 'game'
+    ? "The game's store page (Steam, itch.io, App Store…)"
+    : device === 'browser'
+      ? "The app's address, no https://"
+      : "The app's App Store link",
 );
-const type = await ask('type', 'Type (Web app, iOS app, Chrome extension…)', TYPES[device]);
-const summary = await ask('summary', 'One line on what the app does (blank to fill in later)');
+const type = await ask(
+  'type',
+  kind === 'game' ? 'Type (PC game, Switch game, iOS game…)' : 'Type (Web app, iOS app, Chrome extension…)',
+  TYPES[kind][device],
+);
+const summary = await ask('summary', `One line on what the ${noun} ${kind === 'game' ? 'is' : 'does'} (blank to fill in later)`);
 rl?.close();
 
 // ---------- index.md from the template ----------
@@ -82,7 +106,7 @@ rl?.close();
 const yaml = (value) =>
   /^[\s\-?[\]{},&*!|>'"%@`~#]|: | #|^\d+$/.test(value) ? `'${value.replace(/'/g, "''")}'` : value;
 const values = { app, maker, date: today, type, triedOn: TRIED_ON[device], live, device, summary };
-const [, front, body] = readFileSync(TEMPLATE, 'utf8').match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+const [, front, body] = readFileSync(TEMPLATES[kind], 'utf8').match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
 const lines = front
   .split('\n')
   // drop the template's notes, keep commented-out fields like # post:
@@ -98,7 +122,10 @@ writeFileSync(`${DIR}/${slug}/index.md`, `---\n${lines.join('\n')}\n---\n${body}
 // ---------- report ----------
 console.log(`✓ ${DIR}/${slug}/  →  /reviews/${slug}  (draft)`);
 console.log('\nNext:');
-if (device === 'browser') {
+if (device === 'screen') {
+  console.log(`  · A 16:9 in-game screenshot goes in ${DIR}/${slug}/screenshot.png (1920 × 1080 or larger)`);
+  console.log("  · The game's icon or capsule art, cropped square, goes in logo.png");
+} else if (device === 'browser') {
   console.log(`  · npm run screenshots -- reviews/${slug}  for screenshot.png and logo.png`);
 } else {
   console.log(
@@ -114,6 +141,10 @@ if (device === 'browser') {
   );
   console.log("  · The app's icon from its App Store page goes in logo.png");
 }
-console.log('  · Fill in the scores, verdict, brand colour and sections in index.md');
+console.log(
+  kind === 'game'
+    ? '  · Fill in the scores (learningCurve, fun, feel…), played, verdict, brand colour and sections in index.md'
+    : '  · Fill in the scores, verdict, brand colour and sections in index.md',
+);
 console.log(`  · npm run scorecard -- ${slug}  for scorecard.png, the picture to post on X`);
 console.log('  · Check it on npm run dev, then delete draft: true and run npm run og for its link preview');

@@ -183,6 +183,42 @@ The Try it card at the end of a review says “Give it a go, and if you like it,
 
 The home page intro shows one review: the newest, under **Reviewing**. To keep one there instead, add `featured: true` to its frontmatter and it shows under **Hooked on** (the newest featured one wins if there are several).
 
+#### Game review
+
+Games use the same reviews, with their own scores and a few different labels. Start one with:
+
+```sh
+npm run new -- --kind review --game --app "Game name" --maker studiohandle --live https://store.steampowered.com/app/…
+```
+
+(or run `npm run new`, pick review, and answer `game` when it asks). That copies `templates/review-game/` and sets
+`kind: game`, which changes:
+
+| | App | Game |
+|---|---|---|
+| Scores | First impression, Onboarding, Usefulness, Ease of use, Pricing / value | First impression, **Learning curve**, **Fun**, **Feel**, Pricing / value |
+| Score keys | `onboarding`, `usefulness`, `easeOfUse` | `learningCurve`, `fun`, `feel` |
+| Facts | Tried on | **Played on**, plus **Time played** from `played: 15 hours` |
+| Eyebrow | App review 01 | **Game review 01** |
+| Star on the tile | Still using it | **Still playing it** |
+
+- **What the game scores mean:** Learning curve is how quickly it clicked and whether the tutorial helped or got in
+  the way; Fun is whether it's actually fun to play; Feel is the controls, responsiveness and performance; Pricing /
+  value is the price against the hours you got out of it (replayability goes here).
+- **Screenshot:** for a PC or console game, `device: screen` shows one plain 16:9 screenshot with no device around
+  it: put an in-game shot (1920 × 1080 or larger) in `screenshot.png`. A phone, iPad or Mac game uses `phone`,
+  `tablet` or `desktop` like an app.
+- **Logo:** the game's icon, or its store capsule art cropped square, in `logo.png`.
+- **Link:** set `live` to the store page; it reads Steam ↗, itch.io ↗ or App Store ↗ on its own.
+- **Writing:** the same sections (First look, What I liked, Small ideas, Who it's for). Keep story spoilers out, or
+  flag them first. "Who it's for" can say what it's like ("if you liked X, you'll like this").
+- **Big studios:** the Try it card's "Early feedback means a lot" is for indie games; for a big studio's game, set
+  `tryIt` to something else.
+- **Mixing up scores fails the build:** a game needs `learningCurve`, `fun` and `feel`, and an app `onboarding`,
+  `usefulness` and `easeOfUse`, so a game without `kind: game` (or the reverse) gets a clear error.
+- **When the first game goes up,** change the /reviews lede in `src/pages/reviews/index.astro` from "I try apps…"
+  to "I try apps and games…".
+
 #### Updating a review
 
 When an app changes after you've reviewed it (the maker took your feedback, or a gripe went away), add to the

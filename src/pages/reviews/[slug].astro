@@ -16,6 +16,7 @@ import {
   getReviews,
   makerUrl,
   reviewJsonLd,
+  reviewKindLabel,
   scoresFor,
   type Review,
 } from '../../lib/reviews';
@@ -38,7 +39,7 @@ interface Props {
 }
 
 const { review, total, older, newer } = Astro.props;
-const { app, maker, date, updated, type, triedOn, price, version, platforms, device, post, summary, verdict, tryIt } =
+const { app, kind, maker, date, updated, type, triedOn, played, price, version, platforms, device, post, summary, verdict, tryIt } =
   review.data;
 const { Content } = await render(review);
 const appUrl = appUrlFor(review);
@@ -53,7 +54,9 @@ const facts = [
   { label: 'Date', value: fmtDay(date), ...(updated ? { note: `Updated ${fmtDay(updated)}` } : {}) },
   { label: 'Maker', value: [{ label: `@${maker}`, href: makerUrl(review) }] },
   { label: 'Type', value: type },
-  { label: 'Tried on', value: triedOn },
+  { label: kind === 'game' ? 'Played on' : 'Tried on', value: triedOn },
+  // a game's time played, when it's set
+  ...(played ? [{ label: 'Time played', value: played }] : []),
   // price, version and platforms are optional: left out of the facts when they aren't set
   ...(version ? [{ label: 'Version', value: version }] : []),
   ...(platforms?.length ? [{ label: 'Platforms', value: platforms.join(', ') }] : []),
@@ -81,7 +84,7 @@ const facts = [
   position={`${pad(review.number)} / ${pad(total)}`}
 >
   <Fragment slot="eyebrow">
-    App review <b>{pad(review.number)}</b>
+    {reviewKindLabel(review)} <b>{pad(review.number)}</b>
   </Fragment>
   <script slot="head" type="application/ld+json" is:inline set:html={jsonLd} />
   <Facts slot="facts" class="review-facts" items={facts} />

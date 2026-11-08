@@ -236,6 +236,20 @@
 .device-shots-tablet .device-screen {
   border-radius: 16px;
 }
+/* a PC or console game (device: screen): one plain 16:9 screenshot, as wide as the browser frame, no device */
+.device-shots-screen .device-shots-link {
+  padding: 0;
+  background: none;
+  overflow: hidden;
+}
+.device-shots-screen .device-frame {
+  flex: 1 1 auto;
+  border: 0;
+}
+.device-shots-screen .device-screen {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
 /* a Mac app (MacScreen.astro): only the app is a picture; the screen around it is drawn here, as wide as the
    browser frame. Inside .mac-scene, 1em is one Mac point, so the whole scene scales with the frame */
 .device-shots-desktop .device-shots-link {
