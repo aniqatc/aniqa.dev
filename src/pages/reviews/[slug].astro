@@ -38,7 +38,7 @@ interface Props {
 }
 
 const { review, total, older, newer } = Astro.props;
-const { app, maker, date, type, triedOn, price, version, platforms, device, post, summary, verdict } =
+const { app, maker, date, type, triedOn, price, version, platforms, device, post, summary, verdict, tryIt } =
   review.data;
 const { Content } = await render(review);
 const appUrl = appUrlFor(review);
@@ -129,10 +129,7 @@ const facts = [
         </a>
         .
       </h2>
-      <p>
-        Give it a go, and if you like it, let them know. Early feedback means a lot when you’re building
-        something new.
-      </p>
+      <p>{tryIt ?? 'That’s how it went for me. Everyone works differently, so you might land somewhere else.'}</p>
     </div>
     <div class="try-it-actions">
       <a class="try-it-button" href={appUrl} target="_blank" rel="noopener">

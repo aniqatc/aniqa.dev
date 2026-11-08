@@ -179,6 +179,8 @@ npm run new -- --kind review --app "App name" --maker handle --live example.com
 3. For a web app, run `npm run screenshots -- reviews/<slug>` to capture the app and its icon. For a phone or tablet app, add screenshots from the device and set `device` to `phone` or `tablet`; for a Mac app, see [Mac apps](#mac-apps). Optional `price`, `version` and `platforms` show with the facts.
 4. Run `npm run scorecard -- <slug>` to make the share image. Check the draft locally, remove `draft: true` when ready, then run `npm run og` for the review's link preview.
 
+The Try it card at the end of a review says “That’s how it went for me. Everyone works differently, so you might land somewhere else.”, which fits any verdict. To say something else for one review, set `tryIt` in its frontmatter.
+
 The home page intro shows one review: the newest, under **Reviewing**. To keep one there instead, add `featured: true` to its frontmatter and it shows under **Hooked on** (the newest featured one wins if there are several).
 
 #### Pictures in a review
