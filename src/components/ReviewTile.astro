@@ -1,8 +1,9 @@
 ---
 // /reviews: one app on the logo wall, its icon, name and number; the whole tile opens the review. The newest gets
-// a dot in the accent, and an app you're still using gets a star.
+// a dot in the accent, an app you're still using gets a star, and one updated in the last 30 days gets a refresh
+// badge on the other bottom corner. The legend in the All reviews heading on /reviews explains them.
 import { Image } from 'astro:assets';
-import { logoFor, reviewNumber, type Review } from '../lib/reviews';
+import { logoFor, reviewNumber, updatedLately, type Review } from '../lib/reviews';
 
 interface Props {
   review: Review;
@@ -12,6 +13,7 @@ interface Props {
 const { review, newest = false } = Astro.props;
 const { app, brand, stillUsing } = review.data;
 const logo = logoFor(review);
+const updated = updatedLately(review);
 ---
 
 <li>
@@ -30,10 +32,18 @@ const logo = logoFor(review);
           </svg>
         </span>
       )}
+      {updated && (
+        <span class="review-updated" title="Updated lately">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7" />
+          </svg>
+        </span>
+      )}
     </span>
     <span class="review-name">
       {app}
       {stillUsing && <span class="sr-only">, still using it</span>}
+      {updated && <span class="sr-only">, updated lately</span>}
     </span>
     <span class="review-number">{reviewNumber(review)}</span>
   </a>

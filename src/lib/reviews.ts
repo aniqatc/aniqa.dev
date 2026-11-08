@@ -40,6 +40,17 @@ export async function getHomeReview(): Promise<{ review: Review; featured: boole
   return newest && { review: newest, featured: false };
 }
 
+// How long a review counts as "updated lately" after its `updated` day: the refresh badge on its tile.
+const UPDATED_LATELY_DAYS = 30;
+
+/**
+ * True when the review's `updated` day is within the last 30 days. Worked out when the site builds, so the badge
+ * drops off at the first deploy after the 30 days are up.
+ */
+export const updatedLately = (review: Review) =>
+  Boolean(review.data.updated) &&
+  Date.now() - Date.parse(review.data.updated!) <= UPDATED_LATELY_DAYS * 24 * 60 * 60 * 1000;
+
 /** "No. 06" */
 export const reviewNumber = (review: Review) => `No. ${pad(review.number)}`;
 

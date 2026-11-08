@@ -213,7 +213,9 @@ review instead of rewriting it, so readers can see what changed and what you tho
 
 5. **Tag shipped ideas** in Small ideas without striking them, since the idea is still what you asked for:
    `` `Shipped in 1.4` `` at the end of the point. Both tags get a ✓ and look the same; only the word changes.
-6. **Refresh the images:** `npm run scorecard -- <slug>` and `npm run og`, so the share card and link preview show
+6. **The tile:** for 30 days after `updated`, the review's tile on /reviews and the home page gets a refresh
+   badge, explained by the legend in the All reviews heading. It drops off at the first deploy after that.
+7. **Refresh the images:** `npm run scorecard -- <slug>` and `npm run og`, so the share card and link preview show
    the new scores. On X, quote-post your original post with the update.
 
 #### Pictures in a review
