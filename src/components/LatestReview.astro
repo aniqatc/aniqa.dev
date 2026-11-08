@@ -1,16 +1,19 @@
 ---
-// Portfolio intro: the newest app review as a one-line card: its logo, name and maker, then its number by the arrow.
+// Portfolio intro: one app review as a one-line card: its logo, name and maker, then its number by the arrow.
+// It's the featured review under "Hooked on", or the newest one under "Reviewing" when none is featured.
 // Hides itself until there's a review.
 import { Image } from 'astro:assets';
-import { getLatestReview, logoFor, reviewNumber } from '../lib/reviews';
+import { getHomeReview, logoFor, reviewNumber } from '../lib/reviews';
 
-const latest = await getLatestReview();
+const home = await getHomeReview();
+const latest = home?.review;
+const label = home?.featured ? 'Hooked on' : 'Reviewing';
 const logo = latest && logoFor(latest);
 ---
 
 {latest && (
   <div class="intro-row latest-review-row">
-    <dt class="label">Reviewing</dt>
+    <dt class="label">{label}</dt>
     <dd>
       <a class="latest-review" href={`/reviews/${latest.id}`}>
         <span class="latest-review-app">

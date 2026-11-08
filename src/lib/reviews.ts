@@ -28,6 +28,18 @@ export async function getLatestReview(): Promise<Review | undefined> {
   return (await getReviews()).at(-1);
 }
 
+/**
+ * The review for the home page intro: the featured one (`featured: true`, the newest if more than one is), or
+ * the newest review when none is. `featured` says which, so the intro can label it Hooked on or Reviewing.
+ */
+export async function getHomeReview(): Promise<{ review: Review; featured: boolean } | undefined> {
+  const reviews = await getReviews();
+  const featured = reviews.findLast((review) => review.data.featured);
+  if (featured) return { review: featured, featured: true };
+  const newest = reviews.at(-1);
+  return newest && { review: newest, featured: false };
+}
+
 /** "No. 06" */
 export const reviewNumber = (review: Review) => `No. ${pad(review.number)}`;
 
