@@ -76,6 +76,39 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+/* a badge's label, in the site's style, while the pointer is on it (the badge's words are also in the tile's
+   screen-reader text, so this is only for sighted mouse users) */
+.review-star[data-tip]::after,
+.review-updated[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 2;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--fg);
+  font: 400 10.5px/1 var(--font-mono);
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.35);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
+}
+.review-star[data-tip]:hover::after,
+.review-updated[data-tip]:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.review-star[data-tip]:hover,
+.review-updated[data-tip]:hover {
+  border-color: var(--accent);
+}
 /* feedback given privately: faded, with a lock where the star would be, and nothing to open */
 .review-tile-private .review-logo {
   opacity: 0.7;
@@ -146,5 +179,9 @@
   }
   .review-tile:hover .review-logo {
     transform: none;
+  }
+  .review-star[data-tip]::after,
+  .review-updated[data-tip]::after {
+    transition: none;
   }
 }
