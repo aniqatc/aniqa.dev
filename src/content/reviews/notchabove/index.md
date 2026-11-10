@@ -3,6 +3,7 @@ app: NotchAbove
 maker: capt_sherman
 # makerLink: https://bsky.app/profile/handle # optional: link @maker somewhere else instead (Bluesky, Threads, their site…)
 date: 2026-11-09
+updated: 2026-11-10
 type: Mac app
 triedOn: MacBook M4 Pro, macOS Golden Gate 27.2
 live: notchabove.xyz
@@ -10,7 +11,7 @@ device: desktop
 desktop: notch
 # shadow: false # optional, for a Mac app: when the capture already has its own shadow
 price: $9.99 one-time
-version: 1.3.5
+version: 1.3.7
 platforms: [Mac]
 # post: https://x.com/aniqatc/status/… # optional: the review's post on X
 summary: A Mac notch app that handles audio, AI coding tools, Git, a file shelf and clipboard history, plus a pet to look after.
@@ -39,8 +40,17 @@ shelf for files and a _(cute)_ black cat named Bombay. It has a lot of features,
 native, it's one of the few apps that genuinely brings me joy, and it slotted right into my day. It also freed up my
 menu bar straight away: I deleted Raycast and Vorssaint.
 
-I've used it for about two weeks and can see it sticking around long term, so I'll add an update in a month or so. I
+I've used it for over two weeks and can see it sticking around long term, so I'll add an update in a month or so. I
 got it on a founder's sale, I don't know the maker, and nobody asked me to write this.
+
+## Update
+
+_Nov 10, 2026 · version 1.3.7_
+
+All four of my small ideas shipped in 1.3.7: AI usage for more than one account, notes that save as Markdown
+files with syntax-highlighted code blocks, a dedicated water tab, and app management with Apps, Caches and
+Updates tabs, which is what I was missing after deleting Vorssaint. At first look, I'm very happy with these
+changes, and I appreciate the creator adding them based on my suggestions.
 
 ## First look
 
@@ -72,7 +82,7 @@ being distracting.
    in the usual notification spot; they shouldn't take the same space as a message or calendar event. NotchAbove
    nudges me gently from the notch, and I actually take them in _(even if I finish what I'm doing first)_.
    - Water sits with the Pomodoro timer, countdown and stopwatch ![The focus panel: a Pomodoro timer set to 25 minutes, a countdown, a stopwatch and a hydration glass at 5 of 8](./focus-timers.png 'note: Pomodoro, countdown, stopwatch and hydration'),
-     which is actually my main gripe: I don't use Pomodoro, so I only use part of that view. That being said, the water reminder has made a real difference: I often don't reach for
+     ~~which is actually my main gripe: I don't use Pomodoro, so I only use part of that view.~~ `Fixed in 1.3.7` ![Change what you drink from: Glass 8 a day, Mug 6, 17 oz 4, 25 oz 3, 34 oz 2 selected, 41 oz 2, Tumbler or Classic bottle, each tap 5.1, 6.8, 8.5 selected or 10 oz, 2 bottles a day, 68 oz a day suggested](./water-bottle.png 'note: A 34 oz tumbler, 8.5 oz a tap, two a day, 68 oz suggested') That being said, the water reminder has made a real difference: I often don't reach for
      water until I'm already dehydrated, and now I actually sip through the day. I'll be convincing my husband to give
      it a try.
    - On days my chronic dry eyes are more strained, the eye breaks help ![The eye breaks panel: look 20 feet away for 20 seconds every 45 minutes, next in 26:49, with Blink, Figure 8, Near & far and Palming exercises](./eye-breaks.png 'note: Eye breaks every 45 minutes, with short exercises'). After long stretches of coding or debugging, the
@@ -116,15 +126,15 @@ being distracting.
 ## Small ideas
 
 1. Show usage for more than one account. I'd love to see my AI agent usage across accounts, like my personal and work
-   Claude accounts, side by side.
-2. Save notes ![The notes panel: two notes as tabs, an empty note, and buttons to dictate, copy and delete](./notes.png 'note: Notes, typed or dictated') as Markdown files. Right now they stay inside NotchAbove and save to a JSON file, so I don't use them. I take notes in Obsidian, like so many people with Markdown editors. Having
+   Claude accounts, side by side. `Shipped in 1.3.7`
+2. Save notes as Markdown files. Right now they stay inside NotchAbove and save to a JSON file, so I don't use them. I take notes in Obsidian, like so many people with Markdown editors. Having
    these land as Markdown files in my own notes would be awesome, and they'd sync to my phone and iPad. Syntax
-   highlighting for code snippets would be nice too.
+   highlighting for code snippets would be nice too. `Shipped in 1.3.7` ![A note titled Hello world from NotchAbove with a JavaScript code block, a language dropdown, a Copy button, console.log("Hello World from notchabove!"), and dictate, code, copy and delete buttons](./notes-code.png 'note: Code blocks with syntax highlighting and a language picker')
 3. Give water its own tab. I don't use Pomodoro, so I'd rather have water on its own, or in a Health tab that
-   combines it with the eye breaks.
+   combines it with the eye breaks. `Shipped in 1.3.7` ![Change what you drink from: Glass 8 a day, Mug 6, 17 oz 4, 25 oz 3, 34 oz 2 selected, 41 oz 2, Tumbler or Classic bottle, each tap 5.1, 6.8, 8.5 selected or 10 oz, 2 bottles a day, 68 oz a day suggested](./water-bottle.png 'note: A 34 oz tumbler, 8.5 oz a tap, two a day, 68 oz suggested')
 4. Add app management. An uninstaller, a cache cleaner and app updates are what I'm missing since deleting Vorssaint,
    but they weren't worth keeping it around for. I'll either find a standalone tool or it'd be cool to see them here,
-   but it's not a must.
+   but it's not a must. `Shipped in 1.3.7` ![The App management panel on the Apps tab: a Find an app search, and 1Password, Arc, Bruno and ChatGPT with their versions, plus 39 apps · choose one to review its files, with Caches and Updates tabs](./app-management.png 'note: Apps, Caches and Updates, with a search to review an app and its files')
 
 ## Who it's for
 
