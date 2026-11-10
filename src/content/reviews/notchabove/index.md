@@ -2,7 +2,7 @@
 app: NotchAbove
 maker: capt_sherman
 # makerLink: https://bsky.app/profile/handle # optional: link @maker somewhere else instead (Bluesky, Threads, their site…)
-date: 2026-11-09
+date: 2026-11-07
 updated: 2026-11-10
 type: Mac app
 triedOn: MacBook M4 Pro, macOS Golden Gate 27.2
