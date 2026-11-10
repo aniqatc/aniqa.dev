@@ -49,8 +49,10 @@ _Nov 10, 2026 · version 1.3.7_
 
 All four of my small ideas shipped in 1.3.7: AI usage for more than one account, notes that save as Markdown
 files with syntax-highlighted code blocks, a dedicated water tab, and app management with Apps, Caches and
-Updates tabs, which is what I was missing after deleting Vorssaint. At first look, I'm very happy with these
-changes, and I appreciate the creator adding them based on my suggestions.
+Updates tabs, which is what I was missing after deleting Vorssaint.
+
+At first look, I'm very happy with these changes, and I appreciate the creator adding them based on my
+suggestions.
 
 ## First look
 
