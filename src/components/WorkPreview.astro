@@ -2,10 +2,13 @@
 // Selected work: the screenshot of the project under the cursor, following it. Mouse only, hidden on touch screens.
 // Each row carries a small WebP of its screenshot in data-preview; work-preview.ts only loads them once someone
 // first hovers the list, so the page stays light. It only repeats the row, so screen readers skip it.
+// Two stacked images, so moving to another row crossfades from one screenshot to the next (follow-card.css).
+import '../styles/follow-card.css';
 ---
 
-<div class="work-preview" aria-hidden="true">
-  <img class="work-preview-image" alt="" width="300" height="188" decoding="async" />
+<div class="work-preview follow-card" aria-hidden="true">
+  <img class="work-preview-image follow-layer" alt="" width="300" height="188" decoding="async" hidden />
+  <img class="work-preview-image follow-layer" alt="" width="300" height="188" decoding="async" hidden />
 </div>
 
 <script>
@@ -26,12 +29,7 @@
     border-radius: 10px;
     background: var(--surface);
     box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
-    opacity: 0;
     transform: translate(-9999px, 0);
-    transition: opacity 0.15s ease;
-  }
-  .work-preview.show {
-    opacity: 1;
   }
   .work-preview-image {
     display: block;

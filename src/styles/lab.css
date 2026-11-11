@@ -326,33 +326,30 @@
   border-radius: 14px;
   background: #16151b;
   box-shadow: 0 18px 40px -12px rgba(22, 21, 27, 0.5);
-  opacity: 0;
   transform: translate(-9999px, 0);
-  transition: opacity 0.18s ease;
 }
-.tip.show {
-  opacity: 1;
+/* the screenshot or sketch, stacked so one crossfades into the next (follow-card.css); hidden for an entry with
+   neither, leaving just the caption */
+.tip-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 9px;
+}
+.tip-media[hidden] {
+  display: none;
 }
 .tip-image {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 10;
+  height: 100%;
   object-fit: cover;
-  border-radius: 9px;
 }
 /* a sketch, drawn at the entry page's 800px stage width and shrunk into the card (220 / 800), top 16:10 showing */
 .tip-sketch {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
   overflow: hidden;
-  border-radius: 9px;
   background: var(--bg);
   color: var(--fg);
-}
-.tip-sketch[hidden] {
-  display: none;
 }
 .tip-sketch-stage {
   width: 800px;

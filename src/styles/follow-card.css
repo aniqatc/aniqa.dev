@@ -1,0 +1,52 @@
+/* The two hover previews (WorkPreview, HoverPreview; moved by follow-card.ts): they pop in with a small spring
+   from 90%, and shrink and fade quickly on the way out. Their content crossfades through .follow-layer. */
+.follow-card {
+  opacity: 0;
+  scale: 0.9;
+  transition:
+    opacity 0.14s ease-in,
+    scale 0.16s ease-in;
+}
+.follow-card.show {
+  opacity: 1;
+  scale: 1;
+  /* a soft spring, just past 1 and back */
+  transition:
+    opacity 0.16s ease-out,
+    scale 0.42s cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition:
+    opacity 0.16s ease-out,
+    scale 0.42s linear(0, 0.22 7%, 0.56 16%, 0.84 27%, 1.02 38%, 1.07 46%, 1.06 54%, 1.02 66%, 0.995 80%, 1);
+}
+
+/* stacked in one box; the next one blurs up as the last one blurs away */
+.follow-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  filter: blur(6px);
+  scale: 1.04;
+  transition:
+    opacity 0.18s ease,
+    filter 0.18s ease,
+    scale 0.24s ease;
+}
+.follow-layer.on {
+  opacity: 1;
+  filter: none;
+  scale: 1;
+}
+.follow-layer[hidden] {
+  display: none;
+}
+
+/* reduced motion: no pop or blur, only a short fade (above the site-wide rule that turns transitions off) */
+@media (prefers-reduced-motion: reduce) {
+  .follow-card,
+  .follow-card.show,
+  .follow-layer {
+    scale: 1;
+    filter: none;
+    transition: opacity 0.15s ease !important;
+  }
+}

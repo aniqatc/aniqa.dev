@@ -4,7 +4,9 @@
 // someone first hovers the archive, so the page stays light.
 // An entry that isn't a website (no live site, with a sketch.astro) shows its sketch itself instead, running,
 // shrunk to fit. It stays hidden, so it doesn't animate, until its row is hovered, and inert, so its controls
-// can't be reached.
+// can't be reached. Its screenshots and sketches are stacked layers, so moving to another row crossfades between
+// them (follow-card.css).
+import '../styles/follow-card.css';
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import '../styles/demo.css';
 import type { LabEntry } from '../lib/projects';
@@ -29,16 +31,19 @@ const liveSketches = entries
   .filter(({ Sketch }) => Sketch);
 ---
 
-<div class="tip" aria-hidden="true">
-  <img class="tip-image" alt="" width="232" height="145" decoding="async" />
-  {liveSketches.map(({ slug, Sketch }) => (
-    <div class="tip-sketch" data-sketch-slug={slug} hidden inert>
-      {/* .stage: sketches look for their stage (to hear Pause); unstyled here, since detail.css is only on entry pages */}
-      <div class="tip-sketch-stage stage">
-        <Sketch />
+<div class="tip follow-card" aria-hidden="true">
+  <div class="tip-media">
+    <img class="tip-image follow-layer" alt="" width="232" height="145" decoding="async" hidden />
+    <img class="tip-image follow-layer" alt="" width="232" height="145" decoding="async" hidden />
+    {liveSketches.map(({ slug, Sketch }) => (
+      <div class="tip-sketch follow-layer" data-sketch-slug={slug} hidden inert>
+        {/* .stage: sketches look for their stage (to hear Pause); unstyled here, since detail.css is only on entry pages */}
+        <div class="tip-sketch-stage stage">
+          <Sketch />
+        </div>
       </div>
-    </div>
-  ))}
+    ))}
+  </div>
   <div class="tip-cap">
     <b></b>
     <span></span>

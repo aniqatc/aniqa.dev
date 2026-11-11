@@ -1,5 +1,7 @@
 // Portfolio Selected work: a floating screenshot follows the cursor over the rows. Mouse only;
 // on touch screens the rows are plain links and the preview stays hidden (see the hover: none rule in WorkPreview).
+// The motion (trailing, tilt, pop in and out) is shared with the lab's preview, in follow-card.ts.
+import { crossfade, followCard } from './follow-card';
 import { onPage } from './page';
 
 onPage(() => {
@@ -7,12 +9,13 @@ onPage(() => {
   const list = document.querySelector<HTMLElement>('.projects');
   if (!preview || !list) return;
 
-  const image = preview.querySelector<HTMLImageElement>('.work-preview-image')!;
+  const images = [...preview.querySelectorAll<HTMLImageElement>('.work-preview-image')];
   const rows = [...list.querySelectorAll<HTMLElement>('.project')];
+  const card = followCard(preview);
+  const swap = crossfade(images);
+  let current: string | undefined;
   let loaded = false;
-  let x = 0;
-  let y = 0;
-  let raf = 0;
+  let shown = 0; // which of the two images is showing
 
   // the first hover fetches every row's small screenshot, so the next ones show straight away
   const loadAll = () => {
@@ -23,16 +26,21 @@ onPage(() => {
     });
   };
 
-  // to the right of the cursor, flipped left near the edge, and always inside the window
-  const place = () => {
-    raf = 0;
-    const width = preview.offsetWidth;
-    const height = preview.offsetHeight;
-    let left = x + 24;
-    if (left + width > innerWidth - 16) left = x - width - 24;
-    left = Math.max(16, left);
-    const top = Math.max(16, Math.min(y - height / 2, innerHeight - height - 16));
-    preview.style.transform = `translate(${left}px,${top}px)`;
+  // the new screenshot goes in the image that isn't showing, and fades in once it's decoded (no blank flash);
+  // if the card was hidden it just appears, since there's nothing to fade from
+  const fill = (src: string) => {
+    if (src === current) return;
+    current = src;
+    const instant = !card.seen();
+    shown = 1 - shown;
+    const next = images[shown];
+    next.src = src;
+    next
+      .decode()
+      .catch(() => {})
+      .then(() => {
+        if (current === src) swap(next, instant);
+      });
   };
 
   list.addEventListener('pointerover', (ev) => {
@@ -40,21 +48,15 @@ onPage(() => {
     loadAll();
     const row = (ev.target as Element).closest<HTMLElement>('.project');
     if (!row?.dataset.preview) return;
-    if (image.getAttribute('src') !== row.dataset.preview) image.src = row.dataset.preview;
-    x = ev.clientX;
-    y = ev.clientY;
-    place();
-    preview.classList.add('show');
+    fill(row.dataset.preview);
+    card.show(ev.clientX, ev.clientY);
   });
   list.addEventListener('pointermove', (ev) => {
-    if (ev.pointerType !== 'mouse') return;
-    x = ev.clientX;
-    y = ev.clientY;
-    if (!raf) raf = requestAnimationFrame(place);
+    if (ev.pointerType === 'mouse') card.move(ev.clientX, ev.clientY);
   });
   list.addEventListener('pointerout', (ev) => {
     const to = ev.relatedTarget as Element | null;
-    if (!to?.closest('.project')) preview.classList.remove('show');
+    if (!to?.closest('.project')) card.hide();
   });
-  return () => cancelAnimationFrame(raf);
+  return () => card.stop();
 });
