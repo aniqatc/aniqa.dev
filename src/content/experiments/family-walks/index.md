@@ -10,14 +10,17 @@ summary: Two years on our street as one walk. The date moves forward, the season
 
 ## Idea
 
-I wanted one small place to hold a stretch of time: the same walk down our street, with the seasons, the weather and our family changing around it.
+I wanted a painted scene, seen from an isometric view, of the place that's been home for the past few years and the street where we take our walks as a family. We walk it regardless of season, time of day or weather, so the scene had to have all of those.
 
-I wanted it to look like a small hand-painted model of our street, so I prompted with photos and details, and many tweaks and iterations later it became this: an isometric scene made entirely in code, with trees of overlapping circles and soft dotted edges.
+I also wanted to show our family's progression, from just the two of us to the three of us with our son. The walks have been there the whole way through. So there are two sets of controls: one to move through the time in our lives, and one to change the scene around us.
 
 ## Notes
 
-1. The timeline runs from January 2025 to December 2026 and decides who is walking: the two of us, then a bump from October 2025, then a newborn in a blue swaddle, then a stroller.
-2. A new season ripples outward from wherever we are on the road, with a puff of that season's leaves, petals or snow. The ground and houses are painted once per season and kept, so the change is instant.
-3. Time of day is one wash over the whole scene, with shadows that stretch at dawn and dusk and lamps and windows that light up at night.
-4. Wind and weather are separate controls, and our outfits follow the season and the weather, down to the umbrella.
-5. [Anything you tuned or a dead end you want to mention.]
+1. Built with Claude Fable 5.2. I gave it photos of our community, including aerial shots for the layout and shots from our point of view on the walk.
+2. Lots of tweaking, including details I added by hand: the stop sign, our car, a neighbor walking a dog, a car driving in and parking, street lights and other minor details.
+3. There is a community clubhouse at the far end of the houses, where we've spent time playing pool, getting coffee and using the gym.
+4. A timeline from January 2025 to December 2026 that decides who is walking: the two of us, a bump from October 2025, blue balloons when our son arrives, a newborn in a blue swaddle, then a stroller.
+5. Outfits that follow the season and the weather, down to the umbrella.
+6. Season changes that ripple out from wherever we are on the road, with new trees, ground and leaves, petals or snow.
+7. Time of day as one wash over the whole scene, with longer shadows at dawn and dusk and lamps and windows lit at night.
+8. Separate wind and weather controls: swaying trees and blowing leaves, plus fog, rain, snow and storms.
