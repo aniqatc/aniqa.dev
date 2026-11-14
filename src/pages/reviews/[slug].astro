@@ -39,8 +39,24 @@ interface Props {
 }
 
 const { review, total, older, newer } = Astro.props;
-const { app, kind, maker, date, updated, type, triedOn, played, price, version, platforms, device, post, summary, verdict, tryIt } =
-  review.data;
+const {
+  app,
+  kind,
+  maker,
+  date,
+  updated,
+  type,
+  triedOn,
+  played,
+  price,
+  version,
+  platforms,
+  device,
+  post,
+  summary,
+  verdict,
+  tryIt,
+} = review.data;
 const { Content } = await render(review);
 const appUrl = appUrlFor(review);
 const scores = scoresFor(review);

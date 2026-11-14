@@ -42,7 +42,13 @@ const caption = isPhone
                 src={screen}
                 alt={index === 0 ? screenshotAlt : ''}
                 widths={isPhone ? [240, 480] : isScreen ? [800, 1600] : [640, 1280]}
-                sizes={isPhone ? '200px' : isScreen ? '(max-width: 840px) 100vw, 800px' : '(max-width: 700px) 100vw, 600px'}
+                sizes={
+                  isPhone
+                    ? '200px'
+                    : isScreen
+                      ? '(max-width: 840px) 100vw, 800px'
+                      : '(max-width: 700px) 100vw, 600px'
+                }
               />
             </span>
           ))}
