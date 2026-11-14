@@ -1446,9 +1446,9 @@ export function startScene(stage) {
     mix = 1,
     sweep = { x: 565, y: 400 },
     tmpC = null;
-  var SW_R = 1500,
-    SW_SOFT = 260,
-    SW_DUR = 2.6;
+  var SW_R = 1900,
+    SW_SOFT = 360,
+    SW_DUR = 3.3;
   /* a new season ripples outward from the family instead of fading everywhere at once */
   function mmAt(x, y) {
     if (!prev) return 1;
@@ -2230,6 +2230,10 @@ export function startScene(stage) {
   var ofCur = 'autumn',
     ofPrev = null,
     ofMix = 1;
+  /* ease in and out, for crossfades */
+  function sm(x) {
+    return x * x * (3 - 2 * x);
+  }
   /* One person facing us: shadow, legs that step, body, scarf or collar, head, hair or hat, face,
    and then arms that reach to wherever the hands need to be. */
   function drawPerson(g, x, y, o, ph, hx1, hy1, hx2, hy2) {
@@ -2642,14 +2646,14 @@ export function startScene(stage) {
   function drawFamily(g, u, ph, alpha) {
     g.save();
     if (ofPrev && ofMix < 1) {
-      g.globalAlpha = alpha * (1 - ofMix * ofMix * ofMix);
+      g.globalAlpha = alpha * (1 - Math.pow(sm(ofMix), 3));
       familyIn(g, u, ph, OUTFITS[ofPrev], stCur);
-      g.globalAlpha = alpha * ofMix;
+      g.globalAlpha = alpha * sm(ofMix);
       familyIn(g, u, ph, OUTFITS[ofCur], stCur);
     } else if (stPrev >= 0 && stMix < 1) {
-      g.globalAlpha = alpha * (1 - stMix * stMix * stMix);
+      g.globalAlpha = alpha * (1 - Math.pow(sm(stMix), 3));
       familyIn(g, u, ph, OUTFITS[ofCur], stPrev);
-      g.globalAlpha = alpha * stMix;
+      g.globalAlpha = alpha * sm(stMix);
       familyIn(g, u, ph, OUTFITS[ofCur], stCur);
     } else {
       g.globalAlpha = alpha;
@@ -2702,9 +2706,9 @@ export function startScene(stage) {
   function drawNeighbor(g, u, ph, alpha) {
     g.save();
     if (ofPrev && ofMix < 1) {
-      g.globalAlpha = alpha * (1 - ofMix * ofMix * ofMix);
+      g.globalAlpha = alpha * (1 - Math.pow(sm(ofMix), 3));
       neighborIn(g, u, ph, OUTFITS[ofPrev]);
-      g.globalAlpha = alpha * ofMix;
+      g.globalAlpha = alpha * sm(ofMix);
       neighborIn(g, u, ph, OUTFITS[ofCur]);
     } else {
       g.globalAlpha = alpha;
@@ -3246,7 +3250,9 @@ export function startScene(stage) {
     Gusty: { sway: 2.1, leaves: 45, drift: 40 },
   };
   /* st is what is selected. cur is what is on screen right now, which eases toward the selection a little every frame. */
-  var st = { season: 0, time: 0, wind: 1, weather: 0 };
+  var st = { season: 0, time: 0, wind: 1, weather: 0 },
+    mid = null,
+    frozen = false;
   var cur = {
     wt: [1, 1, 1],
     leafN: 14,
@@ -3669,17 +3675,20 @@ export function startScene(stage) {
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000 || 0.016);
     last = now;
-    T += dt;
+    /* mdt moves the walk and the calendar; it is 0 while the scene is paused so only the change of setting plays */
+    frozen = !running;
+    var mdt = frozen ? 0 : dt;
+    T += mdt;
     var S = SEASON,
       tname = TIMES[st.time];
     if (tname === 'Auto') tname = AUTO[Math.floor(T / 9) % 4];
     var tp = TP[tname],
       wp = WP[WINDS[st.wind]],
       wx = WX[WEATHERS[st.weather]],
-      e = 1 - Math.exp(-dt * 1.7),
-      eW = 1 - Math.exp(-dt * 0.85),
+      e = 1 - Math.exp(-dt * 2.0),
+      eW = 1 - Math.exp(-dt * 1.15),
       i;
-    /* while paused, a change lands at once instead of easing in over frames that are not running */
+    /* with reduced motion, a change made while paused lands at once */
     if (snapNext) {
       e = 1;
       eW = 1;
@@ -3688,20 +3697,32 @@ export function startScene(stage) {
       ofPrev = null;
       stMix = 1;
     }
+    /* two steps: 'mid' glides toward the chosen setting and 'cur' glides toward 'mid', so a change starts gently and ends gently */
+    if (!mid) mid = JSON.parse(JSON.stringify(cur));
     for (i = 0; i < 3; i++) {
-      cur.tint[i] = lerp(cur.tint[i], tp.tint[i], e);
-      cur.wt[i] = lerp(cur.wt[i], wx.t[i], eW);
+      mid.tint[i] = lerp(mid.tint[i], tp.tint[i], e);
+      mid.wt[i] = lerp(mid.wt[i], wx.t[i], eW);
     }
-    cur.leafN = lerp(cur.leafN, (reduce ? Math.min(8, wp.leaves) : wp.leaves) * S.fall.mult, eW);
-    cur.sfly = lerp(cur.sfly, S.fly, eW);
+    mid.leafN = lerp(mid.leafN, (reduce ? Math.min(8, wp.leaves) : wp.leaves) * S.fall.mult, eW);
+    mid.sfly = lerp(mid.sfly, S.fly, eW);
     ['lamp', 'win', 'star', 'fly', 'mist', 'sx', 'sy', 'sa', 'grad'].forEach(function (k) {
       cur[k] = lerp(cur[k], tp[k], e);
     });
     ['rain', 'fog', 'snow', 'storm', 'over'].forEach(function (k) {
       cur[k] = lerp(cur[k], wx[k], eW);
     });
-    cur.sway = lerp(cur.sway, wp.sway + wx.storm * 0.9, eW);
-    cur.drift = lerp(cur.drift, wp.drift + wx.storm * 18, eW);
+    mid.sway = lerp(mid.sway, wp.sway + wx.storm * 0.9, eW);
+    mid.drift = lerp(mid.drift, wp.drift + wx.storm * 18, eW);
+    for (i = 0; i < 3; i++) {
+      cur.tint[i] = lerp(cur.tint[i], mid.tint[i], e);
+      cur.wt[i] = lerp(cur.wt[i], mid.wt[i], eW);
+    }
+    ['lamp', 'win', 'star', 'fly', 'mist', 'sx', 'sy', 'sa', 'grad'].forEach(function (k) {
+      cur[k] = lerp(cur[k], mid[k], e);
+    });
+    ['leafN', 'sfly', 'rain', 'fog', 'snow', 'storm', 'over', 'sway', 'drift'].forEach(function (k) {
+      cur[k] = lerp(cur[k], mid[k], eW);
+    });
     var wname = WEATHERS[st.weather],
       okey =
         wname === 'Rain' || wname === 'Storm'
@@ -3715,13 +3736,13 @@ export function startScene(stage) {
       ofMix = 0;
     }
     if (ofMix < 1) {
-      ofMix = Math.min(1, ofMix + dt / 1.3);
+      ofMix = Math.min(1, ofMix + dt / 1.7);
       if (ofMix >= 1) ofPrev = null;
     }
     if (TL.play) {
-      if (TL.m < TL.END) TL.m = Math.min(TL.END, TL.m + dt * TL.rate);
+      if (TL.m < TL.END) TL.m = Math.min(TL.END, TL.m + mdt * TL.rate);
       else {
-        TL.hold += dt;
+        TL.hold += mdt;
         if (TL.hold > 3) {
           TL.hold = 0;
           TL.m = 0;
@@ -3748,10 +3769,10 @@ export function startScene(stage) {
       stCur = sidx;
       stMix = 0;
     }
-    if (stMix < 1) stMix = Math.min(1, stMix + dt / 1.1);
+    if (stMix < 1) stMix = Math.min(1, stMix + dt / 1.5);
     /* gusts send a wave across the road */
     if (st.wind === 2 && !reduce) {
-      gustT -= dt;
+      gustT -= mdt;
       if (gustT < 0) {
         gustT = 6 + lr() * 4;
         gust = 1;
@@ -3882,8 +3903,8 @@ export function startScene(stage) {
     }
     /* everyone and everything, sorted back to front */
     if (!reduce) {
-      walkU -= 21 * dt;
-      walkPh += dt * 6.2;
+      walkU -= 21 * mdt;
+      walkPh += mdt * 6.2;
     }
     if (walkU < -10) walkU = UMAX + 10;
     var fam = fadeU(walkU),
@@ -4015,7 +4036,7 @@ export function startScene(stage) {
     if (cur.snow > 0.02) drawSnow(g, dt, cur.snow, cur.drift, T);
     /* blue balloons for the day he was born: held for a few seconds, then let go */
     if (balloons) {
-      balloons.age += dt;
+      balloons.age += mdt;
       var bAge = balloons.age,
         bHold = Math.min(bAge, 3.2),
         bUp = Math.max(0, bAge - 3.2);
@@ -4058,7 +4079,7 @@ export function startScene(stage) {
     }
     for (i = hearts.length - 1; i >= 0; i--) {
       var hh = hearts[i];
-      hh.age += dt;
+      hh.age += mdt;
       if (hh.age < 0) continue;
       if (hh.age > 2.6) {
         hearts.splice(i, 1);
@@ -4291,7 +4312,7 @@ export function startScene(stage) {
     /* falling rain, snow and lightning, in screen space */
     g.setTransform(1, 0, 0, 1, 0, 0);
     if (cur.storm > 0.3 && !reduce) {
-      flashT -= dt;
+      flashT -= mdt;
       if (flashT < 0) {
         flashT = 5 + lr() * 7;
         flash = 1;
@@ -4308,7 +4329,8 @@ export function startScene(stage) {
       prev = null;
     }
     snapNext = false;
-    if (running) raf = requestAnimationFrame(frame);
+    if (running || (easing && now < easeUntil)) raf = requestAnimationFrame(frame);
+    else easing = false;
   }
 
   /* ---------- controls ---------- */
@@ -4503,7 +4525,9 @@ export function startScene(stage) {
   var running = false,
     raf = 0,
     timers = [],
-    snapNext = false;
+    snapNext = false,
+    easing = false,
+    easeUntil = 0;
   resize();
   showSeason(tlSeasonIdx(0), false);
   if (reduce) tlSetPlay(false);
@@ -4520,6 +4544,7 @@ export function startScene(stage) {
   });
   /* one still frame, for a resize or a restart while paused */
   function drawOnce() {
+    if (easing) return;
     var was = running;
     running = false;
     var now = performance.now();
@@ -4527,16 +4552,28 @@ export function startScene(stage) {
     frame(now);
     running = was;
   }
-  /* a setting changed while paused: draw two snapped frames so the change shows fully without starting the animation */
+  /* A setting changed while paused: play just that change for a few seconds, with the walk and the calendar held still,
+   then stop again. With reduced motion the change lands at once instead. */
   function settle() {
     if (running) return;
-    snapNext = true;
-    drawOnce();
-    snapNext = true;
-    drawOnce();
+    if (reduce) {
+      snapNext = true;
+      drawOnce();
+      snapNext = true;
+      drawOnce();
+      return;
+    }
+    easeUntil = performance.now() + 5200;
+    if (!easing) {
+      easing = true;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
   }
   function go() {
     if (running) return;
+    cancelAnimationFrame(raf);
+    easing = false;
     running = true;
     last = performance.now();
     raf = requestAnimationFrame(frame);
@@ -4574,6 +4611,7 @@ export function startScene(stage) {
     },
     pause: function () {
       running = false;
+      easing = false;
       cancelAnimationFrame(raf);
     },
     resume: function () {
