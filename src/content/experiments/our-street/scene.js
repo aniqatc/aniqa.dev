@@ -2742,6 +2742,185 @@ export function startScene(stage) {
     }
   }
   /* Where a squirrel is in its loop: sit, dash to the other spot, sit, dash back. */
+  /* Deer wander through the near side of the woods now and then: a buck and a smaller one behind it.
+   Their path weaves, so they slip behind the trees and come back out. They amble, stop to graze, and move on. q is {u,v,s size,ph leg swing,mv how fast,gz head down 0..1,ant antlers,a alpha}. */
+  function deerState(T, lag, s, ant) {
+    var c = (T + 18 - lag) % 120;
+    if (c < 0) c += 120;
+    if (c > 92) return null;
+    var walked = c - (22 / 6.2832) * Math.sin((c * 6.2832) / 22),
+      sp = 1 - Math.cos((c * 6.2832) / 22),
+      u = UMAX + 40 - walked * 7.6;
+    return {
+      u: u,
+      v: 569 + Math.sin(u * 0.045 + lag * 0.2) * 23,
+      s: s,
+      ph: walked * 2.3,
+      mv: Math.min(1, sp * 1.2),
+      gz: clamp((0.5 - sp) / 0.4, 0, 1),
+      ant: ant,
+      a: clamp(Math.min(u + 8, UMAX - u + 8) / 50, 0, 1),
+    };
+  }
+  function drawDeer(g, q) {
+    var p = P(q.u, q.v, 0),
+      col = '#a8733f',
+      dk = '#83572c',
+      sw = Math.sin(q.ph) * 3.4 * q.mv,
+      sw2 = -sw;
+    g.save();
+    g.globalAlpha *= q.a;
+    g.lineCap = 'round';
+    ell(g, p[0], p[1] + 1, 12 * q.s, 3 * q.s, 'rgba(0,0,0,0.2)');
+    g.translate(p[0], p[1]);
+    g.scale(q.s, q.s);
+    seg(g, -6.5, -13, -6.5 + sw, 0, dk, 1.9);
+    seg(g, 7.5, -13, 7.5 + sw2, 0, dk, 1.9);
+    seg(g, -4.5, -13, -4.5 + sw2, 0, col, 1.9);
+    seg(g, 5.5, -13, 5.5 + sw, 0, col, 1.9);
+    ell(g, 0.5, -16, 10.5, 5.2, col, 0);
+    ell(g, 1.5, -13.2, 7, 2.2, '#e3cfae', 0);
+    ell(g, 10.6, -18.4, 1.8, 2.7, '#fbf8f2', 0.5);
+    var hx = lerp(-13.5, -15.5, q.gz),
+      hy = lerp(-29, -5.5, q.gz);
+    seg(g, -7.5, -18, hx + 2.2, hy + 2.2, col, 5);
+    if (q.ant) {
+      seg(g, hx + 1, hy - 2.5, hx + 0.2, hy - 10, '#e9dcc3', 1.1);
+      seg(g, hx + 0.6, hy - 6.5, hx - 2.8, hy - 9.5, '#e9dcc3', 1);
+      seg(g, hx + 0.4, hy - 8, hx + 3, hy - 11, '#e9dcc3', 1);
+    }
+    ell(g, hx + 2.6, hy - 3.2, 1.3, 2.9, dk, 0.6);
+    ell(g, hx - 1.2, hy + 0.2, 4.3, 2.6, col, lerp(0.22, -0.7, q.gz));
+    circ(g, hx - 5.1 + q.gz * 1.2, hy + 1.1 + q.gz * 2.2, 0.9, '#3a2b22');
+    circ(g, hx - 0.6, hy - 0.7, 0.6, '#2b2624');
+    g.restore();
+  }
+  /* A bunny that lives by the woods. It waits at the edge of the trees, hops across the road by the stop sign to our lawn,
+   pauses, then frolics off round the back of the house. A little later it turns up at the woods again.
+   Before each crossing it looks ahead: it only sets off when the family, the neighbour and his dog, the red car and the
+   moving truck will all be clear of the corner for the whole trip. */
+  var BUN = { ph: 0, t: 0 };
+  function bunnyClear(T, tm) {
+    if (tm < TL.MOVE) return false;
+    for (var d = 0; d <= 6.5; d += 0.5) {
+      var fu = walkU - 21 * d;
+      if (fu < -10) fu += UMAX + 20;
+      if (fu > -25 && fu < 70) return false;
+      var nu = UMAX + 20 - (((T + d) * 15 + 260) % (UMAX + 70));
+      if (nu > -30 && nu < 75) return false;
+      var rc = redCarState(T + d);
+      if (rc && rc.u < 110) return false;
+    }
+    return true;
+  }
+  function bunnyStep(T, mdt, tm) {
+    var A = [15, 338],
+      B = [10, 150],
+      C = [8, 34],
+      E = [27, 3],
+      u = A[0],
+      v = A[1],
+      h = 0,
+      hop = false,
+      al = 1,
+      k,
+      w,
+      f;
+    function along(x, n) {
+      k = x * n;
+      h = k - Math.floor(k);
+      w = h - Math.sin(h * 6.2832) * 0.11;
+      return (Math.floor(k) + w) / n;
+    }
+    BUN.t += mdt;
+    /* 0 waits at the woods, 1 crosses the road, 2 pauses on our lawn, 3 frolics off round the back of the house, 4 is out of sight */
+    if (BUN.ph === 0 && BUN.t > 3.5 && bunnyClear(T, tm)) {
+      BUN.ph = 1;
+      BUN.t = 0;
+    } else if (BUN.ph === 1 && BUN.t >= 5.8) {
+      BUN.ph = 2;
+      BUN.t = 0;
+    } else if (BUN.ph === 2 && BUN.t >= 1.3) {
+      BUN.ph = 3;
+      BUN.t = 0;
+    } else if (BUN.ph === 3 && BUN.t >= 4.8) {
+      BUN.ph = 4;
+      BUN.t = 0;
+    } else if (BUN.ph === 4 && BUN.t >= 9) {
+      BUN.ph = 0;
+      BUN.t = 0;
+    }
+    if (BUN.ph === 4) return null;
+    if (BUN.ph === 0) al = clamp(BUN.t / 1.2, 0, 1);
+    else if (BUN.ph === 1) {
+      f = along(BUN.t / 5.8, 8);
+      hop = true;
+      u = lerp(A[0], B[0], f);
+      v = lerp(A[1], B[1], f);
+    } else if (BUN.ph === 2) {
+      u = B[0];
+      v = B[1];
+    } else {
+      f = along(BUN.t / 4.8, 8);
+      hop = true;
+      if (f < 0.82) {
+        u = lerp(B[0], C[0], f / 0.82);
+        v = lerp(B[1], C[1], f / 0.82);
+      } else {
+        u = lerp(C[0], E[0], (f - 0.82) / 0.18);
+        v = lerp(C[1], E[1], (f - 0.82) / 0.18);
+        al = 1 - (f - 0.82) / 0.18;
+      }
+    }
+    var air = hop ? Math.pow(Math.sin(h * 3.1416), 0.85) : 0;
+    return {
+      u: u,
+      v: v,
+      hop: air * 7,
+      air: air,
+      tilt: hop ? Math.cos(h * 3.1416) * 0.32 : 0,
+      dir: -1,
+      a: al,
+    };
+  }
+  function drawBunny(g, q, T) {
+    var p = P(q.u, q.v, 0),
+      x = 0,
+      y = 0,
+      d = q.dir,
+      col = '#eadfcd',
+      dark = '#cdbfa8',
+      a = q.air,
+      tw = Math.sin(T * 3 + 1) * 0.12;
+    ell(g, p[0], p[1] + 1, 6.4 - a * 2, 2.3 - a * 0.8, 'rgba(0,0,0,0.22)');
+    g.save();
+    g.translate(p[0], p[1] - q.hop);
+    g.scale(1.2, 1.2);
+    if (a > 0.02) {
+      g.translate(0, -4.6);
+      g.rotate(-d * q.tilt);
+      g.translate(0, 4.6);
+      ell(g, x - d * 5.6, y - 5.2, 1.9, 1.9, '#fbf8f2');
+      ell(g, x, y - 4.6, 6.2 + a * 1.2, 3.5 - a * 0.4, col, -d * 0.18 * a);
+      ell(g, x - d * 3.4, y - 2.2 + a * 1.2, 2.6, 1.3, dark, d * 0.5);
+      ell(g, x + d * 3.6, y - 2.4 + a * 0.8, 2.2, 1.1, dark, -d * 0.5);
+      circ(g, x + d * 5.6, y - 7.2, 2.9, col);
+      ell(g, x + d * 3.6, y - 11.4, 1.2, 3.8, col, -d * 0.75);
+      ell(g, x + d * 4.9, y - 11.9, 1.2, 3.8, dark, -d * 0.55);
+      circ(g, x + d * 6.6, y - 7.6, 0.6, '#2b2624');
+      circ(g, x + d * 8.2, y - 6.6, 0.5, '#e9a9a9');
+    } else {
+      ell(g, x - d * 3.8, y - 2.6, 1.9, 1.9, '#fbf8f2');
+      ell(g, x, y - 4.6, 4.4, 4.8, col, 0);
+      ell(g, x + d * 1.2, y - 3.2, 2, 2.8, '#fbf6ec', 0);
+      circ(g, x + d * 2.2, y - 10, 2.9, col);
+      ell(g, x + d * 1, y - 15, 1.2, 4, dark, -d * (0.12 + tw));
+      ell(g, x + d * 2.6, y - 15.4, 1.2, 4, col, d * (0.1 + tw));
+      circ(g, x + d * 3.3, y - 10.4, 0.6, '#2b2624');
+      circ(g, x + d * 4.9, y - 9.5, 0.5, '#e9a9a9');
+    }
+    g.restore();
+  }
   function squirrelState(T, A, B, off) {
     var c = (T + off) % 10,
       f,
@@ -4136,6 +4315,26 @@ export function startScene(stage) {
         },
       });
     });
+    [deerState(TA, 0, 1.15, true), deerState(TA, 5.5, 0.85, false)].forEach(function (q) {
+      if (q && q.a > 0.01)
+        dyn.push({
+          k: q.u - q.v,
+          d: function () {
+            drawDeer(g, q);
+          },
+        });
+    });
+    var bun = bunnyStep(TA, reduce ? 0 : mdt, tm);
+    if (bun)
+      dyn.push({
+        k: bun.u - bun.v,
+        d: function () {
+          g.save();
+          g.globalAlpha = bun.a;
+          drawBunny(g, bun, TA);
+          g.restore();
+        },
+      });
     LAWNBIRDS.forEach(function (b) {
       dyn.push({
         k: b[0] - b[1],
