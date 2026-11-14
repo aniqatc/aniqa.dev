@@ -337,8 +337,7 @@ export function startScene(stage) {
   /* ---------- scene data ---------- */
   var BLOCKS = [
     { u0: 20, u1: 195, wall: '#e9dfc8', lower: '#b4654a', roof: '#8a7b6e', sh: '#3f4a5a' },
-    { u0: 225, u1: 400, wall: '#cfd6d5', lower: '#a9a297', roof: '#7d7068', sh: '#6b3b34' },
-    { u0: 430, u1: 605, wall: '#e3d2ae', lower: '#b4654a', roof: '#8a7b6e', sh: '#3f5a4a' },
+    { u0: 225, u1: 356, n: 3, wall: '#cfd6d5', lower: '#a9a297', roof: '#7d7068', sh: '#6b3b34' },
   ];
   var V0 = 14,
     V1 = 124,
@@ -355,7 +354,7 @@ export function startScene(stage) {
     flies = [];
   var doors = [];
   BLOCKS.forEach(function (b) {
-    var n = 4,
+    var n = b.n || 4,
       w = (b.u1 - b.u0) / n;
     for (var i = 0; i < n; i++) doors.push(b.u0 + i * w + 11);
   });
@@ -602,6 +601,36 @@ export function startScene(stage) {
       p = P(r() * UMAX, 348 + r() * 250, 0);
       ell(g, p[0], p[1], 2.6, 1.4, S.tuft, r() * 3.14);
     }
+    /* the community centre at the far end of the row: pavers for sitting, with grass between it and the houses */
+    var PAVE = S.snow ? '#e6eaf0' : '#d2c9bb',
+      SOIL = S.snow ? '#eef2f6' : '#4a3a30';
+    flat(g, 414, 468, 24, 116, PAVE);
+    flat(g, 468, 616, 16, 124, S.snow ? '#dfe4ea' : '#c4bbad');
+    flat(g, 432, 450, 116, 160, PAVE);
+    for (i = 414; i <= 468; i += 9) {
+      wline(g, [i, 24], [i, 116], 'rgba(90,80,65,0.16)', 0.6);
+    }
+    for (i = 24; i <= 116; i += 9.2) {
+      wline(g, [414, i], [468, i], 'rgba(90,80,65,0.16)', 0.6);
+    }
+    flat(g, 407, 414, 24, 116, SOIL);
+    flat(g, 472, 614, 124, 131, SOIL);
+    for (i = 0; i < 7; i++) {
+      p = P(410.5, 30 + i * 14, 0);
+      circ(g, p[0], p[1] - 3, 4 + r() * 2, r() < 0.5 ? S.hedge[0] : S.hedge[1]);
+      if (S.snow) circ(g, p[0] - 1, p[1] - 6, 2.6, '#f6f9fc');
+      else if (r() < 0.5) circ(g, p[0], p[1] - 5, 1.2, S.bedCols[(r() * S.bedCols.length) | 0]);
+    }
+    for (i = 474; i < 612; i += 3.4) {
+      p = P(i, 126 + r() * 4, 0);
+      if (S.snow) {
+        if (r() < 0.5) circ(g, p[0], p[1] - 2, 2.6 + r() * 1.4, r() < 0.5 ? '#7d8f6c' : '#ffffff');
+      } else {
+        circ(g, p[0], p[1] - 2.5, 2.6 + r() * 1.4, r() < 0.5 ? S.hedge[0] : S.hedge[1]);
+        if (r() < 0.5)
+          circ(g, p[0] + (r() - 0.5) * 2, p[1] - 4.5, 1.1, S.bedCols[(r() * S.bedCols.length) | 0]);
+      }
+    }
     for (i = 0; i < 3200; i++) {
       p = P(r() * UMAX, 187 + r() * 152, 0);
       circ(g, p[0], p[1], 0.5 + r() * 0.8, r() < 0.5 ? 'rgba(255,255,255,0.13)' : 'rgba(0,0,0,0.16)');
@@ -708,7 +737,7 @@ export function startScene(stage) {
       wline(g, [d - 4.5, 142], [d + 4.5, 142], 'rgba(120,105,85,0.28)', 0.8);
     });
     BLOCKS.forEach(function (b) {
-      var n = 4,
+      var n = b.n || 4,
         w = (b.u1 - b.u0) / n;
       for (var k = 0; k < n; k++) {
         var a = b.u0 + k * w + 19,
@@ -729,7 +758,44 @@ export function startScene(stage) {
     windows.length = 0;
     porch.length = 0;
     smokeSrc.length = 0;
+    drawCenter(g, S.snow);
     for (i = BLOCKS.length - 1; i >= 0; i--) drawBlock(g, BLOCKS[i], mulberry(900 + i));
+    /* the community centre's glass, lit with the houses */
+    windows.push({
+      q: [
+        [510, 30, 2],
+        [510, 56, 2],
+        [510, 56, 34],
+        [510, 30, 34],
+      ],
+      r: 0.1,
+      spill: [480, 43],
+    });
+    windows.push({
+      q: [
+        [510, 84, 2],
+        [510, 110, 2],
+        [510, 110, 34],
+        [510, 84, 34],
+      ],
+      r: 0.1,
+      spill: [480, 97],
+    });
+    [
+      [526, 546],
+      [560, 586],
+      [594, 608],
+    ].forEach(function (w, k) {
+      windows.push({
+        q: [
+          [w[0], 118, 18],
+          [w[1], 118, 18],
+          [w[1], 118, 38],
+          [w[0], 118, 38],
+        ],
+        r: 0.15 + k * 0.2,
+      });
+    });
   }
   function winFace(g, x, z, w, h) {
     g.fillStyle = '#fbf9f4';
@@ -746,7 +812,7 @@ export function startScene(stage) {
     var u0 = b.u0,
       u1 = b.u1,
       len = u1 - u0,
-      n = 4,
+      n = b.n || 4,
       w = len / n,
       i,
       z,
@@ -1616,6 +1682,309 @@ export function startScene(stage) {
     rr(g, a[0] - 2.6, a[1] - 9, 5.2, 9, 1.4, '#d2483c');
     circ(g, a[0], a[1] - 9.5, 2.8, DS.snow ? '#f6f9fc' : '#d2483c');
     rr(g, a[0] - 4.4, a[1] - 6.6, 8.8, 2.4, 1.2, '#b53a30');
+  }
+  function box3(g, u0, u1, v0, v1, z0, z1, col) {
+    poly(
+      g,
+      [
+        [u0, v1, z0],
+        [u1, v1, z0],
+        [u1, v1, z1],
+        [u0, v1, z1],
+      ],
+      shade(col, 0.84),
+    );
+    poly(
+      g,
+      [
+        [u0, v0, z0],
+        [u0, v1, z0],
+        [u0, v1, z1],
+        [u0, v0, z1],
+      ],
+      shade(col, 0.7),
+    );
+    poly(
+      g,
+      [
+        [u0, v0, z1],
+        [u1, v0, z1],
+        [u1, v1, z1],
+        [u0, v1, z1],
+      ],
+      col,
+    );
+  }
+  /* the community centre: a big timber-framed gable over a covered patio, with a stone chimney.
+   It sits at the far end of the row of houses and is painted with them, once per season. */
+  function drawCenter(g, sn) {
+    var u0 = 510,
+      u1 = 612,
+      up = 468,
+      v0 = 22,
+      v1 = 118,
+      vr = 70,
+      WH = 46,
+      RZ2 = 90,
+      TOP = 112,
+      i;
+    var wall = '#eef0ee',
+      stone = '#a9a59c',
+      stoneD = '#8f8b83',
+      wood = '#b5723c',
+      roofC = '#51606e',
+      frame = '#2f3338';
+    flat(g, up, u1, v1, v1 + 7, 'rgba(40,40,20,0.14)');
+    poly(
+      g,
+      [
+        [up - 4, v0 - 5, WH - 4],
+        [u1, v0 - 5, WH - 4],
+        [u1, vr, RZ2],
+        [up - 4, vr, RZ2],
+      ],
+      sn ? '#d6e0ee' : shade(roofC, 0.78),
+    );
+    /* the long wall facing the road */
+    poly(
+      g,
+      [
+        [u0, v1, 0],
+        [u1, v1, 0],
+        [u1, v1, WH],
+        [u0, v1, WH],
+      ],
+      wall,
+    );
+    for (i = u0 + 8; i < u1; i += 8) wline(g, [i, v1, 14], [i, v1, WH], 'rgba(0,0,0,0.08)', 0.7);
+    poly(
+      g,
+      [
+        [u0, v1, 0],
+        [u1, v1, 0],
+        [u1, v1, 14],
+        [u0, v1, 14],
+      ],
+      stone,
+    );
+    for (i = 0; i < 22; i++) {
+      var sp = P(u0 + 3 + ((i * 37) % (u1 - u0 - 6)), v1, 2 + ((i * 7) % 10));
+      ell(g, sp[0], sp[1], 3, 1.6, i % 2 ? stoneD : '#bdb9b0', -0.5);
+    }
+    [
+      [u0 + 16, u0 + 36],
+      [u0 + 50, u0 + 76],
+      [u0 + 84, u0 + 98],
+    ].forEach(function (w) {
+      poly(
+        g,
+        [
+          [w[0] - 1.5, v1, 16.5],
+          [w[1] + 1.5, v1, 16.5],
+          [w[1] + 1.5, v1, 39.5],
+          [w[0] - 1.5, v1, 39.5],
+        ],
+        frame,
+      );
+      poly(
+        g,
+        [
+          [w[0], v1, 18],
+          [w[1], v1, 18],
+          [w[1], v1, 38],
+          [w[0], v1, 38],
+        ],
+        '#9fc0d4',
+      );
+      wline(g, [(w[0] + w[1]) / 2, v1, 18], [(w[0] + w[1]) / 2, v1, 38], frame, 1);
+    });
+    /* the gable wall behind the covered patio */
+    poly(
+      g,
+      [
+        [u0, v0, 0],
+        [u0, v1, 0],
+        [u0, v1, WH],
+        [u0, vr, RZ2],
+        [u0, v0, WH],
+      ],
+      shade(wall, 0.93),
+    );
+    for (i = v0 + 7; i < v1; i += 7)
+      wline(
+        g,
+        [u0, i, 2],
+        [u0, i, WH + (RZ2 - WH) * (1 - Math.abs(i - vr) / (v1 - vr))],
+        'rgba(0,0,0,0.07)',
+        0.7,
+      );
+    [
+      [v0 + 8, v0 + 34],
+      [v1 - 34, v1 - 8],
+    ].forEach(function (d) {
+      poly(
+        g,
+        [
+          [u0, d[0] - 1.5, 0],
+          [u0, d[1] + 1.5, 0],
+          [u0, d[1] + 1.5, 35.5],
+          [u0, d[0] - 1.5, 35.5],
+        ],
+        frame,
+      );
+      poly(
+        g,
+        [
+          [u0, d[0], 2],
+          [u0, d[1], 2],
+          [u0, d[1], 34],
+          [u0, d[0], 34],
+        ],
+        '#8fb4cc',
+      );
+      wline(g, [u0, (d[0] + d[1]) / 2, 2], [u0, (d[0] + d[1]) / 2, 34], frame, 1.1);
+      wline(g, [u0, d[0], 24], [u0, d[1], 24], frame, 0.9);
+    });
+    poly(
+      g,
+      [
+        [u0, vr - 10, 0],
+        [u0, vr + 10, 0],
+        [u0, vr + 10, RZ2],
+        [u0, vr - 10, RZ2],
+      ],
+      stone,
+    );
+    for (i = 0; i < 26; i++) {
+      var cp = P(u0, vr - 8 + ((i * 5) % 17), 4 + ((i * 13) % 82));
+      ell(g, cp[0], cp[1], 2.8, 1.6, i % 2 ? stoneD : '#bdb9b0', 0.5);
+    }
+    poly(
+      g,
+      [
+        [u0, vr - 6, 5],
+        [u0, vr + 6, 5],
+        [u0, vr + 6, 16],
+        [u0, vr - 6, 16],
+      ],
+      '#2b2624',
+    );
+    var fl = P(u0, vr, 9);
+    ell(g, fl[0], fl[1], 3.4, 3, '#f29a3d', 0);
+    ell(g, fl[0], fl[1] + 0.6, 1.8, 1.8, '#ffd84d', 0);
+    poly(
+      g,
+      [
+        [u0, vr - 6, 24],
+        [u0, vr + 6, 24],
+        [u0, vr + 6, 32],
+        [u0, vr - 6, 32],
+      ],
+      '#23262b',
+    );
+    /* seating under the roof */
+    box3(g, up + 10, up + 24, v0 + 10, v0 + 36, 0, 7, '#e9e6df');
+    box3(g, up + 22, up + 26, v0 + 10, v0 + 36, 7, 12, '#e9e6df');
+    box3(g, up + 10, up + 20, v1 - 32, v1 - 22, 0, 6, '#d2483c');
+    box3(g, up + 10, up + 20, v1 - 18, v1 - 8, 0, 6, '#d2483c');
+    /* the roof slope facing the road, standing seams and ridge */
+    poly(
+      g,
+      [
+        [up - 4, v1 + 5, WH - 4],
+        [u1, v1 + 5, WH - 4],
+        [u1, vr, RZ2],
+        [up - 4, vr, RZ2],
+      ],
+      sn ? '#f4f7fb' : roofC,
+    );
+    for (i = up + 4; i < u1; i += 9)
+      wline(
+        g,
+        [i, v1 + 5, WH - 4],
+        [i, vr, RZ2],
+        sn ? 'rgba(170,188,214,0.3)' : 'rgba(255,255,255,0.11)',
+        0.7,
+      );
+    wline(g, [up - 4, vr, RZ2], [u1, vr, RZ2], sn ? '#ffffff' : shade(roofC, 1.3), 2);
+    wline(g, [up - 4, v1 + 5, WH - 4], [u1, v1 + 5, WH - 4], sn ? '#ffffff' : shade(roofC, 0.7), 1.6);
+    /* chimney above the ridge */
+    poly(
+      g,
+      [
+        [u0, vr + 10, RZ2 - 8],
+        [u0 + 12, vr + 10, RZ2 - 8],
+        [u0 + 12, vr + 10, TOP],
+        [u0, vr + 10, TOP],
+      ],
+      stoneD,
+    );
+    poly(
+      g,
+      [
+        [u0, vr - 10, RZ2 - 8],
+        [u0, vr + 10, RZ2 - 8],
+        [u0, vr + 10, TOP],
+        [u0, vr - 10, TOP],
+      ],
+      stone,
+    );
+    poly(
+      g,
+      [
+        [u0 - 1, vr - 11, TOP],
+        [u0 + 13, vr - 11, TOP],
+        [u0 + 13, vr + 11, TOP],
+        [u0 - 1, vr + 11, TOP],
+      ],
+      sn ? '#f4f7fb' : '#6f6b64',
+    );
+    /* the timber truss and posts at the front of the covered patio */
+    g.lineCap = 'round';
+    [v0 + 1, v0 + 32, v1 - 32, v1 - 1].forEach(function (pv) {
+      var b = P(up, pv, 0);
+      ell(g, b[0] + 3, b[1] + 1, 5, 1.8, 'rgba(0,0,0,0.16)');
+      wline(g, [up, pv, 0], [up, pv, WH - 3], wood, 3.4);
+      box3(g, up - 2, up + 2, pv - 2.5, pv + 2.5, 0, 7, stone);
+    });
+    wline(g, [up, v0, WH - 3], [up, v1, WH - 3], wood, 3.6);
+    wline(g, [up, vr, WH - 3], [up, vr, RZ2 - 3], wood, 3.2);
+    wline(g, [up, vr, WH - 3], [up, (v0 + vr) / 2 - 4, (WH + RZ2) / 2 - 6], wood, 2.6);
+    wline(g, [up, vr, WH - 3], [up, (v1 + vr) / 2 + 4, (WH + RZ2) / 2 - 6], wood, 2.6);
+    wline(g, [up, v0 - 5, WH - 5], [up, vr, RZ2 - 2], shade(wood, 0.88), 3.8);
+    wline(g, [up, vr, RZ2 - 2], [up, v1 + 5, WH - 5], wood, 3.8);
+    g.lineCap = 'butt';
+    /* out on the pavers: red chairs round a fire table, and a dining set */
+    var ft = P(440, 92, 5);
+    ell(g, ft[0] + 2, ft[1] + 6, 10, 4.2, 'rgba(0,0,0,0.16)');
+    ell(g, ft[0], ft[1], 8, 4.4, '#8f8b83');
+    ell(g, ft[0], ft[1] - 1, 5, 2.6, sn ? '#f4f7fb' : '#5f5a53');
+    [
+      [424, 88],
+      [436, 106],
+      [452, 102],
+      [448, 78],
+    ].forEach(function (c) {
+      box3(g, c[0], c[0] + 8, c[1], c[1] + 8, 0, 5, '#d2483c');
+      box3(g, c[0] + 6, c[0] + 8, c[1], c[1] + 8, 5, 10, '#c03f34');
+    });
+    var dt = P(438, 46, 8);
+    ell(g, dt[0] + 2, dt[1] + 9, 11, 4.6, 'rgba(0,0,0,0.16)');
+    seg(g, dt[0], dt[1], dt[0], dt[1] + 8, '#5b5f66', 1.6);
+    ell(g, dt[0], dt[1], 9.5, 5, sn ? '#f4f7fb' : '#6f757d');
+    [
+      [424, 42],
+      [438, 30],
+      [452, 50],
+      [434, 58],
+    ].forEach(function (c) {
+      box3(g, c[0], c[0] + 5, c[1], c[1] + 5, 0, 6, '#4a4f57');
+    });
+    /* a bench on the grass between the houses and the patio */
+    var bn = P(388, 106, 0);
+    ell(g, bn[0] + 3, bn[1] + 1, 11, 3, 'rgba(0,0,0,0.16)');
+    box3(g, 385, 391, 96, 114, 3, 5.5, sn ? '#f1f5f9' : '#9b7048');
+    box3(g, 383, 385, 96, 114, 5.5, 11, '#8a623d');
   }
   function drawSnowman(g, m) {
     var a = P(m.u, m.v, 0),
