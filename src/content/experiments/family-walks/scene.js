@@ -1,6 +1,8 @@
 // Family Walks: the scene itself. Everything is drawn on one canvas in code; there are no image files.
 // sketch.ts hands the stage to startScene(), which adds the canvas and a strip of controls (the timeline, then
 // Season / Time / Wind / Weather) and returns stop / pause / resume / restart for the stage buttons.
+// The stage's own Pause stops everything, timeline included, so the strip has no play button of its own:
+// dragging the timeline holds the date and letting go carries on from there; Season skips ahead to the next one.
 // Plain JavaScript on purpose: it grew through a lot of small prompted tweaks, and typing ~1,000 lines of drawing
 // code wouldn't make it any clearer. scene.d.ts gives sketch.ts its type.
 
@@ -8,19 +10,17 @@ const STYLE = `
 .fw{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;cursor:default;background:var(--bg)}
 .fw-view{position:relative;flex:1;min-height:0;cursor:pointer}
 .fw-ctl{flex:none;display:flex;flex-direction:column;gap:2px;padding:8px 14px 4px;border-top:1px solid var(--line);background:var(--bg)}
-.fw-row{display:flex;align-items:center;gap:12px}
-.fw-play{flex:none;display:grid;place-items:center;width:40px;height:40px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--accent);cursor:pointer}
+.fw-row{display:flex;align-items:center;gap:14px;min-height:36px}
 .fw-when{display:flex;flex-direction:column;gap:3px;min-width:118px}
 .fw-date{font:700 15px/1 var(--font-display);letter-spacing:-0.01em;white-space:nowrap;font-variant-numeric:tabular-nums}
 .fw-ctl .fw-note{font-size:9px;white-space:nowrap}
-.fw-track{position:relative;flex:1;min-width:0;display:flex;align-items:center;height:24px}
-.fw-track input{width:100%;height:24px;margin:0;background:transparent;accent-color:var(--accent)}
-.fw-tick{position:absolute;top:1px;width:2px;height:6px;border-radius:1px;background:var(--accent);opacity:.75;pointer-events:none}
+.fw-track{position:relative;flex:1;min-width:0;padding-bottom:7px}
+.fw-track input{display:block;width:100%;height:24px;margin:0;background:transparent;accent-color:var(--accent)}
+.fw-tick{position:absolute;bottom:0;width:2px;height:5px;border-radius:1px;background:var(--accent);opacity:.8;pointer-events:none}
 .fw-opts{display:flex;flex-wrap:wrap;gap:0 18px}
 .fw-opts button{min-height:36px;padding:0;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--muted);cursor:pointer}
 .fw-opts b{font-weight:500;color:var(--fg)}
 .fw-opts button:hover b{color:var(--accent)}
-.fw-play:hover{border-color:var(--accent)}
 .fw button:focus-visible,.fw input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (max-width:640px){.fw-ctl{padding:6px 10px 2px}.fw-row{gap:8px}.fw-when{min-width:0}.fw-date{font-size:13px}.fw .fw-opts{gap:0 10px;font-size:9.5px;letter-spacing:.06em}}
 `;
@@ -29,7 +29,6 @@ const MARKUP = `
 <div class="fw-view"><canvas role="img" aria-label="An isometric street: a row of townhouses, a parking road with a family walking along it, and a wood. The season, time of day, wind and weather change with the controls below."></canvas></div>
 <div class="fw-ctl">
   <div class="fw-row" role="group" aria-label="Timeline">
-    <button type="button" class="fw-play" data-fw="tl-play" aria-label="Pause timeline"><svg data-fw="tl-icon" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h3v11H4zM9 2.5h3v11H9z" fill="currentColor"></path></svg></button>
     <div class="fw-when"><span class="fw-date" data-fw="tl-date">January 2025</span><span class="fw-note label" data-fw="tl-note">Just the two of us</span></div>
     <div class="fw-track"><span class="fw-tick" data-fw="tick-a"></span><span class="fw-tick" data-fw="tick-b"></span><input type="range" data-fw="tl-range" min="0" max="24" step="0.01" value="0" aria-label="Date, January 2025 to December 2026"></div>
   </div>
@@ -2989,11 +2988,6 @@ export function startScene(stage) {
   }
   function tlSetPlay(on) {
     TL.play = on;
-    var b = $('tl-play');
-    b.setAttribute('aria-label', on ? 'Pause timeline' : 'Play timeline');
-    $('tl-icon').innerHTML = on
-      ? '<path d="M4 2.5h3v11H4zM9 2.5h3v11H9z" fill="currentColor"></path>'
-      : '<path d="M4.5 2.5l8.5 5.5-8.5 5.5z" fill="currentColor"></path>';
   }
   function drawProp(g, p) {
     if (p.car) drawCar(g, p.car);
@@ -3821,30 +3815,36 @@ export function startScene(stage) {
       if (after) after();
     });
   }
+  /* Season skips the timeline ahead to the start of the next season */
   $('btn-season').addEventListener('click', function () {
-    TL.manual = true;
-    tlSetPlay(false);
-    showSeason((st.season + 1) % SEASON_ORDER.length, true);
-    this.setAttribute('aria-label', 'Season: ' + SEASON_ORDER[st.season] + '. Press to change.');
-  });
-  $('tl-play').addEventListener('click', function () {
-    if (!TL.play) {
-      TL.manual = false;
-      if (TL.m >= TL.END) {
-        TL.m = 0;
-        TL.hold = 0;
-      }
+    var m = Math.floor(Math.min(TL.m, TL.END - 0.01)) + 1,
+      n = 0;
+    while (tlSeasonIdx(m % TL.END) === st.season && n < 12) {
+      m++;
+      n++;
     }
-    tlSetPlay(!TL.play);
+    TL.m = m % TL.END;
+    TL.hold = 0;
+    TL.manual = false;
+    this.setAttribute(
+      'aria-label',
+      'Season: ' + SEASON_ORDER[tlSeasonIdx(TL.m)] + '. Press to skip to the next season.',
+    );
+    if (!running) drawOnce();
   });
+  /* dragging the timeline holds the date; letting go carries on from there */
   $('tl-range').addEventListener('input', function () {
     TL.manual = false;
     TL.hold = 0;
     TL.m = parseFloat(this.value) || 0;
     tlSetPlay(false);
+    if (!running) drawOnce();
   });
-  $('tick-a').style.left = 'calc(' + ((TL.EXPECT / TL.END) * 100).toFixed(2) + '% - 1px)';
-  $('tick-b').style.left = 'calc(' + ((TL.BORN / TL.END) * 100).toFixed(2) + '% - 1px)';
+  $('tl-range').addEventListener('change', function () {
+    tlSetPlay(!reduce);
+  });
+  $('tick-a').style.left = 'calc((100% - 24px) * ' + (TL.EXPECT / TL.END).toFixed(4) + ' + 11px)';
+  $('tick-b').style.left = 'calc((100% - 24px) * ' + (TL.BORN / TL.END).toFixed(4) + ' + 11px)';
   bind('btn-time', 'val-time', 'time', TIMES);
   bind('btn-wind', 'val-wind', 'wind', WINDS);
   bind('btn-weather', 'val-weather', 'weather', WEATHERS);
