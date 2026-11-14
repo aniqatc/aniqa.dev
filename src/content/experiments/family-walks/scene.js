@@ -21,6 +21,10 @@ const STYLE = `
 .fw-opts button{min-height:36px;padding:0;white-space:nowrap;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--muted);cursor:pointer}
 .fw-opts b{font-weight:500;color:var(--fg)}
 .fw-opts button:hover b{color:var(--accent)}
+.fw-opts .fw-fs{display:none;color:var(--fg)}
+.fw-opts .fw-fs:hover{color:var(--accent)}
+.stage.fs .fw-opts .fw-fs{display:inline-block}
+.fw-opts [data-fw="fs-pause"]{margin-left:auto}
 .fw button:focus-visible,.fw input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (max-width:640px){.fw-ctl{padding:6px 10px 2px}.fw-row{gap:8px}.fw-when{min-width:0}.fw-date{font-size:13px}.fw .fw-opts{gap:0 10px;font-size:9.5px;letter-spacing:.06em}}
 `;
@@ -37,6 +41,8 @@ const MARKUP = `
     <button type="button" data-fw="btn-time" data-name="Time">Time <b data-fw="val-time">Day</b></button>
     <button type="button" data-fw="btn-wind" data-name="Wind">Wind <b data-fw="val-wind">Breeze</b></button>
     <button type="button" data-fw="btn-weather" data-name="Weather">Weather <b data-fw="val-weather">Clear</b></button>
+    <button type="button" class="fw-fs" data-fw="fs-pause">Pause</button>
+    <button type="button" class="fw-fs" data-fw="fs-restart">Restart</button>
   </div>
 </div>`;
 
@@ -59,6 +65,8 @@ export function startScene(stage) {
       : [241, 239, 234];
   }
 
+  /* The scene sits on a ground grid: u runs along the road, v runs across it (houses, then road, then woods) and z is height.
+   W and H are the size of the drawing in its own units, OX and OY place the grid on it, and UX to VY are the isometric directions (2:1). */
   var W = 1140,
     H = 790,
     OX = 40,
@@ -69,9 +77,11 @@ export function startScene(stage) {
     VY = 0.5,
     UMAX = 625,
     VMAX = 600;
+  /* Turns a grid point (u, v, z) into a spot on the canvas. Everything in the scene is positioned through this. */
   function P(u, v, z) {
     return [OX + UX * u + VX * v, OY - UY * u + VY * v - (z || 0)];
   }
+  /* A small seeded random number generator, so the trees, leaves and textures land in the same places every time. */
   function mulberry(a) {
     return function () {
       a |= 0;
@@ -81,6 +91,7 @@ export function startScene(stage) {
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }
+  /* Colour helpers: read a hex colour, and make a darker (f below 1) or lighter (f above 1) shade of it. */
   function hex(h) {
     return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
   }
@@ -91,6 +102,7 @@ export function startScene(stage) {
     }
     return 'rgb(' + m(c[0]) + ',' + m(c[1]) + ',' + m(c[2]) + ')';
   }
+  /* Keep a number inside a range, and blend between two numbers. */
   function clamp(x, a, b) {
     return x < a ? a : x > b ? b : x;
   }
@@ -99,6 +111,7 @@ export function startScene(stage) {
   }
 
   /* ---------- drawing helpers ---------- */
+  /* poly and wline take grid points; ell, circ, rr and seg take canvas points. */
   function poly(g, pts, fill) {
     g.beginPath();
     for (var i = 0; i < pts.length; i++) {
@@ -159,6 +172,8 @@ export function startScene(stage) {
   }
 
   /* ---------- seasons ---------- */
+  /* Everything that changes with the season: ground colours, how many leaves lie about, tree colours, whether there is snow,
+   and what drifts through the air (fall). */
   var LEAF = ['#e8c03e', '#e58a35', '#c95b33', '#f0d463', '#b9502c', '#d9762f'];
   var PETAL = ['#f7c9d8', '#fbe3ea', '#f3b6cb', '#ffffff'];
   var SEASONS = {
@@ -335,6 +350,7 @@ export function startScene(stage) {
     SEASON = SEASONS.Autumn;
 
   /* ---------- scene data ---------- */
+  /* The townhouse blocks: where each starts and ends along the road, and its colours. n is how many homes it has (4 if not given). */
   var BLOCKS = [
     { u0: 20, u1: 195, wall: '#e9dfc8', lower: '#b4654a', roof: '#8a7b6e', sh: '#3f4a5a' },
     { u0: 225, u1: 356, n: 3, wall: '#cfd6d5', lower: '#a9a297', roof: '#7d7068', sh: '#6b3b34' },
@@ -344,6 +360,8 @@ export function startScene(stage) {
     VR = 69,
     HH = 66,
     RZ = 104;
+  /* Lists the scene fills in as it is built: lit windows, lamp positions, porch lights and chimney tops,
+   then the trees, everything else that stands on the ground (props), stars and fireflies. */
   var windows = [],
     lights = [],
     porch = [],
@@ -359,6 +377,8 @@ export function startScene(stage) {
     for (var i = 0; i < n; i++) doors.push(b.u0 + i * w + 11);
   });
 
+  /* Place everything once: the woods on a jittered grid, the lawn trees, parked cars, lamps, bushes and small props,
+   then sort it all from back to front. */
   (function build() {
     var r = mulberry(20261113);
     var weights = [0.14, 0.1, 0.14, 0.17, 0.1, 0.15, 0.07, 0.09, 0.04];
@@ -498,6 +518,7 @@ export function startScene(stage) {
   })();
 
   /* ---------- static layer: ground and houses ---------- */
+  /* Dabs a row of dots along an edge, which gives the ground its soft painted border. */
   function fuzz(g, a, b, cols, r) {
     var A = P(a[0], a[1], 0),
       B = P(b[0], b[1], 0),
@@ -516,6 +537,7 @@ export function startScene(stage) {
       }
     }
   }
+  /* A flat rectangle lying on the ground. */
   function flat(g, u0, u1, v0, v1, fill) {
     poly(
       g,
@@ -528,6 +550,8 @@ export function startScene(stage) {
       fill,
     );
   }
+  /* Paints everything that never moves, once per season: grass, woods floor, road and parking lines, sidewalk,
+   the patio, and then the community centre and the houses. */
   function drawGround(g) {
     var r = mulberry(4242),
       i,
@@ -797,6 +821,7 @@ export function startScene(stage) {
       });
     });
   }
+  /* One window: white frame, glass and crossbars. */
   function winFace(g, x, z, w, h) {
     g.fillStyle = '#fbf9f4';
     g.fillRect(x - 1.2, z - 1.2, w + 2.4, h + 2.4);
@@ -808,6 +833,8 @@ export function startScene(stage) {
     g.fillRect(x + w / 2 - 0.5, z, 1, h);
     g.fillRect(x, z + h / 2 - 0.5, w, 1);
   }
+  /* One block of townhouses: the back roof, the front wall with its doors and windows, the front roof,
+   a chimney, and then the gable end that faces us. */
   function drawBlock(g, b, r) {
     var u0 = b.u0,
       u1 = b.u1,
@@ -1219,6 +1246,8 @@ export function startScene(stage) {
   }
 
   /* ---------- sprites ---------- */
+  /* Trees are painted once onto small off-screen canvases (sprites) and stamped each frame,
+   which is far cheaper than redrawing every circle. */
   var sprites = {};
   function newSprite(k) {
     var c = document.createElement('canvas');
@@ -1228,6 +1257,7 @@ export function startScene(stage) {
     g.scale(k, k);
     return [c, g];
   }
+  /* A leafy tree: overlapping circles for the canopy, light dabs on one side and dark on the other, with the trunk behind. */
   function makeTree(col, seed, k) {
     var cg = newSprite(k),
       c = cg[0],
@@ -1294,6 +1324,7 @@ export function startScene(stage) {
     g.fill();
     return c;
   }
+  /* A winter tree: branches that split a few times, with a line of snow along the top of each. */
   function makeBare(seed, k) {
     var cg = newSprite(k),
       c = cg[0],
@@ -1341,6 +1372,7 @@ export function startScene(stage) {
     br(75, 125, -1.5708 + 0.85, 18, 2.6, 3);
     return c;
   }
+  /* An evergreen: stacked jagged tiers, with snow on them in winter. */
   function makePine(col, seed, k, snow) {
     var cg = newSprite(k),
       c = cg[0],
@@ -1394,6 +1426,7 @@ export function startScene(stage) {
     g.globalCompositeOperation = 'source-over';
     return c;
   }
+  /* One full set of tree sprites for the current season. */
   function buildSprites(k) {
     var sprites = {},
       S = SEASON;
@@ -1407,6 +1440,7 @@ export function startScene(stage) {
   }
 
   /* ---------- props ---------- */
+  /* DS is the season a prop is being drawn in. prev, mix and sweep describe a season change that is under way. */
   var DS = SEASON,
     prev = null,
     mix = 1,
@@ -1422,6 +1456,7 @@ export function startScene(stage) {
       v = clamp((mix * SW_R - d) / SW_SOFT, 0, 1);
     return v * v * (3 - 2 * v);
   }
+  /* Stamp a tree, leaning it with the wind. During a season change it crossfades from the old sprite to the new one. */
   function drawTree(g, t, time, wind) {
     var sp = t.pine ? sprites['p' + t.seed] : sprites['t' + t.ci + '_' + t.seed];
     if (!sp) return;
@@ -1446,6 +1481,7 @@ export function startScene(stage) {
     g.drawImage(sp, -75 * s, -162 * s, 150 * s, 170 * s);
     g.restore();
   }
+  /* A car parked nose-in on the woods side: two boxes, windows and wheels. */
   function drawCar(g, c) {
     var ua = c.u - 10,
       ub = c.u + 10,
@@ -1585,6 +1621,7 @@ export function startScene(stage) {
     circ(g, w2[0], w2[1], 4, '#2a2b30');
     circ(g, w2[0], w2[1], 1.7, '#c6c6c6');
   }
+  /* The small things along the street: lamppost, bush, dumpster, mailboxes, bench and hydrant. */
   function drawLamp(g, l) {
     var a = P(l.u, l.v, 0),
       b = P(l.u, l.v, 46);
@@ -1683,6 +1720,7 @@ export function startScene(stage) {
     circ(g, a[0], a[1] - 9.5, 2.8, DS.snow ? '#f6f9fc' : '#d2483c');
     rr(g, a[0] - 4.4, a[1] - 6.6, 8.8, 2.4, 1.2, '#b53a30');
   }
+  /* A plain box with its three visible faces shaded differently. */
   function box3(g, u0, u1, v0, v1, z0, z1, col) {
     poly(
       g,
@@ -1986,6 +2024,7 @@ export function startScene(stage) {
     box3(g, 385, 391, 96, 114, 3, 5.5, sn ? '#f1f5f9' : '#9b7048');
     box3(g, 383, 385, 96, 114, 5.5, 11, '#8a623d');
   }
+  /* Only drawn in winter. */
   function drawSnowman(g, m) {
     var a = P(m.u, m.v, 0),
       x = a[0],
@@ -2015,6 +2054,7 @@ export function startScene(stage) {
   }
 
   /* ---------- the family and what they wear ---------- */
+  /* Copy an outfit and change a few things about it. */
   function ext(base, over) {
     var o = {},
       k;
@@ -2022,6 +2062,7 @@ export function startScene(stage) {
     for (k in over) o[k] = over[k];
     return o;
   }
+  /* The three people: height and everyday colours. */
   var MAN = {
     h: 58,
     body: '#4d6c8e',
@@ -2055,6 +2096,7 @@ export function startScene(stage) {
     long: false,
     scarf: '#d9762f',
   };
+  /* What everyone wears, by season or by weather. umb is an umbrella and cover is the stroller's rain cover. */
   var OUTFITS = {
     autumn: {
       m: MAN,
@@ -2188,6 +2230,8 @@ export function startScene(stage) {
   var ofCur = 'autumn',
     ofPrev = null,
     ofMix = 1;
+  /* One person facing us: shadow, legs that step, body, scarf or collar, head, hair or hat, face,
+   and then arms that reach to wherever the hands need to be. */
   function drawPerson(g, x, y, o, ph, hx1, hy1, hx2, hy2) {
     var s = o.h / 40,
       i,
@@ -2322,6 +2366,7 @@ export function startScene(stage) {
       circ(g, a[1], a[2], 1.9 * s, o.mitt || skin);
     });
   }
+  /* An umbrella held up from a hand. */
   function drawUmbrella(g, hx, hy, cx, topY, r, col) {
     seg(g, hx, hy, cx, topY, '#4a4038', 1.6);
     var yb = topY + r * 0.42,
@@ -2357,6 +2402,7 @@ export function startScene(stage) {
     g.fill();
     circ(g, cx, yt - 1.6, 1.4, '#4a4038');
   }
+  /* The stroller: wheels and frame, the bar the parents hold, the hood, the baby, then the tub and blanket. */
   function drawStroller(g, x, y, ph, b1, b2, of) {
     var k = 1.62,
       wob = Math.sin(ph * 2) * 0.4;
@@ -2463,6 +2509,7 @@ export function startScene(stage) {
     stMix = 1,
     hearts = [],
     balloons = null;
+  /* Small hearts that float up when the baby arrives. */
   function heart(g, x, y, s, fill) {
     g.beginPath();
     g.moveTo(x, y + s * 0.9);
@@ -2483,9 +2530,12 @@ export function startScene(stage) {
         s: 3.4 + lr() * 2.6,
       });
   }
+  /* Where a free hand is as the arm swings. */
   function swingHand(p, s, side, ph) {
     return [p[0] + side * 8.2 * s, p[1] - 16 * s + Math.sin(ph + (side > 0 ? Math.PI : 0)) * 2.2 * s];
   }
+  /* Draw the family at one stage of the story: 3 is just the two of us, 0 is expecting,
+   1 is carrying the newborn and 2 is pushing the stroller. */
   function familyIn(g, u, ph, of, stage) {
     var sm = of.m.h / 40,
       sw = of.w.h / 40;
@@ -2588,6 +2638,7 @@ export function startScene(stage) {
     }
     if (of.umb) drawUmbrella(g, mIn[0], mIn[1], (qm[0] + qw[0]) / 2 + 3, qm[1] - 88, 29, '#d2483c');
   }
+  /* Draw the family, crossfading when the outfit or the stage has just changed. */
   function drawFamily(g, u, ph, alpha) {
     g.save();
     if (ofPrev && ofMix < 1) {
@@ -2608,9 +2659,11 @@ export function startScene(stage) {
   }
 
   /* ---------- neighbours, animals, traffic ---------- */
+  /* People fade in and out at the two ends of the road. */
   function fadeU(u) {
     return clamp(Math.min(u - 4, UMAX - 4 - u) / 40, 0, 1);
   }
+  /* The neighbour's dog, with a coat in rain or snow. */
   function drawDog(g, x, y, ph, col, coat) {
     ell(g, x + 1, y + 1, 9, 3, 'rgba(0,0,0,0.2)');
     var a = Math.sin(ph * 2) * 2.2;
@@ -2628,6 +2681,7 @@ export function startScene(stage) {
     ell(g, x - 5.6, y - 13.6, 1.5, 2.4, shade(col, 0.7), 0.5);
     seg(g, x - 5.4, y - 9.2, x - 4.6, y - 9.8, '#c8452f', 1.6);
   }
+  /* The neighbour walks the sidewalk with the dog on a leash. */
   function neighborIn(g, u, ph, of) {
     var pn = P(u, 168, 0),
       pd = P(u - 24, 172, 0),
@@ -2658,6 +2712,7 @@ export function startScene(stage) {
     }
     g.restore();
   }
+  /* A squirrel, either sitting up or mid-dash. */
   function drawSquirrel(g, q, T) {
     var p = P(q.u, q.v, 0),
       x = p[0],
@@ -2682,6 +2737,7 @@ export function startScene(stage) {
       circ(g, x + d * 2.3, y - 9.3, 0.5, '#2b2624');
     }
   }
+  /* Where a squirrel is in its loop: sit, dash to the other spot, sit, dash back. */
   function squirrelState(T, A, B, off) {
     var c = (T + off) % 10,
       f,
@@ -2710,6 +2766,7 @@ export function startScene(stage) {
       hop: run ? Math.abs(Math.sin(c * 14)) * 3.5 : 0,
     };
   }
+  /* Small birds that peck and hop on the lawn, and a flock that crosses overhead. */
   var LAWNBIRDS = [
     [150, 140, 0],
     [162, 134, 1.7],
@@ -2749,6 +2806,7 @@ export function startScene(stage) {
       g.stroke();
     }
   }
+  /* A car parked along the kerb on the house side. The red car uses this while it drives too. */
   function drawCarU(g, u, v0, col, sn) {
     var ua = u,
       ub = u + 34,
@@ -2884,6 +2942,7 @@ export function startScene(stage) {
     circ(g, w2[0], w2[1], 4, '#2a2b30');
     circ(g, w2[0], w2[1], 1.7, '#c6c6c6');
   }
+  /* Our grey SUV at the end of the block. */
   function drawSUV(g, u, v0, col, sn) {
     var ua = u,
       ub = u + 38,
@@ -3039,6 +3098,7 @@ export function startScene(stage) {
     circ(g, w2[0], w2[1], 4.8, '#222327');
     circ(g, w2[0], w2[1], 2.2, '#c9cbce');
   }
+  /* The stop sign. */
   function drawStop(g, m) {
     var a = P(m.u, m.v, 0),
       x = a[0],
@@ -3114,10 +3174,13 @@ export function startScene(stage) {
   var carGlow = null;
 
   /* ---------- state ---------- */
+  /* The choices behind the Time, Wind and Weather buttons. */
   var TIMES = ['Day', 'Dusk', 'Night', 'Dawn', 'Auto'],
     AUTO = ['Dawn', 'Day', 'Dusk', 'Night'],
     WINDS = ['Calm', 'Breeze', 'Gusty'],
     WEATHERS = ['Clear', 'Rain', 'Fog', 'Snow', 'Storm'];
+  /* What each time of day does: the colour wash, how bright the lamps and windows are, stars, fireflies, mist,
+   and the direction (sx, sy) and strength (sa) of the shadows. */
   var TP = {
     Day: {
       tint: [255, 255, 255],
@@ -3168,6 +3231,7 @@ export function startScene(stage) {
       grad: 0.8,
     },
   };
+  /* What each kind of weather does to the light and the air. */
   var WX = {
     Clear: { t: [1, 1, 1], rain: 0, fog: 0, snow: 0, storm: 0, over: 0 },
     Rain: { t: [0.82, 0.86, 0.93], rain: 1, fog: 0, snow: 0, storm: 0, over: 0.8 },
@@ -3175,11 +3239,13 @@ export function startScene(stage) {
     Snow: { t: [0.92, 0.95, 1], rain: 0, fog: 0.15, snow: 1, storm: 0, over: 0.7 },
     Storm: { t: [0.6, 0.64, 0.74], rain: 1.7, fog: 0, snow: 0, storm: 1, over: 1 },
   };
+  /* Wind: how much the trees sway, how many leaves fall and how fast they drift. */
   var WP = {
     Calm: { sway: 0.2, leaves: 4, drift: 4 },
     Breeze: { sway: 0.9, leaves: 14, drift: 15 },
     Gusty: { sway: 2.1, leaves: 45, drift: 40 },
   };
+  /* st is what is selected. cur is what is on screen right now, which eases toward the selection a little every frame. */
   var st = { season: 0, time: 0, wind: 1, weather: 0 };
   var cur = {
     wt: [1, 1, 1],
@@ -3205,6 +3271,7 @@ export function startScene(stage) {
   };
   var BG = stageBg();
 
+  /* Leaves in the air (or petals, or blown snow, depending on the season). */
   var leaves = [],
     lr = mulberry(5150);
   function spawnLeaf(l, first) {
@@ -3244,8 +3311,10 @@ export function startScene(stage) {
     cssH = 640,
     ucy = 320,
     KS = 2;
+  /* view is the zoom and the point of the scene that sits at the centre of the canvas. */
   var view = { z: 0.5, cx: 565, cy: 405, zMin: 0.3, zMax: 2, touched: false };
   var seasonCache = {};
+  /* Paint a season's ground and trees once and keep them, so switching back to it is instant. */
   function buildSeason(name) {
     if (seasonCache[name]) return seasonCache[name];
     var saved = SEASON;
@@ -3261,6 +3330,7 @@ export function startScene(stage) {
     seasonCache[name] = c;
     return c;
   }
+  /* Switch season. With animate, the change ripples out from the family and kicks up a puff of leaves. */
   function showSeason(idx, animate) {
     var oldS = SEASON,
       oldLayer = staticLayer,
@@ -3310,6 +3380,7 @@ export function startScene(stage) {
     'November',
     'December',
   ];
+  /* m is the date, counted in months since January 2025. EXPECT, BORN and STROLLER are the months where the story changes. */
   var TL = {
     m: 0,
     END: 24,
@@ -3322,6 +3393,7 @@ export function startScene(stage) {
     STROLLER: 20,
   };
   var bellyK = 1;
+  /* The season, the stage of the story, the label and the caption for a date. */
   function tlSeasonIdx(m) {
     var mo = Math.floor(Math.min(m, TL.END - 0.01)) % 12;
     return mo === 11 || mo < 2 ? 1 : mo < 5 ? 2 : mo < 8 ? 3 : 0;
@@ -3340,6 +3412,7 @@ export function startScene(stage) {
     tlNoteEl = null,
     tlRangeEl = null,
     tlShown = '';
+  /* Keep the date, the caption and the slider in step with the timeline. */
   function tlRender() {
     if (!tlDateEl) {
       tlDateEl = $('tl-date');
@@ -3359,6 +3432,7 @@ export function startScene(stage) {
   function tlSetPlay(on) {
     TL.play = on;
   }
+  /* Draw one prop, whatever it is. */
   function drawProp(g, p) {
     if (p.car) drawCar(g, p.car);
     else if (p.carU) {
@@ -3375,6 +3449,7 @@ export function startScene(stage) {
       if (DS.snow) drawSnowman(g, p.snowman);
     }
   }
+  /* Size the canvas to its box and work out the zoom that fits the whole scene in it. */
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2.5);
     cssW = viewEl.clientWidth || 360;
@@ -3406,10 +3481,12 @@ export function startScene(stage) {
     if (!running) drawOnce();
   });
   ro.observe(viewEl);
+  /* A position on the canvas, as a position in the scene. */
   function toLogical(px, py) {
     return [view.cx + (px - cssW / 2) / view.z, view.cy + (py - ucy) / view.z];
   }
 
+  /* A cloud, greyer when the weather is overcast. */
   function drawCloud(g, c, over) {
     var s = c.s,
       o = over || 0,
@@ -3481,6 +3558,7 @@ export function startScene(stage) {
       snowP.push(f);
     }
   })();
+  /* Rain: slanted streaks that fall, then a small splash ring where each one lands. */
   function drawRain(g, dt, amt, drift, storm) {
     var n = Math.min(rainP.length, Math.round(185 * amt)),
       i,
@@ -3544,6 +3622,7 @@ export function startScene(stage) {
       }
     }
   }
+  /* Snow: flakes that wobble down and rest for a moment where they land. */
   function drawSnow(g, dt, amt, drift, T) {
     var n = Math.min(snowP.length, Math.round(300 * amt)),
       i,
@@ -3585,6 +3664,8 @@ export function startScene(stage) {
     walkU = UMAX - 30,
     walkPh = 0;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* One frame. In order: ease everything toward the current settings, move the timeline, draw the painted ground,
+   the shadows, then everything standing on it from back to front, then the weather, the time-of-day wash, and last the lights. */
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000 || 0.016);
     last = now;
@@ -3598,6 +3679,15 @@ export function startScene(stage) {
       e = 1 - Math.exp(-dt * 1.7),
       eW = 1 - Math.exp(-dt * 0.85),
       i;
+    /* while paused, a change lands at once instead of easing in over frames that are not running */
+    if (snapNext) {
+      e = 1;
+      eW = 1;
+      if (prev) mix = 1;
+      ofMix = 1;
+      ofPrev = null;
+      stMix = 1;
+    }
     for (i = 0; i < 3; i++) {
       cur.tint[i] = lerp(cur.tint[i], tp.tint[i], e);
       cur.wt[i] = lerp(cur.wt[i], wx.t[i], eW);
@@ -4217,10 +4307,12 @@ export function startScene(stage) {
     if (prev && mix >= 1) {
       prev = null;
     }
+    snapNext = false;
     if (running) raf = requestAnimationFrame(frame);
   }
 
   /* ---------- controls ---------- */
+  /* Wire a button so each press moves to the next choice in its list. */
   function bind(id, valId, key, list, after) {
     var b = $(id),
       v = $(valId);
@@ -4229,6 +4321,7 @@ export function startScene(stage) {
       v.textContent = list[st[key]];
       b.setAttribute('aria-label', b.getAttribute('data-name') + ': ' + list[st[key]] + '. Press to change.');
       if (after) after();
+      settle();
     });
   }
   /* Season skips the timeline ahead to the start of the next season */
@@ -4246,7 +4339,7 @@ export function startScene(stage) {
       'aria-label',
       'Season: ' + SEASON_ORDER[tlSeasonIdx(TL.m)] + '. Press to skip to the next season.',
     );
-    if (!running) drawOnce();
+    settle();
   });
   /* dragging the timeline holds the date; letting go carries on from there */
   $('tl-range').addEventListener('input', function () {
@@ -4254,7 +4347,7 @@ export function startScene(stage) {
     TL.hold = 0;
     TL.m = parseFloat(this.value) || 0;
     tlSetPlay(false);
-    if (!running) drawOnce();
+    settle();
   });
   $('tl-range').addEventListener('change', function () {
     tlSetPlay(!reduce);
@@ -4265,6 +4358,7 @@ export function startScene(stage) {
   bind('btn-wind', 'val-wind', 'wind', WINDS);
   bind('btn-weather', 'val-weather', 'weather', WEATHERS);
 
+  /* Tapping a tree shakes it and drops some of its leaves. */
   function tapAt(px, py) {
     var q = toLogical(px, py),
       x = q[0],
@@ -4394,6 +4488,7 @@ export function startScene(stage) {
   /* entering Fullscreen turns the gestures on; leaving it puts the whole scene back in view */
   var fsWatch = new MutationObserver(function () {
     var fs = isFs();
+    syncFsPause();
     canvas.style.touchAction = fs ? 'none' : '';
     canvas.style.cursor = fs ? 'grab' : '';
     if (!fs && view.touched) {
@@ -4407,7 +4502,8 @@ export function startScene(stage) {
   KS = 1.6;
   var running = false,
     raf = 0,
-    timers = [];
+    timers = [],
+    snapNext = false;
   resize();
   showSeason(tlSeasonIdx(0), false);
   if (reduce) tlSetPlay(false);
@@ -4431,12 +4527,39 @@ export function startScene(stage) {
     frame(now);
     running = was;
   }
+  /* a setting changed while paused: draw two snapped frames so the change shows fully without starting the animation */
+  function settle() {
+    if (running) return;
+    snapNext = true;
+    drawOnce();
+    snapNext = true;
+    drawOnce();
+  }
   function go() {
     if (running) return;
     running = true;
     last = performance.now();
     raf = requestAnimationFrame(frame);
   }
+  /* Fullscreen hides the page's Pause and Restart, so the strip shows its own pair there.
+   They press the page's buttons, which keeps the two sets in step. */
+  function pageBtn(act) {
+    var fig = stage.closest('figure');
+    return fig ? fig.querySelector('[data-act="' + act + '"]') : null;
+  }
+  function syncFsPause() {
+    var b = pageBtn('pause');
+    $('fs-pause').textContent = b && b.hasAttribute('data-paused') ? 'Play' : 'Pause';
+  }
+  $('fs-pause').addEventListener('click', function () {
+    var b = pageBtn('pause');
+    if (b) b.click();
+    syncFsPause();
+  });
+  $('fs-restart').addEventListener('click', function () {
+    var b = pageBtn('restart');
+    if (b) b.click();
+  });
   go();
   return {
     stop: function () {
@@ -4464,7 +4587,7 @@ export function startScene(stage) {
       hearts.length = 0;
       balloons = null;
       tlSetPlay(!reduce);
-      if (!running) drawOnce();
+      settle();
     },
   };
 }
