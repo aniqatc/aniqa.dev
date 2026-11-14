@@ -17,12 +17,12 @@ const STYLE = `
 .fw-track{position:relative;flex:1;min-width:0;padding-bottom:7px}
 .fw-track input{display:block;width:100%;height:24px;margin:0;background:transparent;accent-color:var(--accent)}
 .fw-tick{position:absolute;bottom:0;width:2px;height:5px;border-radius:1px;background:var(--accent);opacity:.8;pointer-events:none}
-.fw-opts{display:flex;flex-wrap:wrap;gap:0 18px}
-.fw-opts button{min-height:36px;padding:0;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--muted);cursor:pointer}
+.fw-opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
+.fw-opts button{min-height:36px;padding:0;text-align:left;white-space:nowrap;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--muted);cursor:pointer}
 .fw-opts b{font-weight:500;color:var(--fg)}
 .fw-opts button:hover b{color:var(--accent)}
 .fw button:focus-visible,.fw input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media (max-width:640px){.fw-ctl{padding:6px 10px 2px}.fw-row{gap:8px}.fw-when{min-width:0}.fw-date{font-size:13px}.fw .fw-opts{gap:0 10px;font-size:9.5px;letter-spacing:.06em}}
+@media (max-width:640px){.fw-ctl{padding:6px 10px 2px}.fw-row{gap:8px}.fw-when{min-width:0}.fw-date{font-size:13px}.fw .fw-opts{gap:0 6px;font-size:9px;letter-spacing:.04em}}
 `;
 
 const MARKUP = `
