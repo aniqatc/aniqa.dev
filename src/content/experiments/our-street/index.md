@@ -1,10 +1,10 @@
 ---
-title: Family Walks
+title: Our Street
 type: Interactive
 stack: Canvas / JS
 released: 2026-11
 hint: Drag the timeline · tap a tree
-screenshotAlt: 'Family Walks in autumn: an isometric street with a row of townhouses, parked cars, a wood in fall colours and a couple pushing a stroller, above a timeline set to October 2026 and Season, Time, Wind and Weather controls.'
+screenshotAlt: 'Our Street in autumn: an isometric street with a row of townhouses, parked cars, a wood in fall colours and a couple pushing a stroller, above a timeline set to October 2026 and Season, Time, Wind and Weather controls.'
 summary: Two years on our street as one walk. The date moves forward, the seasons turn, and the family walking down the road changes with it.
 ---
 

@@ -1,4 +1,4 @@
-// Family Walks: the scene itself. Everything is drawn on one canvas in code; there are no image files.
+// Our Street: the scene itself. Everything is drawn on one canvas in code; there are no image files.
 // sketch.ts hands the stage to startScene(), which adds the canvas and a strip of controls (the timeline, then
 // Season / Time / Wind / Weather) and returns stop / pause / resume / restart for the stage buttons.
 // The stage's own Pause stops everything, timeline included, so the strip has no play button of its own:
