@@ -1447,8 +1447,8 @@ export function startScene(stage) {
     sweep = { x: 565, y: 400 },
     tmpC = null;
   var SW_R = 1900,
-    SW_SOFT = 360,
-    SW_DUR = 3.3;
+    SW_SOFT = 520,
+    SW_DUR = 5;
   /* a new season ripples outward from the family instead of fading everywhere at once */
   function mmAt(x, y) {
     if (!prev) return 1;
@@ -2572,7 +2572,7 @@ export function startScene(stage) {
         lerp(b1[1], b2[1], 0.28),
       );
       drawPerson(g, pm[0], pm[1], of.m, ph, mh1x, mh1y, b2[0], b2[1]);
-      if (of.umb) drawUmbrella(g, mh1x, mh1y, ux, uy, 29, '#d2483c');
+      if (of.umb) drawUmbrella(g, mh1x, mh1y, ux, uy, 29, '#2a2a30');
       drawStroller(g, ps[0], ps[1], ph, b1, b2, of);
       return;
     }
@@ -2640,7 +2640,7 @@ export function startScene(stage) {
       circ(g, hr[0], hr[1], 2 * sw, of.w.mitt || of.w.skin);
       drawPerson(g, qm[0], qm[1], of.m, ph, mIn[0], mIn[1], mOut[0], mOut[1]);
     }
-    if (of.umb) drawUmbrella(g, mIn[0], mIn[1], (qm[0] + qw[0]) / 2 + 3, qm[1] - 88, 29, '#d2483c');
+    if (of.umb) drawUmbrella(g, mIn[0], mIn[1], (qm[0] + qw[0]) / 2 + 3, qm[1] - 88, 29, '#2a2a30');
   }
   /* Draw the family, crossfading when the outfit or the stage has just changed. */
   function drawFamily(g, u, ph, alpha) {
