@@ -2461,7 +2461,8 @@ export function startScene(stage) {
   var stCur = 3,
     stPrev = -1,
     stMix = 1,
-    hearts = [];
+    hearts = [],
+    balloons = null;
   function heart(g, x, y, s, fill) {
     g.beginPath();
     g.moveTo(x, y + s * 0.9);
@@ -3333,7 +3334,7 @@ export function startScene(stage) {
     return MONTHS[k % 12] + ' ' + (2025 + Math.floor(k / 12));
   }
   function tlNote(m) {
-    return m < TL.EXPECT ? 'Just the two of us' : m < TL.BORN ? 'Expecting' : 'The three of us';
+    return m < TL.EXPECT ? 'Just the two of us' : m < TL.BORN ? 'Expecting Zayn' : 'The three of us';
   }
   var tlDateEl = null,
     tlNoteEl = null,
@@ -3649,7 +3650,10 @@ export function startScene(stage) {
     }
     tlRender();
     if (sidx !== stCur) {
-      if (sidx === 1 && stCur === 0) spawnHearts(9, walkU);
+      if (sidx === 1 && stCur === 0) {
+        spawnHearts(6, walkU);
+        balloons = { age: 0 };
+      }
       stPrev = stCur;
       stCur = sidx;
       stMix = 0;
@@ -3919,6 +3923,49 @@ export function startScene(stage) {
     }
     if (cur.rain > 0.02) drawRain(g, dt, cur.rain, cur.drift, cur.storm);
     if (cur.snow > 0.02) drawSnow(g, dt, cur.snow, cur.drift, T);
+    /* blue balloons for the day he was born: held for a few seconds, then let go */
+    if (balloons) {
+      balloons.age += dt;
+      var bAge = balloons.age,
+        bHold = Math.min(bAge, 3.2),
+        bUp = Math.max(0, bAge - 3.2);
+      if (bAge > 4.8) balloons = null;
+      else {
+        var bq = P(walkU - 12, 288, 0),
+          bax = bq[0] + 11,
+          bay = bq[1] - 36 - bUp * 70,
+          bal = clamp(Math.min(bAge / 0.3, 1) * (1 - bUp / 1.6), 0, 1) * fam,
+          bGrow = Math.min(1, bHold / 0.5);
+        [
+          [-19, -50, '#bfe0f7'],
+          [-9, -65, '#4f9ad9'],
+          [3, -74, '#7fb8ea'],
+          [15, -64, '#2f7fc4'],
+          [25, -49, '#a8d2f2'],
+        ].forEach(function (b, bi) {
+          var sw = Math.sin(T * 2.2 + bi * 1.7) * 3,
+            bx = bax + b[0] * bGrow + sw + bUp * bUp * 7 * (bi - 2),
+            by = bay + b[1] * bGrow - bUp * bUp * 26;
+          g.globalAlpha = bal;
+          g.beginPath();
+          g.moveTo(bax, bay);
+          g.quadraticCurveTo((bax + bx) / 2 + sw, (bay + by) / 2 + 9, bx, by + 12);
+          g.strokeStyle = 'rgba(90,80,70,0.75)';
+          g.lineWidth = 0.8;
+          g.stroke();
+          ell(g, bx, by, 8.5, 10.5, b[2], 0);
+          ell(g, bx - 2.6, by - 3.6, 2.5, 3.6, 'rgba(255,255,255,0.5)', -0.5);
+          g.beginPath();
+          g.moveTo(bx - 2.2, by + 12.6);
+          g.lineTo(bx + 2.2, by + 12.6);
+          g.lineTo(bx, by + 9.6);
+          g.closePath();
+          g.fillStyle = b[2];
+          g.fill();
+          g.globalAlpha = 1;
+        });
+      }
+    }
     for (i = hearts.length - 1; i >= 0; i--) {
       var hh = hearts[i];
       hh.age += dt;
@@ -4415,6 +4462,7 @@ export function startScene(stage) {
       TL.manual = false;
       walkU = UMAX - 30;
       hearts.length = 0;
+      balloons = null;
       tlSetPlay(!reduce);
       if (!running) drawOnce();
     },
