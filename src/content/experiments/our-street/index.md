@@ -19,7 +19,7 @@ I also wanted to show our family's progression, from just the two of us to the t
 1. Built with Claude Fable 5.2. I gave it photos of our community, including aerial shots for the layout and shots from our point of view on the walk.
 2. Lots of tweaking, including details I added by hand: the stop sign, our car, a neighbor walking a dog, a car driving in and parking, street lights and other minor details.
 3. There is a community clubhouse at the far end of the houses, where we've spent time playing pool, getting coffee and using the gym.
-4. A timeline from January 2025 to December 2026 that decides who is walking: the two of us, a bump from October 2025, blue balloons when our son arrives, a newborn in a blue swaddle, then a stroller.
+4. A timeline from May 2024, when we moved in, to December 2026. It opens with a pink moving truck and boxes all over the lawn, then it's the two of us walking. A bump appears in October 2025, blue balloons go up when our son arrives at the end of June 2026, and after that it's a newborn in a blue swaddle, then a stroller.
 5. Outfits that follow the season and the weather, down to the umbrella.
 6. Season changes that ripple out from wherever we are on the road, with new trees, ground and leaves, petals or snow.
 7. Time of day as one wash over the whole scene, with longer shadows at dawn and dusk and lamps and windows lit at night.

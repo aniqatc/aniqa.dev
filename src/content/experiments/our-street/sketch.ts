@@ -1,4 +1,4 @@
-// Our Street: the street we walk, through 2025 and 2026, as a small isometric scene, drawn on one canvas.
+// Our Street: the street we walk, from May 2024 to the end of 2026, as a small isometric scene, drawn on one canvas.
 // The drawing code lives in scene.js (plain JavaScript); this file hands it the stage.
 import type { StartSketch } from '../../../lib/sketch';
 import { startScene } from './scene.js';

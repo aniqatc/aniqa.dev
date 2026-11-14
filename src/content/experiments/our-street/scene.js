@@ -33,8 +33,8 @@ const MARKUP = `
 <div class="fw-view"><canvas role="img" aria-label="An isometric street: a row of townhouses, a parking road with a family walking along it, and a wood. The season, time of day, wind and weather change with the controls below."></canvas></div>
 <div class="fw-ctl">
   <div class="fw-row" role="group" aria-label="Timeline">
-    <div class="fw-when"><span class="fw-date" data-fw="tl-date">January 2025</span><span class="fw-note label" data-fw="tl-note">Just the two of us</span></div>
-    <div class="fw-track"><span class="fw-tick" data-fw="tick-a"></span><span class="fw-tick" data-fw="tick-b"></span><input type="range" data-fw="tl-range" min="0" max="24" step="0.01" value="0" aria-label="Date, January 2025 to December 2026"></div>
+    <div class="fw-when"><span class="fw-date" data-fw="tl-date">May 2024</span><span class="fw-note label" data-fw="tl-note">Moving in</span></div>
+    <div class="fw-track"><span class="fw-tick" data-fw="tick-a"></span><span class="fw-tick" data-fw="tick-b"></span><input type="range" data-fw="tl-range" min="0" max="32" step="0.01" value="0" aria-label="Date, May 2024 to December 2026"></div>
   </div>
   <div class="fw-opts label" role="group" aria-label="Scene settings">
     <button type="button" data-fw="btn-season" data-name="Season">Season <b data-fw="val-season">Winter</b></button>
@@ -3102,6 +3102,197 @@ export function startScene(stage) {
     circ(g, w2[0], w2[1], 4.8, '#222327');
     circ(g, w2[0], w2[1], 2.2, '#c9cbce');
   }
+  /* The pink moving truck from the day we moved in: a cab and a tall cargo box. */
+  function drawTruck(g, u, v0, sn) {
+    var col = '#f48db6',
+      ua = u,
+      bx = u + 17,
+      ub = u + 60,
+      v1 = v0 + 23,
+      cz = 21,
+      b0 = 6,
+      b1 = 38;
+    poly(
+      g,
+      [
+        [ua - 2, v0 - 1],
+        [ub + 4, v0 - 1],
+        [ub + 4, v1 + 4],
+        [ua - 2, v1 + 4],
+      ],
+      'rgba(0,0,0,0.22)',
+    );
+    poly(
+      g,
+      [
+        [bx, v1, 3],
+        [ub, v1, 3],
+        [ub, v1, b0],
+        [bx, v1, b0],
+      ],
+      '#3a3338',
+    );
+    poly(
+      g,
+      [
+        [bx, v1, b0],
+        [ub, v1, b0],
+        [ub, v1, b1],
+        [bx, v1, b1],
+      ],
+      shade(col, 0.92),
+    );
+    poly(
+      g,
+      [
+        [bx, v1, 9],
+        [ub, v1, 9],
+        [ub, v1, 12],
+        [bx, v1, 12],
+      ],
+      '#fff6fa',
+    );
+    var tp = P((bx + ub) / 2, v1, 0);
+    g.save();
+    g.translate(tp[0], tp[1]);
+    g.transform(0.866, -0.5, 0, 1, 0, 0);
+    g.fillStyle = '#ffffff';
+    g.font = '800 8px Arial, sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText('MOVING', 0, -30);
+    g.fillText('TRUCK', 0, -20.5);
+    g.restore();
+    poly(
+      g,
+      [
+        [bx, v0, b0],
+        [bx, v1, b0],
+        [bx, v1, b1],
+        [bx, v0, b1],
+      ],
+      shade(col, 0.74),
+    );
+    poly(
+      g,
+      [
+        [bx, v0, b1],
+        [ub, v0, b1],
+        [ub, v1, b1],
+        [bx, v1, b1],
+      ],
+      sn ? '#f6f9fc' : shade(col, 1.16),
+    );
+    poly(
+      g,
+      [
+        [ua, v1, 3],
+        [bx, v1, 3],
+        [bx, v1, cz],
+        [ua + 3, v1, cz],
+        [ua, v1, 13],
+      ],
+      shade(col, 0.88),
+    );
+    poly(
+      g,
+      [
+        [ua, v0, 3],
+        [ua, v1, 3],
+        [ua, v1, 13],
+        [ua, v0, 13],
+      ],
+      shade(col, 0.7),
+    );
+    poly(
+      g,
+      [
+        [ua, v0, 13],
+        [ua, v1, 13],
+        [ua + 3, v1, cz],
+        [ua + 3, v0, cz],
+      ],
+      '#56788f',
+    );
+    poly(
+      g,
+      [
+        [ua + 3, v0, cz],
+        [bx, v0, cz],
+        [bx, v1, cz],
+        [ua + 3, v1, cz],
+      ],
+      sn ? '#f1f5f9' : shade(col, 1.12),
+    );
+    poly(
+      g,
+      [
+        [ua + 5, v1, 13.5],
+        [ua + 13.5, v1, 13.5],
+        [ua + 13.5, v1, 19.5],
+        [ua + 6.6, v1, 19.5],
+      ],
+      '#a8c6d8',
+    );
+    poly(
+      g,
+      [
+        [ua, v0, 3],
+        [ua, v1, 3],
+        [ua, v1, 5.5],
+        [ua, v0, 5.5],
+      ],
+      '#3a3338',
+    );
+    poly(
+      g,
+      [
+        [ua, v0 + 1.5, 7.5],
+        [ua, v0 + 6, 7.5],
+        [ua, v0 + 6, 10.2],
+        [ua, v0 + 1.5, 10.2],
+      ],
+      '#fff3c4',
+    );
+    poly(
+      g,
+      [
+        [ua, v1 - 6, 7.5],
+        [ua, v1 - 1.5, 7.5],
+        [ua, v1 - 1.5, 10.2],
+        [ua, v1 - 6, 10.2],
+      ],
+      '#fff3c4',
+    );
+    var w1 = P(ua + 9, v1, 4.6),
+      w2 = P(ub - 13, v1, 4.6);
+    circ(g, w1[0], w1[1], 5.4, '#222327');
+    circ(g, w1[0], w1[1], 2.4, '#c9cbce');
+    circ(g, w2[0], w2[1], 5.4, '#222327');
+    circ(g, w2[0], w2[1], 2.4, '#c9cbce');
+  }
+  /* Moving boxes spread over our lawn (the last house in the row), the sidewalk and the road behind the truck.
+   Each is [u0,u1,v0,v1,z0,z1, the point in May when it has been carried inside]. */
+  var MOVEBOXES = [
+    [24, 37, 128, 141, 0, 11, 0.58],
+    [26, 36, 129, 139, 11, 19, 0.46],
+    [44, 58, 127, 141, 0, 12, 0.52],
+    [46, 56, 129, 139, 12, 21, 0.4],
+    [64, 77, 129, 142, 0, 11, 0.34],
+    [84, 97, 128, 141, 0, 12, 0.49],
+    [104, 117, 131, 144, 0, 10, 0.37],
+    [33, 45, 146, 158, 0, 10, 0.43],
+    [56, 69, 147, 160, 0, 11, 0.55],
+    [92, 104, 148, 160, 0, 10, 0.31],
+    [70, 81, 168, 179, 0, 10, 0.27],
+    [138, 151, 222, 235, 0, 11, 0.23],
+    [140, 150, 224, 234, 11, 19, 0.18],
+  ];
+  function drawBox(g, b) {
+    box3(g, b[0], b[1], b[2], b[3], b[4], b[5], '#d9b077');
+    wline(g, [(b[0] + b[1]) / 2, b[2], b[5]], [(b[0] + b[1]) / 2, b[3], b[5]], '#f3e3c2', 1.6);
+    wline(g, [(b[0] + b[1]) / 2, b[3], b[5]], [(b[0] + b[1]) / 2, b[3], b[5] - 3.5], '#f3e3c2', 1.6);
+  }
   /* The stop sign. */
   function drawStop(g, m) {
     var a = P(m.u, m.v, 0),
@@ -3371,7 +3562,7 @@ export function startScene(stage) {
       }
     }
   }
-  /* ---------- timeline: January 2025 to December 2026 ---------- */
+  /* ---------- timeline: May 2024 to December 2026 ---------- */
   var MONTHS = [
     'January',
     'February',
@@ -3386,33 +3577,40 @@ export function startScene(stage) {
     'November',
     'December',
   ];
-  /* m is the date, counted in months since January 2025. EXPECT, BORN and STROLLER are the months where the story changes. */
+  /* m is the date, counted in months since May 2024, when we moved in. MOVE, EXPECT, BORN and STROLLER are the months where the story changes. */
   var TL = {
     m: 0,
-    END: 24,
+    END: 32,
     rate: 1 / 1.9,
     play: true,
     manual: false,
     hold: 0,
-    EXPECT: 9,
-    BORN: 17.97,
-    STROLLER: 20,
+    MOVE: 1,
+    EXPECT: 17,
+    BORN: 25.97,
+    STROLLER: 28,
   };
   var bellyK = 1;
   /* The season, the stage of the story, the label and the caption for a date. */
   function tlSeasonIdx(m) {
-    var mo = Math.floor(Math.min(m, TL.END - 0.01)) % 12;
+    var mo = (Math.floor(Math.min(m, TL.END - 0.01)) + 4) % 12;
     return mo === 11 || mo < 2 ? 1 : mo < 5 ? 2 : mo < 8 ? 3 : 0;
   }
   function tlStage(m) {
     return m < TL.EXPECT ? 3 : m < TL.BORN ? 0 : m < TL.STROLLER ? 1 : 2;
   }
   function tlLabel(m) {
-    var k = Math.floor(Math.min(m, TL.END - 0.01));
-    return MONTHS[k % 12] + ' ' + (2025 + Math.floor(k / 12));
+    var k = Math.floor(Math.min(m, TL.END - 0.01)) + 4;
+    return MONTHS[k % 12] + ' ' + (2024 + Math.floor(k / 12));
   }
   function tlNote(m) {
-    return m < TL.EXPECT ? 'Just the two of us' : m < TL.BORN ? 'Expecting Zayn' : 'The three of us';
+    return m < TL.MOVE
+      ? 'Moving in'
+      : m < TL.EXPECT
+        ? 'Just the two of us'
+        : m < TL.BORN
+          ? 'Expecting Zayn'
+          : 'The three of us';
   }
   var tlDateEl = null,
     tlNoteEl = null,
@@ -3427,8 +3625,9 @@ export function startScene(stage) {
     }
     var mm = Math.min(TL.m, TL.END),
       lab = tlLabel(mm);
-    if (lab !== tlShown) {
-      tlShown = lab;
+    var labKey = lab + '/' + tlNote(mm);
+    if (labKey !== tlShown) {
+      tlShown = labKey;
       tlDateEl.textContent = lab;
       tlNoteEl.textContent = tlNote(mm);
       tlRangeEl.setAttribute('aria-valuetext', lab);
@@ -3740,7 +3939,7 @@ export function startScene(stage) {
       if (ofMix >= 1) ofPrev = null;
     }
     if (TL.play) {
-      if (TL.m < TL.END) TL.m = Math.min(TL.END, TL.m + mdt * TL.rate);
+      if (TL.m < TL.END) TL.m = Math.min(TL.END, TL.m + mdt * TL.rate * (TL.m < TL.MOVE ? 0.45 : 1));
       else {
         TL.hold += mdt;
         if (TL.hold > 3) {
@@ -3946,6 +4145,35 @@ export function startScene(stage) {
       });
     });
     carGlow = null;
+    /* May 2024: the truck is double parked by our house with boxes on the lawn that go inside a few at a time, then drives off and is gone by June */
+    if (tm < TL.MOVE) {
+      var mf = clamp((tm - 0.62) / 0.38, 0, 1),
+        mu = lerp(72, -60, mf * mf),
+        mv = 214,
+        ma = clamp((mu + 58) / 60, 0, 1);
+      dyn.push({
+        k: mu - (mv + 10),
+        d: function () {
+          g.save();
+          g.globalAlpha = ma;
+          drawTruck(g, mu, mv, S.snow);
+          g.restore();
+        },
+      });
+      MOVEBOXES.forEach(function (b) {
+        var ba = clamp((b[6] - tm) / 0.035, 0, 1);
+        if (ba > 0)
+          dyn.push({
+            k: b[0] - b[2],
+            d: function () {
+              g.save();
+              g.globalAlpha = ba;
+              drawBox(g, b);
+              g.restore();
+            },
+          });
+      });
+    }
     var rc = reduce ? { u: 343, v: 190, lit: 0, a: 1 } : redCarState(T);
     if (rc) {
       if (rc.lit) carGlow = [rc.u, rc.a, rc.v];
