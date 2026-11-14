@@ -63,6 +63,18 @@ const OVERRIDES = {
     // at rest every card is a plain word, so show all twenty mid-hover
     whenReady: (page) => page.check('[data-show-all]'),
   },
+  'experiments/our-street': {
+    // it opens on January 2025 in snow: hold the timeline on November 2026 (autumn, the three of us) and let the
+    // season finish turning. The crop takes 5% off each side of the stage, so move the controls in past it.
+    whenReady: async (page) => {
+      await page.addStyleTag({ content: '.fw-ctl { padding-inline: 7% !important; }' });
+      await page.locator('[data-fw="tl-range"]').evaluate((range) => {
+        range.value = '22.5';
+        range.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      await page.waitForTimeout(6000);
+    },
+  },
 };
 
 // ---------- every entry, from its frontmatter ----------
