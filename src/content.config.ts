@@ -88,40 +88,41 @@ const gameScores = z.object({
 // drawn around it.
 const reviews = defineCollection({
   loader: folder('./src/content/reviews'),
-  schema: z.object({
-    app: z.string(), // the app's or game's name
-    kind: z.enum(['app', 'game']).default('app'), // a game gets game scores, "Played on" and "Game review"
-    maker: z.string().regex(/^[A-Za-z0-9_.-]+$/, 'The handle without the @'), // the maker's handle, shown as @maker
-    makerLink: z.url().optional(), // where @maker links; their X profile (x.com/<maker>) when left out
-    date: day, // the day the review went up
-    updated: day.optional(), // the day of the latest ## Update: shown under the date, and to search engines
-    type: z.string(), // a label: Web app, iOS app, Chrome extension…
-    triedOn: z.string(), // where you tried it: "MacBook, Chrome", "iPhone 15"; for a game, where you played it: "PC, Steam Deck"
-    live: z.string(), // a web app's address without https:// (tallyho.app), or a full App Store / Google Play link
-    device: z.enum(['browser', 'phone', 'tablet', 'desktop', 'screen']).default('browser'), // the frame around the screenshot; screen is a plain 16:9 picture, for a PC or console game
-    // with device: desktop, the Mac screen drawn around the app (src/components/MacScreen.astro): "window" for an
-    // app's window on the desktop, "menubar" for a popover under its menu bar icon, "notch" for a panel that grows
-    // out of the notch. screenshot.png is only the app, cropped with no background, as a 2× capture.
-    desktop: z.enum(['window', 'menubar', 'notch']).default('window'),
-    shadow: z.boolean().default(true), // with device: desktop, a Mac shadow under the app; false if the capture has one
-    price: z.string().optional(), // what it costs, as you'd say it: Free, $4.99 one-time, $3/mo
-    version: z.string().optional(), // the version you tried, e.g. 1.2.0
-    played: z.string().optional(), // a game's time played, as you'd say it: 15 hours
-    platforms: z.array(z.string()).optional(), // where it runs, e.g. [Mac, iOS, Web]
-    post: z.url().optional(), // the review's post on X
-    summary: z.string(), // one line on what the app does: the lede, and the card's description
-    verdict: z.string(), // the one-word overall, e.g. Promising, Delightful, Solid
-    quote: z.string().optional(), // a short line beside the verdict on the scorecard, e.g. "Can't wait to see where this goes"
-    cardTheme: z.enum(['night', 'day']).default('night'), // the scorecard's and link preview's look
-    stillBuilding: z.boolean().default(false), // an app still being built: a note under the scores that "needs love" means room to grow
-    stillUsing: z.boolean().default(false), // still using it since the review: a star, and a place in Still using
-    tryIt: z.string().optional(), // the Try it card's line under the maker, instead of the usual "Give it a go…" (e.g. for a mixed review or a big company's app)
-    featured: z.boolean().default(false), // the home page intro shows this review under "Hooked on" instead of the newest
-    brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // the app's brand colour
-    scores: z.union([appScores, gameScores]), // an app's or a game's five scores; checked against kind below
-    screenshotAlt: z.string().optional(), // what's on screen in screenshot.png (and the other screens, for a phone)
-    draft: z.boolean().default(false), // only shown on the dev server
-  })
+  schema: z
+    .object({
+      app: z.string(), // the app's or game's name
+      kind: z.enum(['app', 'game']).default('app'), // a game gets game scores, "Played on" and "Game review"
+      maker: z.string().regex(/^[A-Za-z0-9_.-]+$/, 'The handle without the @'), // the maker's handle, shown as @maker
+      makerLink: z.url().optional(), // where @maker links; their X profile (x.com/<maker>) when left out
+      date: day, // the day the review went up
+      updated: day.optional(), // the day of the latest ## Update: shown under the date, and to search engines
+      type: z.string(), // a label: Web app, iOS app, Chrome extension…
+      triedOn: z.string(), // where you tried it: "MacBook, Chrome", "iPhone 15"; for a game, where you played it: "PC, Steam Deck"
+      live: z.string(), // a web app's address without https:// (tallyho.app), or a full App Store / Google Play link
+      device: z.enum(['browser', 'phone', 'tablet', 'desktop', 'screen']).default('browser'), // the frame around the screenshot; screen is a plain 16:9 picture, for a PC or console game
+      // with device: desktop, the Mac screen drawn around the app (src/components/MacScreen.astro): "window" for an
+      // app's window on the desktop, "menubar" for a popover under its menu bar icon, "notch" for a panel that grows
+      // out of the notch. screenshot.png is only the app, cropped with no background, as a 2× capture.
+      desktop: z.enum(['window', 'menubar', 'notch']).default('window'),
+      shadow: z.boolean().default(true), // with device: desktop, a Mac shadow under the app; false if the capture has one
+      price: z.string().optional(), // what it costs, as you'd say it: Free, $4.99 one-time, $3/mo
+      version: z.string().optional(), // the version you tried, e.g. 1.2.0
+      played: z.string().optional(), // a game's time played, as you'd say it: 15 hours
+      platforms: z.array(z.string()).optional(), // where it runs, e.g. [Mac, iOS, Web]
+      post: z.url().optional(), // the review's post on X
+      summary: z.string(), // one line on what the app does: the lede, and the card's description
+      verdict: z.string(), // the one-word overall, e.g. Promising, Delightful, Solid
+      quote: z.string().optional(), // a short line beside the verdict on the scorecard, e.g. "Can't wait to see where this goes"
+      cardTheme: z.enum(['night', 'day']).default('night'), // the scorecard's and link preview's look
+      stillBuilding: z.boolean().default(false), // an app still being built: a note under the scores that "needs love" means room to grow
+      stillUsing: z.boolean().default(false), // still using it since the review: a star, and a place in Still using
+      tryIt: z.string().optional(), // the Try it card's line under the maker, instead of the usual "Give it a go…" (e.g. for a mixed review or a big company's app)
+      featured: z.boolean().default(false), // the home page intro shows this review under "Hooked on" instead of the newest
+      brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // the app's brand colour
+      scores: z.union([appScores, gameScores]), // an app's or a game's five scores; checked against kind below
+      screenshotAlt: z.string().optional(), // what's on screen in screenshot.png (and the other screens, for a phone)
+      draft: z.boolean().default(false), // only shown on the dev server
+    })
     // a game needs the game scores (learningCurve, fun, feel) and an app the app ones (onboarding, usefulness, easeOfUse)
     .superRefine((review, ctx) => {
       const isGame = 'fun' in review.scores;

@@ -94,7 +94,8 @@ export function scoresFor(review: Review) {
 }
 
 /** "App review" or "Game review", for the review page's eyebrow. */
-export const reviewKindLabel = (review: Review) => (review.data.kind === 'game' ? 'Game review' : 'App review');
+export const reviewKindLabel = (review: Review) =>
+  review.data.kind === 'game' ? 'Game review' : 'App review';
 
 /** What the star on a tile means: "Still using it", or "Still playing it" for a game. */
 export const stillUsingLabel = (review: Review) =>

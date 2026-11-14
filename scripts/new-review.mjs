@@ -29,9 +29,21 @@ const TEMPLATES = { app: 'templates/review/index.md', game: 'templates/review-ga
 const DEVICES = ['browser', 'phone', 'tablet', 'desktop', 'screen'];
 const TYPES = {
   app: { browser: 'Web app', phone: 'iOS app', tablet: 'iPad app', desktop: 'Mac app', screen: 'App' },
-  game: { browser: 'Browser game', phone: 'iOS game', tablet: 'iPad game', desktop: 'Mac game', screen: 'PC game' },
+  game: {
+    browser: 'Browser game',
+    phone: 'iOS game',
+    tablet: 'iPad game',
+    desktop: 'Mac game',
+    screen: 'PC game',
+  },
 };
-const TRIED_ON = { browser: 'MacBook, Chrome', phone: 'iPhone', tablet: 'iPad', desktop: 'MacBook', screen: 'PC' };
+const TRIED_ON = {
+  browser: 'MacBook, Chrome',
+  phone: 'iPhone',
+  tablet: 'iPad',
+  desktop: 'MacBook',
+  screen: 'PC',
+};
 
 // --key value pairs; a bare --flag is true
 const flags = {};
@@ -98,7 +110,10 @@ const type = await ask(
   kind === 'game' ? 'Type (PC game, Switch game, iOS game…)' : 'Type (Web app, iOS app, Chrome extension…)',
   TYPES[kind][device],
 );
-const summary = await ask('summary', `One line on what the ${noun} ${kind === 'game' ? 'is' : 'does'} (blank to fill in later)`);
+const summary = await ask(
+  'summary',
+  `One line on what the ${noun} ${kind === 'game' ? 'is' : 'does'} (blank to fill in later)`,
+);
 rl?.close();
 
 // ---------- index.md from the template ----------

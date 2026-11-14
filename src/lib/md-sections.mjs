@@ -87,7 +87,8 @@ const UPDATE_TAG = /^(Shipped|Fixed) in \S.*$/;
  * @returns The tag element, or undefined.
  */
 const updateTag = (node) => {
-  if (node.tagName !== 'code' || node.children.length !== 1 || node.children[0].type !== 'text') return undefined;
+  if (node.tagName !== 'code' || node.children.length !== 1 || node.children[0].type !== 'text')
+    return undefined;
   const text = node.children[0].value.trim();
   if (!UPDATE_TAG.test(text)) return undefined;
   return {

@@ -194,13 +194,13 @@ npm run new -- --kind review --game --app "Game name" --maker studiohandle --liv
 (or run `npm run new`, pick review, and answer `game` when it asks). That copies `templates/review-game/` and sets
 `kind: game`, which changes:
 
-| | App | Game |
-|---|---|---|
-| Scores | First impression, Onboarding, Usefulness, Ease of use, Pricing / value | First impression, **Learning curve**, **Fun**, **Feel**, Pricing / value |
-| Score keys | `onboarding`, `usefulness`, `easeOfUse` | `learningCurve`, `fun`, `feel` |
-| Facts | Tried on | **Played on**, plus **Time played** from `played: 15 hours` |
-| Eyebrow | App review 01 | **Game review 01** |
-| Star on the tile | Still using it | **Still playing it** |
+|                  | App                                                                    | Game                                                                     |
+| ---------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Scores           | First impression, Onboarding, Usefulness, Ease of use, Pricing / value | First impression, **Learning curve**, **Fun**, **Feel**, Pricing / value |
+| Score keys       | `onboarding`, `usefulness`, `easeOfUse`                                | `learningCurve`, `fun`, `feel`                                           |
+| Facts            | Tried on                                                               | **Played on**, plus **Time played** from `played: 15 hours`              |
+| Eyebrow          | App review 01                                                          | **Game review 01**                                                       |
+| Star on the tile | Still using it                                                         | **Still playing it**                                                     |
 
 - **What the game scores mean:** Learning curve is how quickly it clicked and whether the tutorial helped or got in
   the way; Fun is whether it's actually fun to play; Feel is the controls, responsiveness and performance; Pricing /
