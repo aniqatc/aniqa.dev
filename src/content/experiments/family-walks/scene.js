@@ -17,12 +17,12 @@ const STYLE = `
 .fw-track{position:relative;flex:1;min-width:0;padding-bottom:7px}
 .fw-track input{display:block;width:100%;height:24px;margin:0;background:transparent;accent-color:var(--accent)}
 .fw-tick{position:absolute;bottom:0;width:2px;height:5px;border-radius:1px;background:var(--accent);opacity:.8;pointer-events:none}
-.fw-opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px}
-.fw-opts button{min-height:36px;padding:0;text-align:left;white-space:nowrap;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--muted);cursor:pointer}
+.fw-opts{display:flex;flex-wrap:wrap;gap:0 18px}
+.fw-opts button{min-height:36px;padding:0;white-space:nowrap;border:0;background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--muted);cursor:pointer}
 .fw-opts b{font-weight:500;color:var(--fg)}
 .fw-opts button:hover b{color:var(--accent)}
 .fw button:focus-visible,.fw input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media (max-width:640px){.fw-ctl{padding:6px 10px 2px}.fw-row{gap:8px}.fw-when{min-width:0}.fw-date{font-size:13px}.fw .fw-opts{gap:0 6px;font-size:9px;letter-spacing:.04em}}
+@media (max-width:640px){.fw-ctl{padding:6px 10px 2px}.fw-row{gap:8px}.fw-when{min-width:0}.fw-date{font-size:13px}.fw .fw-opts{gap:0 10px;font-size:9.5px;letter-spacing:.06em}}
 `;
 
 const MARKUP = `
@@ -1660,7 +1660,7 @@ export function startScene(stage) {
     legs: '#333a4b',
     shoes: '#f1eee8',
     hair: '#2b2624',
-    skin: '#dfae84',
+    skin: '#c8905f',
     long: false,
     scarf: null,
   };
@@ -1671,7 +1671,7 @@ export function startScene(stage) {
     legs: '#4a4f63',
     shoes: '#2b2624',
     hair: '#3a2a22',
-    skin: '#e6b990',
+    skin: '#cf9968',
     long: true,
     scarf: '#f1e8d6',
   };
@@ -2048,8 +2048,8 @@ export function startScene(stage) {
     ell(g, 0.5, -22, 9.4, 6.4, '#a99d87');
     rr(g, -6, -23, 13, 7, 3.2, '#7fb8ea');
     seg(g, 5.2, -21, 8.6, -26 + Math.sin(ph) * 1.2, '#7fb8ea', 2.1);
-    circ(g, 8.6, -26 + Math.sin(ph) * 1.2, 1.2, '#edc4a2');
-    circ(g, 0.5, -25.6, 4.7, '#edc4a2');
+    circ(g, 8.6, -26 + Math.sin(ph) * 1.2, 1.2, '#dcaa80');
+    circ(g, 0.5, -25.6, 4.7, '#dcaa80');
     g.beginPath();
     g.arc(0.5, -26.3, 4.95, Math.PI * 0.98, Math.PI * 2.02);
     g.closePath();
@@ -2194,7 +2194,7 @@ export function startScene(stage) {
       seg(g, bx - 2 * sw, byy + 3.6 * sw, bx + 8.6 * sw, byy + 0.2 * sw, '#cfe6f8', 1.1 * sw);
       var hx0 = bx - 7.4 * sw,
         hy0 = byy - 3.4 * sw;
-      circ(g, hx0, hy0, 4.5 * sw, '#edc4a2');
+      circ(g, hx0, hy0, 4.5 * sw, '#dcaa80');
       g.beginPath();
       g.arc(hx0, hy0 - 0.5 * sw, 4.8 * sw, Math.PI * 0.95, Math.PI * 1.98);
       g.closePath();
@@ -3882,10 +3882,111 @@ export function startScene(stage) {
       n++;
     }
   }
-  canvas.addEventListener('click', function (ev) {
+  /* In Fullscreen the scene can be pinched, dragged and wheel-zoomed. On the page it stays put, so scrolling past it works. */
+  var ptrs = {},
+    moved = 0,
+    pinch = null;
+  function isFs() {
+    return stage.classList.contains('fs');
+  }
+  function clampView() {
+    view.cx = clamp(view.cx, W * 0.12, W * 0.88);
+    view.cy = clamp(view.cy, H * 0.1, H * 0.9);
+  }
+  function local(ev) {
     var rc = canvas.getBoundingClientRect();
-    tapAt(ev.clientX - rc.left, ev.clientY - rc.top);
+    return [ev.clientX - rc.left, ev.clientY - rc.top];
+  }
+  function pts() {
+    var a = [];
+    for (var k in ptrs) a.push(ptrs[k]);
+    return a;
+  }
+  canvas.addEventListener('pointerdown', function (ev) {
+    ptrs[ev.pointerId] = local(ev);
+    var a = pts();
+    if (a.length === 1) moved = 0;
+    if (!isFs()) return;
+    try {
+      canvas.setPointerCapture(ev.pointerId);
+    } catch {
+      /* some pointers can't be captured */
+    }
+    if (a.length === 2) {
+      pinch = {
+        d: Math.hypot(a[0][0] - a[1][0], a[0][1] - a[1][1]) || 1,
+        z: view.z,
+        anchor: toLogical((a[0][0] + a[1][0]) / 2, (a[0][1] + a[1][1]) / 2),
+      };
+      moved = 99;
+    }
   });
+  canvas.addEventListener('pointermove', function (ev) {
+    var p = ptrs[ev.pointerId];
+    if (!p) return;
+    var q = local(ev),
+      dx = q[0] - p[0],
+      dy = q[1] - p[1];
+    ptrs[ev.pointerId] = q;
+    moved += Math.abs(dx) + Math.abs(dy);
+    if (!isFs()) return;
+    var a = pts();
+    if (a.length === 1 && moved > 8) {
+      view.cx -= dx / view.z;
+      view.cy -= dy / view.z;
+      view.touched = true;
+      clampView();
+    } else if (a.length === 2 && pinch) {
+      var mx = (a[0][0] + a[1][0]) / 2,
+        my = (a[0][1] + a[1][1]) / 2,
+        d = Math.hypot(a[0][0] - a[1][0], a[0][1] - a[1][1]) || 1;
+      view.z = clamp((pinch.z * d) / pinch.d, view.zMin, view.zMax);
+      view.cx = pinch.anchor[0] - (mx - cssW / 2) / view.z;
+      view.cy = pinch.anchor[1] - (my - ucy) / view.z;
+      view.touched = true;
+      clampView();
+    }
+    if (!running) drawOnce();
+  });
+  function pointerEnd(ev) {
+    delete ptrs[ev.pointerId];
+    pinch = null;
+  }
+  canvas.addEventListener('pointerup', pointerEnd);
+  canvas.addEventListener('pointercancel', pointerEnd);
+  canvas.addEventListener('click', function (ev) {
+    if (moved > 8) return;
+    var q = local(ev);
+    tapAt(q[0], q[1]);
+  });
+  canvas.addEventListener(
+    'wheel',
+    function (ev) {
+      if (!isFs()) return;
+      ev.preventDefault();
+      var q = local(ev),
+        an = toLogical(q[0], q[1]);
+      view.z = clamp(view.z * Math.exp(-ev.deltaY * 0.0015), view.zMin, view.zMax);
+      view.cx = an[0] - (q[0] - cssW / 2) / view.z;
+      view.cy = an[1] - (q[1] - ucy) / view.z;
+      view.touched = true;
+      clampView();
+      if (!running) drawOnce();
+    },
+    { passive: false },
+  );
+  /* entering Fullscreen turns the gestures on; leaving it puts the whole scene back in view */
+  var fsWatch = new MutationObserver(function () {
+    var fs = isFs();
+    canvas.style.touchAction = fs ? 'none' : '';
+    canvas.style.cursor = fs ? 'grab' : '';
+    if (!fs && view.touched) {
+      view.touched = false;
+      resize();
+      if (!running) drawOnce();
+    }
+  });
+  fsWatch.observe(stage, { attributes: true, attributeFilter: ['class'] });
 
   KS = 1.6;
   var running = false,
@@ -3926,6 +4027,7 @@ export function startScene(stage) {
       running = false;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      fsWatch.disconnect();
       timers.forEach(function (t) {
         clearTimeout(t);
       });
