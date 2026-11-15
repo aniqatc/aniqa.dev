@@ -14,6 +14,8 @@ const STYLE = `
 .fw-when{display:flex;flex-direction:column;gap:3px;min-width:118px}
 .fw-date{font:700 15px/1 var(--font-display);letter-spacing:-0.01em;white-space:nowrap;font-variant-numeric:tabular-nums}
 .fw-ctl .fw-note{font-size:9px;white-space:nowrap}
+.fw-play{flex:none;display:grid;place-items:center;width:28px;height:28px;padding:0;border:1px solid var(--line);border-radius:999px;background:none;color:var(--fg);cursor:pointer}
+.fw-play:hover{color:var(--accent);border-color:var(--accent)}
 .fw-track{position:relative;flex:1;min-width:0;padding-bottom:7px}
 .fw-track input{display:block;width:100%;height:24px;margin:0;background:transparent;accent-color:var(--accent)}
 .fw-tick{position:absolute;bottom:0;width:2px;height:5px;border-radius:1px;background:var(--accent);opacity:.8;pointer-events:none}
@@ -34,6 +36,7 @@ const MARKUP = `
 <div class="fw-ctl">
   <div class="fw-row" role="group" aria-label="Timeline">
     <div class="fw-when"><span class="fw-date" data-fw="tl-date">May 2024</span><span class="fw-note label" data-fw="tl-note">Moving in</span></div>
+    <button type="button" class="fw-play" data-fw="tl-play" aria-label="Hold this date" title="Hold this date"><svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path data-fw="tl-icon" d="M3.5 2h3.2v12H3.5zM9.3 2h3.2v12H9.3z" fill="currentColor"></path></svg></button>
     <div class="fw-track"><span class="fw-tick" data-fw="tick-a"></span><span class="fw-tick" data-fw="tick-b"></span><input type="range" data-fw="tl-range" min="0" max="32" step="0.01" value="0" aria-label="Date, May 2024 to December 2026"></div>
   </div>
   <div class="fw-opts label" role="group" aria-label="Scene settings">
@@ -3813,6 +3816,7 @@ export function startScene(stage) {
     }
     if (document.activeElement !== tlRangeEl || TL.play) tlRangeEl.value = mm;
   }
+  var tlHeld = false;
   function tlSetPlay(on) {
     TL.play = on;
   }
@@ -4775,6 +4779,14 @@ export function startScene(stage) {
   }
   /* Season skips the timeline ahead to the start of the next season */
   $('btn-season').addEventListener('click', function () {
+    /* with the date held, Season changes the season right where we are instead of moving the date */
+    if (tlHeld) {
+      TL.manual = true;
+      showSeason((st.season + 1) % SEASON_ORDER.length, true);
+      this.setAttribute('aria-label', 'Season: ' + SEASON_ORDER[st.season] + '. Press to change.');
+      settle();
+      return;
+    }
     var m = Math.floor(Math.min(TL.m, TL.END - 0.01)) + 1,
       n = 0;
     while (tlSeasonIdx(m % TL.END) === st.season && n < 12) {
@@ -4799,7 +4811,45 @@ export function startScene(stage) {
     settle();
   });
   $('tl-range').addEventListener('change', function () {
-    tlSetPlay(!reduce);
+    tlSetPlay(!reduce && !tlHeld);
+  });
+  /* The timeline's own pause holds the date and nothing else: the walk, the weather and every control carry on.
+   (The page's Pause is the full stop.) */
+  var tlSaved = null;
+  function setOpt(id, valId, key, list, val) {
+    st[key] = val;
+    $(valId).textContent = list[val];
+    var b = $(id);
+    b.setAttribute('aria-label', b.getAttribute('data-name') + ': ' + list[val] + '. Press to change.');
+  }
+  function tlHold(on) {
+    /* what you change while the date is held belongs to that moment: pressing play puts the time, wind and weather
+     back the way they were, and the season goes back to following the date */
+    if (on) tlSaved = { time: st.time, wind: st.wind, weather: st.weather };
+    else if (tlSaved) {
+      setOpt('btn-time', 'val-time', 'time', TIMES, tlSaved.time);
+      setOpt('btn-wind', 'val-wind', 'wind', WINDS, tlSaved.wind);
+      setOpt('btn-weather', 'val-weather', 'weather', WEATHERS, tlSaved.weather);
+      tlSaved = null;
+    }
+    tlHeld = on;
+    tlSetPlay(!on);
+    var b = $('tl-play'),
+      t = on ? 'Play the timeline' : 'Hold this date';
+    b.setAttribute('aria-label', t);
+    b.title = t;
+    $('tl-icon').setAttribute('d', on ? 'M4 2l9.5 6L4 14z' : 'M3.5 2h3.2v12H3.5zM9.3 2h3.2v12H9.3z');
+  }
+  $('tl-play').addEventListener('click', function () {
+    if (tlHeld) {
+      TL.manual = false;
+      if (TL.m >= TL.END) {
+        TL.m = 0;
+        TL.hold = 0;
+      }
+    }
+    tlHold(!tlHeld);
+    settle();
   });
   $('tick-a').style.left = 'calc((100% - 24px) * ' + (TL.EXPECT / TL.END).toFixed(4) + ' + 11px)';
   $('tick-b').style.left = 'calc((100% - 24px) * ' + (TL.BORN / TL.END).toFixed(4) + ' + 11px)';
@@ -4957,7 +5007,7 @@ export function startScene(stage) {
     easeUntil = 0;
   resize();
   showSeason(tlSeasonIdx(0), false);
-  if (reduce) tlSetPlay(false);
+  if (reduce) tlHold(true);
   /* draw the other seasons in the background so the first change to each is instant */
   [2, 3, 0].forEach(function (si, k) {
     timers.push(
@@ -5051,7 +5101,7 @@ export function startScene(stage) {
       walkU = UMAX - 30;
       hearts.length = 0;
       balloons = null;
-      tlSetPlay(!reduce);
+      tlHold(reduce);
       settle();
     },
   };
