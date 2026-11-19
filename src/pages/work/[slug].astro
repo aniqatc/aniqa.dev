@@ -32,7 +32,7 @@ interface Props {
 }
 
 const { project, i, total, prev, next } = Astro.props;
-const { title, type, stack, released, summary } = project.data;
+const { title, type, stack, released, summary, pageTitle } = project.data;
 const { Content } = await render(project);
 const facts = [
   { label: 'Released', value: fmtMonth(released) },
@@ -47,6 +47,7 @@ const facts = [
   mode="portfolio"
   variant="cs"
   title={title}
+  pageTitle={pageTitle}
   lede={summary}
   back={{ href: '/', label: '← All work' }}
   position={`${pad(i + 1)} / ${pad(total)}`}

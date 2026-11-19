@@ -36,6 +36,7 @@ const projects = defineCollection({
   schema: base.extend({
     order: z.number().int().positive(), // position in Selected work
     blurb: z.string(), // one line for the portfolio card
+    pageTitle: z.string().optional(), // the browser tab and search result title, when it should say more than the title
   }),
 });
 

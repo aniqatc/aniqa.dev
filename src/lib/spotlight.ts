@@ -29,7 +29,7 @@ export const SPOTLIGHT: Spotlight | null = {
   title: 'Little Doors',
   status: 'Out now',
   blurb:
-    'An advent calendar that lives in your Mac’s menu bar. Open a door a day in December and something new decorates your desktop. My first app with real users.',
+    'A digital advent calendar that lives in your Mac’s menu bar. Open a door a day until Christmas and something new decorates your desktop. My first app with real users.',
   image: '/little-doors/christmas-dark.webp',
   imageAlt:
     'Little Doors: Christmas, with string lights, the line “An advent calendar that lives in your menu bar.” and a grid of 25 doors.',
