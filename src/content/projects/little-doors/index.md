@@ -1,7 +1,7 @@
 ---
-title: Little Doors
+title: 'Little Doors: Christmas'
 # the browser tab and search result title: the phrases people search for, not just the name
-pageTitle: 'Little Doors: a digital advent calendar app for Mac'
+pageTitle: 'Little Doors: Christmas, a digital advent calendar app for Mac'
 type: Mac app
 stack: Swift / SwiftUI / AppKit / Sparkle / Astro
 released: 2026-11
@@ -10,7 +10,7 @@ order: 1
 blurb: A digital advent calendar for your Mac's menu bar. My first app with real users.
 # TODO(Aniqa): swap for a real capture with `npm run screenshots -- little-doors` (this is the dark share image for now)
 screenshotAlt: "Little Doors: Christmas share image in dark mode: string lights along the top, the headline “An advent calendar that lives in your menu bar.”, and a grid of 25 numbered doors with door 1 and door 25 open."
-summary: Little Doors is a digital advent calendar for the Mac. It lives in the menu bar, opens a new door each day until Christmas, and each door adds something to your desktop.
+summary: Little Doors: Christmas is a digital advent calendar for the Mac. It lives in the menu bar, opens a new door each day until Christmas, and each door adds something to your desktop.
 ---
 
 ## Why

@@ -26,7 +26,7 @@ type Spotlight = {
 export const SPOTLIGHT: Spotlight | null = {
   label: 'Now shipping',
   headerLink: { text: 'The lab →', href: '/lab' },
-  title: 'Little Doors',
+  title: 'Little Doors: Christmas',
   status: 'Out now',
   blurb:
     'A digital advent calendar that lives in your Mac’s menu bar. Open a door a day until Christmas and something new decorates your desktop. My first app with real users.',
