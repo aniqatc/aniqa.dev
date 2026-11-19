@@ -27,14 +27,6 @@ I don't always notice the decorations around the house, but I'd notice something
 4. **Make it your own.** [What people can customise, and how setups save it.]
 5. **Built for macOS.** A native Swift app, made for the menu bar, with updates that arrive on their own.
 
-## A digital Christmas gift for anyone with a Mac
-
-Little Doors can be sent as a gift. You buy a key, and it arrives by email with a note from you, so it works as a last-minute Christmas gift for a partner, a friend, a coworker or anyone who spends their day at a Mac. There are two keys: the Standard Key, and the Golden Key, which comes with a surprise gift just for Golden Key holders.
-
-## Get Little Doors
-
-Little Doors: Christmas is out now for macOS. [Get it on littledoors.app](https://littledoors.app/christmas), or [send it as a gift](https://littledoors.app/christmas/gift). Start any time: your first door opens the day you install it.
-
 ## Hardest part
 
 [The one problem that took the most work, and how you solved it.]
@@ -49,3 +41,11 @@ Little Doors: Christmas is out now for macOS. [Get it on littledoors.app](https:
 ## More holiday editions
 
 Christmas is the first edition. Spring is next, then Independence Day, and more holidays after that. [Get a knock when the next door opens](https://littledoors.app/coming-soon).
+
+## A digital Christmas gift for anyone with a Mac
+
+Little Doors can be sent as a gift. You buy a key, and it arrives by email with a note from you, so it works as a last-minute Christmas gift for a partner, a friend, a coworker or anyone who spends their day at a Mac. There are two keys: the Standard Key, and the Golden Key, which comes with a surprise gift just for Golden Key holders.
+
+## Get Little Doors
+
+Little Doors: Christmas is out now for macOS. [Get it on littledoors.app](https://littledoors.app/christmas), or [send it as a gift](https://littledoors.app/christmas/gift). Start any time: your first door opens the day you install it.
