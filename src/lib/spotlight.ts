@@ -19,7 +19,7 @@ type Spotlight = {
   primary: { text: string; href: string };
   /** the outlined button: a page on this site, usually the case study */
   secondary: { text: string; href: string };
-  /** one quiet line under the buttons */
+  /** one quiet line under the title, as its subheading */
   note?: string;
 };
 

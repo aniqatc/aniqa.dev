@@ -31,6 +31,8 @@ const { spotlight } = Astro.props;
       </span>
     )}
   </h3>
+  {/* the short status line sits under the title, as its subheading */}
+  {spotlight.note && <p class="spotlight-note label">{spotlight.note}</p>}
   <p class="spotlight-blurb">{spotlight.blurb}</p>
 
   {/* ---------- Buttons: filled for the product, outlined for the story ---------- */}
@@ -42,7 +44,6 @@ const { spotlight } = Astro.props;
       {spotlight.secondary.text} <span aria-hidden="true">→</span>
     </a>
   </div>
-  {spotlight.note && <p class="spotlight-note label">{spotlight.note}</p>}
 </div>
 
 <style>
@@ -145,8 +146,9 @@ const { spotlight } = Astro.props;
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+  /* subheading under the title: close to it, a little room before the blurb */
   .spotlight-note {
-    margin: 22px 0 0;
+    margin: 10px 0 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
