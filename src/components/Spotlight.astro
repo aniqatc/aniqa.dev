@@ -24,7 +24,12 @@ const { spotlight } = Astro.props;
   {/* ---------- Title, status and blurb ---------- */}
   <h3 class="spotlight-title">
     {spotlight.title}
-    <span class="spotlight-status"><i aria-hidden="true"></i>{spotlight.status}</span>
+    {spotlight.status && (
+      <span class="spotlight-status">
+        <i aria-hidden="true"></i>
+        {spotlight.status}
+      </span>
+    )}
   </h3>
   <p class="spotlight-blurb">{spotlight.blurb}</p>
 
@@ -99,7 +104,7 @@ const { spotlight } = Astro.props;
   /* ---------- Buttons: pills like the Updates button ---------- */
   .spotlight-actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
     margin-top: 22px;
   }
@@ -116,6 +121,7 @@ const { spotlight } = Astro.props;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
+    white-space: nowrap;
     transition:
       background-color 0.2s,
       border-color 0.2s,

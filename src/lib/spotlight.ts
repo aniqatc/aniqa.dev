@@ -8,8 +8,8 @@ type Spotlight = {
   /** right-hand link in that header */
   headerLink: { text: string; href: string };
   title: string;
-  /** short status next to the title, with a pulsing dot */
-  status: string;
+  /** optional short status next to the title, with a pulsing dot */
+  status?: string;
   /** a sentence or two under the title */
   blurb: string;
   /** a 1200 × 630 image in public/ */
@@ -27,13 +27,12 @@ export const SPOTLIGHT: Spotlight | null = {
   label: 'Now shipping',
   headerLink: { text: 'The lab →', href: '/lab' },
   title: 'Little Doors: Christmas',
-  status: 'Out now',
   blurb:
-    'A digital advent calendar that lives in your Mac’s menu bar. Open a door a day until Christmas and something new decorates your desktop. My first app with real users.',
+    'A digital advent calendar that lives in your Mac’s menu bar. Open a door a day until Christmas, and each one decorates your desktop.',
   image: '/little-doors/christmas-dark.webp',
   imageAlt:
     'Little Doors: Christmas, with string lights, the line “An advent calendar that lives in your menu bar.” and a grid of 25 doors.',
-  primary: { text: 'Get it on littledoors.app', href: 'https://littledoors.app/christmas' },
+  primary: { text: 'Get it', href: 'https://littledoors.app/christmas' },
   secondary: { text: 'Read the story', href: '/work/little-doors' },
-  note: 'Christmas is out now · Spring is next',
+  note: 'Out now · Spring is next',
 };
