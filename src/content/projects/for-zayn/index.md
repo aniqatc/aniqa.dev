@@ -3,7 +3,7 @@ title: For Zayn
 type: CSS art
 stack: HTML / CSS
 released: 2026-10
-order: 7
+order: 8
 draft: true
 blurb: A gallery of CSS art, each one something that reminds me of my son.
 summary: A small, growing gallery of CSS art. Each one is something that reminds me of my son Zayn.

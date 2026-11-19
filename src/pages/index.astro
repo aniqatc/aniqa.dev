@@ -6,10 +6,12 @@ import LatestReview from '../components/LatestReview.astro';
 import NowBuilding from '../components/NowBuilding.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ReviewTile from '../components/ReviewTile.astro';
+import Spotlight from '../components/Spotlight.astro';
 import UpdatesSignup from '../components/UpdatesSignup.astro';
 import WorkPreview from '../components/WorkPreview.astro';
 import { getLab, getSelected, real } from '../lib/projects';
 import { TINKERING } from '../lib/now';
+import { SPOTLIGHT } from '../lib/spotlight';
 import { getReviews } from '../lib/reviews';
 
 const selected = await getSelected();
@@ -23,6 +25,9 @@ const showReviewRow = reviews.length >= REVIEWS_FOR_ROW;
 // the row takes up room on the right, so Selected work keeps its first five (by `order`) while it shows
 const WORK_WITH_REVIEW_ROW = 5;
 const shownWork = showReviewRow ? selected.slice(0, WORK_WITH_REVIEW_ROW) : selected;
+// While a project is in the spotlight (src/lib/spotlight.ts), it takes the whole work column: no App reviews,
+// no Selected work, and no review in the intro. Those pages stay up; only the home page changes.
+const spotlightOn = SPOTLIGHT !== null;
 ---
 
 <Base mode="portfolio">
@@ -47,38 +52,44 @@ const shownWork = showReviewRow ? selected.slice(0, WORK_WITH_REVIEW_ROW) : sele
           </dd>
         </div>
         <NowBuilding />
-        {!showReviewRow && <LatestReview />}
+        {!spotlightOn && !showReviewRow && <LatestReview />}
       </dl>
     </section>
 
     <section class="work" aria-labelledby="pf-work">
-      {/* the reviewed apps' icons, newest first, above the work, once there are REVIEWS_FOR_ROW of them */}
-      {showReviewRow && (
-        <div class="home-reviews" role="region" aria-labelledby="pf-reviews">
+      {SPOTLIGHT ? (
+        <Spotlight spotlight={SPOTLIGHT} />
+      ) : (
+        <>
+          {/* the reviewed apps' icons, newest first, above the work, once there are REVIEWS_FOR_ROW of them */}
+          {showReviewRow && (
+            <div class="home-reviews" role="region" aria-labelledby="pf-reviews">
+              <div class="work-head">
+                <h2 class="label" id="pf-reviews">
+                  App reviews
+                </h2>
+                <a href="/reviews">All reviews →</a>
+              </div>
+              <ol class="review-wall home-review-wall">
+                {reviews.map((review, i) => (
+                  <ReviewTile review={review} newest={i === 0} />
+                ))}
+              </ol>
+            </div>
+          )}
           <div class="work-head">
-            <h2 class="label" id="pf-reviews">
-              App reviews
+            <h2 class="label" id="pf-work">
+              Selected work
             </h2>
-            <a href="/reviews">All reviews →</a>
+            <a href="/lab">{real(lab).length} more in the lab →</a>
           </div>
-          <ol class="review-wall home-review-wall">
-            {reviews.map((review, i) => (
-              <ReviewTile review={review} newest={i === 0} />
+          <ol class="projects">
+            {shownWork.map((p, i) => (
+              <ProjectCard project={p} n={i + 1} />
             ))}
           </ol>
-        </div>
+        </>
       )}
-      <div class="work-head">
-        <h2 class="label" id="pf-work">
-          Selected work
-        </h2>
-        <a href="/lab">{real(lab).length} more in the lab →</a>
-      </div>
-      <ol class="projects">
-        {shownWork.map((p, i) => (
-          <ProjectCard project={p} n={i + 1} />
-        ))}
-      </ol>
     </section>
 
     {/* its own block: under the intro on desktop, after the work when the columns stack */}

@@ -5,7 +5,7 @@ stack: React / TypeScript / Supabase / Tailwind / Mantine / Astronomy Engine
 released: 2025-02
 live: tt.aniqa.dev
 repo: time-tapestry
-order: 2
+order: 3
 updated: 2026-10
 blurb: Birthdays, history and the night sky for any date, with birthdays you can save and share.
 screenshotAlt: "Time Tapestry in dark mode on October 31: the calendar and add-a-birthday form on the left, then notable birthdays, three historical events and the Moon's phase, illumination and rise and set times."
