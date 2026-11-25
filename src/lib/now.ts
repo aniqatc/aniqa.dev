@@ -14,7 +14,7 @@ export const BUILDING: NowItem[] = [
     title: 'littledoors.app',
     blurb: 'A festive advent calendar for your Mac.',
     href: 'https://littledoors.app',
-    status: 'Live',
+    status: 'Launched',
   },
   {
     title: 'For Zayn',
