@@ -155,3 +155,14 @@ body:has(.pf) > main {
     gap: 10px;
   }
 }
+
+/* phones (520px and under): the footer is centred site-wide, but on the home page it lines up on the left with the
+   column above it, © after the buttons */
+@media (max-width: 520px) {
+  body:has(.pf) footer .wrap {
+    justify-content: flex-start;
+  }
+  body:has(.pf) .footer-copyright {
+    text-align: left;
+  }
+}

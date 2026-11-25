@@ -11,21 +11,14 @@ import { BUILDING } from '../lib/now';
       <ul class="building">
         {BUILDING.map(({ title, blurb, href, status }) => (
           <li class:list={{ 'building-highlight': status }}>
-            <i class="dot-on" aria-hidden="true" />
-            <div>
-              <div class="building-title-row">
-                <b>
-                  <NowTitle title={title} href={href} />
-                </b>
-                {status && (
-                  <span class="building-status">
-                    <i aria-hidden="true" />
-                    {status}
-                  </span>
-                )}
-              </div>
-              <span>{blurb}</span>
+            <div class="building-title-row">
+              <i class="dot-on" aria-hidden="true" />
+              <b>
+                <NowTitle title={title} href={href} />
+              </b>
+              {status && <span class="building-status">{status}</span>}
             </div>
+            <span class="building-blurb">{blurb}</span>
           </li>
         ))}
       </ul>
@@ -42,16 +35,16 @@ import { BUILDING } from '../lib/now';
     flex-direction: column;
     gap: 12px;
   }
+  /* each item: the dot, title and pill on one line, then the blurb under it, flush with the dot so the
+     Building items line up with the rest of the intro instead of sitting indented */
   li {
-    display: grid;
-    grid-template-columns: 7px minmax(0, 1fr);
-    gap: 12px;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
   }
   .dot-on {
+    flex: none;
     width: 7px;
     height: 7px;
-    margin-top: 5px;
     border-radius: 50%;
     background: var(--accent);
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
@@ -62,8 +55,7 @@ import { BUILDING } from '../lib/now';
     font: 500 12px/1.4 var(--font-mono);
     color: var(--fg);
   }
-  /* ---------- Highlighted item: accent title, then a status pill like the spotlight's "Out now" ---------- */
-  /* the title and pill sit side by side, centred on each other; the pill drops under the title if there's no room */
+  /* ---------- Title row: dot, title, then the status pill for a highlighted item ---------- */
   .building-title-row {
     display: flex;
     flex-wrap: wrap;
@@ -74,36 +66,27 @@ import { BUILDING } from '../lib/now';
     color: var(--accent);
     border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   }
+  /* a small, quiet pill: the row's pulsing dot already marks the item, so the pill has no dot of its own */
   .building-status {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    height: 20px;
-    padding: 0 9px 0 8px;
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    height: 18px;
+    padding: 0 7px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    font: 500 9px/1 var(--font-mono);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    font: 500 8.5px/1 var(--font-mono);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
     white-space: nowrap;
   }
-  /* the same pulsing dot as the list, sized for the pill */
-  .building-status i {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: building-pulse 2s ease-in-out infinite;
-  }
-  li span:not(.building-status) {
+  .building-blurb {
     display: block;
-    margin-top: 2px;
+    margin-top: 4px;
     font-size: 12.5px;
     line-height: 1.5;
     color: var(--muted);
-    max-width: 44ch;
   }
   @keyframes building-pulse {
     50% {
@@ -111,7 +94,7 @@ import { BUILDING } from '../lib/now';
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .building-status i {
+    .dot-on {
       animation: none;
     }
   }
