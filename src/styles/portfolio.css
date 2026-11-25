@@ -9,7 +9,7 @@
 }
 /* one width for the column, the header and the footer, so their edges line up */
 body:has(.pf) {
-  --home-width: 480px;
+  --home-width: 600px;
 }
 .pf > .intro,
 .pf > .updates {
