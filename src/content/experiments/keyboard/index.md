@@ -8,7 +8,6 @@ repo: keyboard
 updated: 2026-10
 screenshotAlt: 'Virtual Keyboard in its dark Nebula theme: a split Markdown editor with the source on the left and the preview on the right, above a full on-screen keyboard.'
 summary: A virtual keyboard with eight themes and four light shows, paired with a Markdown editor that previews as you type.
-favorite: true
 ---
 
 ## Why

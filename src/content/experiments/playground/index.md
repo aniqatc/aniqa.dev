@@ -8,7 +8,6 @@ repo: playground
 updated: 2026-10
 screenshotAlt: 'The Playground home page in dark mode: the headline “Seven small apps. One big playground.”, an index of the widgets with their like counts, and a GitHub activity grid.'
 summary: Eight independent widgets, from a graphing calculator to a community bookmark board, each built to practise a different part of full-stack development.
-favorite: true
 ---
 
 ## Why

@@ -8,7 +8,6 @@ repo: weather
 updated: 2026-10
 screenshotAlt: "Weather Dashboard in dark mode: today's forecast for New York with temperature, visibility, wind and humidity, sunrise and sunset times, the week ahead, and the weather in five other cities."
 summary: A light and dark weather dashboard with live conditions and a 7-day forecast for any city, plus the weather in five random cities.
-favorite: true
 ---
 
 ## Why

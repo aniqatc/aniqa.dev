@@ -8,7 +8,6 @@ repo: time-tapestry
 updated: 2026-10
 screenshotAlt: "Time Tapestry in dark mode on October 31: the calendar and add-a-birthday form on the left, then notable birthdays, three historical events and the Moon's phase, illumination and rise and set times."
 summary: A calendar that shows the birthdays, events and sky for any date. Save up to five birthdays of your own, privately or shared with everyone.
-favorite: true
 ---
 
 ## Why
