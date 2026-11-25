@@ -1,17 +1,16 @@
-/* ---------- Portfolio home: intro on the left, work on the right ---------- */
-/* the intro and Updates share the left column (intro above, Updates below, meeting in the middle), and the work
-   spans both rows on the right. The two sides share the width and are centred against each other (not each
-   against the window), so their middles line up at every size. */
+/* ---------- Portfolio home: just the intro, centred on the page ---------- */
+/* the intro and Updates stack in one column, centred both ways in the space between the header and footer */
 .pf {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  grid-template-areas:
-    'intro work'
-    'updates work';
-  column-gap: clamp(40px, 6vw, 80px);
-  row-gap: 0;
-  align-content: center;
-  padding-block: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: 48px;
+}
+.pf > .intro,
+.pf > .updates {
+  width: 100%;
+  max-width: 460px;
 }
 /* one screen on desktop, no scrollbar: header, the two sides centred in what's left, then the footer */
 body:has(.pf) {
@@ -24,18 +23,15 @@ body:has(.pf) > main {
   width: 100%;
 }
 .intro {
-  grid-area: intro;
-  align-self: end;
-  max-width: 440px;
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 .intro h1 {
-  font-size: clamp(44px, 6vw, 72px);
+  font-size: clamp(48px, 7vw, 80px);
 }
 .intro .lede {
-  font-size: 17px;
+  font-size: 18px;
   /* one sentence per line: the intro column is wide enough on desktop, and each line balances on its own when it wraps */
   max-width: none;
 }
@@ -89,12 +85,26 @@ body:has(.pf) > main {
   transform: translateY(-2px);
 }
 
-/* ---------- Updates: under the intro, its closing line the top of this row ---------- */
-.updates {
-  grid-area: updates;
-  align-self: start;
-  max-width: 440px;
+/* the Work row: where Selected work went */
+.intro-work {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
 }
+.intro-work a {
+  color: var(--fg);
+  border-bottom: 1px solid var(--line);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.intro-work a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Updates: under the intro, its closing line the top of this row ---------- */
+
 /* no line under the email form */
 .updates-list {
   margin: 0;
@@ -111,210 +121,28 @@ body:has(.pf) > main {
   flex-basis: 0;
 }
 
-/* ---------- Work column ---------- */
-.work {
-  grid-area: work;
-  align-self: center;
-  min-width: 0;
-}
-.work-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--line);
-}
-.work-head h2 {
-  margin: 0;
-}
-.work-head a {
-  font: 400 11px/1 var(--font-mono);
-  color: var(--muted);
-}
-.work-head a:hover {
-  color: var(--accent);
-}
-
-/* App reviews: the /reviews logo wall made compact, above the work */
-.home-reviews {
-  margin-bottom: 36px;
-}
-.pf .home-review-wall {
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-  gap: 18px 8px;
-  padding-top: 20px;
-}
-.pf .home-review-wall .review-tile {
-  gap: 8px;
-}
-.pf .home-review-wall .review-logo {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  font-size: 22px;
-}
-.pf .home-review-wall .review-name {
-  font-size: 12px;
-}
-.pf .home-review-wall .review-number {
-  margin-top: -5px;
-  font-size: 10px;
-}
-@media (max-width: 600px) {
-  .pf .home-review-wall {
-    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
-    gap: 16px 4px;
-  }
-  .pf .home-review-wall .review-logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-  }
-  .pf .home-review-wall .review-name {
-    font-size: 11.5px;
-  }
-}
-
-/* ---------- The list: number, title and blurb, year; the whole row opens the case study ---------- */
-.projects {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.project-link {
-  display: grid;
-  /* the same side width on every row, so the years and stars line up down the list */
-  grid-template-columns: 2rem minmax(0, 1fr) 3rem;
-  gap: 4px 16px;
-  align-items: baseline;
-  padding: 14px 0;
-}
-.project-number,
-.project-year {
-  align-self: start;
-  padding-top: 6px;
-  font: 500 10px/1 var(--font-mono);
-  color: var(--muted);
-  transition: color 0.2s;
-}
-.project-year {
-  font-weight: 400;
-  font-variant-numeric: tabular-nums;
-}
-/* the year, with the GitHub stars under it */
-.project-side {
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-  padding-top: 6px;
-}
-.project-side .project-year {
-  align-self: flex-end;
-  padding-top: 0;
-}
-/* the star sits in a column of its own and the count is right-aligned, so "★ 5" and "★ 38" share edges */
-.project-stars {
-  display: grid;
-  grid-template-columns: 13px minmax(2ch, max-content);
-  align-items: center;
-  column-gap: 4px;
-  text-align: right;
-  font: 400 10.5px/1 var(--font-mono);
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.project-stars svg {
-  width: 13px;
-  height: 13px;
-  fill: var(--pop);
-}
-.project-text {
-  min-width: 0;
-}
-.project-title {
-  margin: 0;
-  font: 500 16px/1.3 var(--font-display);
-  letter-spacing: -0.01em;
-  transition: color 0.2s;
-}
-.project-blurb {
-  display: block;
-  margin-top: 4px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--muted);
-}
-.project-link:hover .project-title,
-.project-link:focus-visible .project-title,
-.project-link:hover .project-number {
-  color: var(--accent);
-}
-
 /* shorter laptop screens (under 820px tall): tighten the intro so the home page still fits one screen */
-@media (min-width: 951px) and (max-height: 820px) {
+@media (max-height: 820px) {
   .pf {
-    padding-block: 16px;
+    padding-block: 24px;
   }
   .intro {
     gap: 12px;
   }
-  .intro h1 {
-    font-size: clamp(44px, 5vw, 60px);
-  }
   .intro-row {
     padding-block: 10px;
   }
-  /* six projects fit a 1280 × 720 screen */
-  .project-link {
-    padding-block: 11px;
-  }
 }
 
-/* Tinkering, Building and Updates: on small screens (650px and under) the label sits above its content */
+/* Tinkering, Building, Work and Updates: on small screens (650px and under) the label sits above its content */
 @media (max-width: 650px) {
+  .pf {
+    justify-content: flex-start;
+    padding-block: 44px 56px;
+  }
   .intro .intro-row,
   .updates .intro-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
-  }
-}
-/* under 950px the work column would get cramped, so the columns stack: intro, work, then Updates */
-@media (max-width: 950px) {
-  .pf {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'intro'
-      'work'
-      'updates';
-    align-content: start;
-    padding-block: 44px 56px;
-  }
-  /* room between the intro and the work, and a little before Updates */
-  .work {
-    margin-top: 64px;
-  }
-  /* a line between the end of the work and the email form */
-  .updates {
-    margin-top: 24px;
-    border-top: 1px solid var(--line);
-    transition: border-color 0.6s;
-  }
-  /* stacked, everything runs the full width, so their lines match */
-  .intro,
-  .updates {
-    align-self: start;
-    max-width: none;
-  }
-  /* one divider between the intro and the work, not two: the intro ends on its last row, and the Selected
-     work header's line starts the new section */
-  .intro-list {
-    border-bottom: 0;
-  }
-  .intro .intro-row:last-child {
-    padding-bottom: 0;
   }
 }

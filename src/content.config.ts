@@ -30,7 +30,7 @@ const base = z.object({
   screenshotAlt: z.string().optional(), // what's on screen in screenshot.png
 });
 
-// Portfolio: src/content/projects/<slug>/ → /work/<slug>
+// Portfolio: src/content/projects/<slug>/ → /work/<slug>. Empty for now: Selected work moved into the lab as favorites.
 const projects = defineCollection({
   loader: folder('./src/content/projects'), // locate all index.md files within the projects folder and generate slugs from folder names
   schema: base.extend({

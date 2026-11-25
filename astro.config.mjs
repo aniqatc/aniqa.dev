@@ -19,6 +19,13 @@ const sketchLibs = ['p5', 'three'].filter((name) => name in dependencies);
 export default defineConfig({
   site: 'https://aniqa.dev', // The base URL of the site.
   adapter: vercel(), // Vercel adapter for deploying the site; pages stay static, only routes with `prerender = false` run as functions.
+  // Selected work moved into the lab (Nov 2026), so old case-study links land on the same entry there.
+  redirects: Object.fromEntries(
+    ['moji-canvas', 'time-tapestry', 'rflect-cli', 'playground', 'keyboard', 'weather'].map((slug) => [
+      `/work/${slug}`,
+      `/lab/${slug}`,
+    ]),
+  ),
   integrations: [sitemap({ filter: (page) => !page.endsWith('/404/') })], // Generate a sitemap, excluding the 404 page.
   markdown: {
     processor: satteri({ hastPlugins: [sections] }), // Use the Satteri processor with custom section handling for markdown files.
