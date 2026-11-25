@@ -12,7 +12,7 @@ export const TINKERING = ['TypeScript', 'Next.js', 'Astro', 'Three.js', 'CSS art
 export const BUILDING: NowItem[] = [
   {
     title: 'littledoors.app',
-    blurb: 'A festive advent calendar for your Mac.',
+    blurb: 'A festive advent calendar that lives in your Mac’s menu bar.',
     href: 'https://littledoors.app',
     status: 'Launched',
   },
