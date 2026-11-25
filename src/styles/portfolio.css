@@ -7,10 +7,19 @@
   justify-content: center;
   padding-block: 48px;
 }
+/* one width for the column, the header and the footer, so their edges line up */
+body:has(.pf) {
+  --home-width: 480px;
+}
 .pf > .intro,
 .pf > .updates {
   width: 100%;
-  max-width: 460px;
+  max-width: var(--home-width);
+}
+/* ---------- Header and footer: pulled in to the column's width on the home page ---------- */
+body:has(.pf) .hdr .wrap,
+body:has(.pf) footer .wrap {
+  max-width: calc(var(--home-width) + 48px);
 }
 /* one screen on desktop, no scrollbar: header, the two sides centred in what's left, then the footer */
 body:has(.pf) {

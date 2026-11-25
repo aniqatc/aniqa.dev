@@ -8,7 +8,7 @@ interface Props {
 
 const { mode } = Astro.props;
 const onLab = mode === 'lab';
-// app reviews sit under the portfolio without being part of it, so Portfolio is dimmed there, not filled
+// app reviews sit under the home page without being part of it, so Now is dimmed there, not filled
 const onReviews = Astro.url.pathname.startsWith('/reviews');
 ---
 
@@ -24,7 +24,7 @@ const onReviews = Astro.url.pathname.startsWith('/reviews');
           class:list={{ 'switch-under': onReviews }}
           aria-current={onLab || onReviews ? undefined : 'page'}
         >
-          Portfolio
+          Now
         </a>
         <a href="/lab" aria-current={onLab ? 'page' : undefined}>
           Lab
