@@ -36,6 +36,8 @@ body:has(.pf) > main {
 }
 .intro .lede {
   font-size: 17px;
+  /* one sentence per line: the intro column is wide enough on desktop, and each line balances on its own when it wraps */
+  max-width: none;
 }
 .pf .label {
   font-size: 10px;
