@@ -55,29 +55,23 @@ import { BUILDING } from '../lib/now';
     font: 500 12px/1.4 var(--font-mono);
     color: var(--fg);
   }
-  /* ---------- Highlighted item: accent title and a status pill, like the spotlight's "Out now" ---------- */
+  /* ---------- Highlighted item: accent title and a quiet status word, no pill ---------- */
   .building-title {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
+    align-items: baseline;
+    gap: 4px 10px;
   }
   .building-highlight .building-title :global(.now-link) {
     color: var(--accent);
     border-color: color-mix(in srgb, var(--accent) 45%, transparent);
   }
   .building-status {
-    display: inline-flex;
-    align-items: center;
-    height: 20px;
-    padding: 0 8px;
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    font: 500 9px/1 var(--font-mono);
-    letter-spacing: 0.12em;
+    font: 500 9.5px/1 var(--font-mono);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--accent);
+    opacity: 0.75;
   }
   li span:not(.building-status) {
     display: block;

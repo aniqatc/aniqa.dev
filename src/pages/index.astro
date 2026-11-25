@@ -23,6 +23,9 @@ const showReviewRow = reviews.length >= REVIEWS_FOR_ROW;
 // the row takes up room on the right, so Selected work keeps its first five (by `order`) while it shows
 const WORK_WITH_REVIEW_ROW = 5;
 const shownWork = showReviewRow ? selected.slice(0, WORK_WITH_REVIEW_ROW) : selected;
+// The intro's Hooked on line (the newest review) is hidden for now, during the Little Doors launch.
+// Set this back to true to bring it back. The footer's Reviews link stays either way.
+const SHOW_LATEST_REVIEW = false;
 ---
 
 <Base mode="portfolio">
@@ -47,7 +50,7 @@ const shownWork = showReviewRow ? selected.slice(0, WORK_WITH_REVIEW_ROW) : sele
           </dd>
         </div>
         <NowBuilding />
-        {!showReviewRow && <LatestReview />}
+        {SHOW_LATEST_REVIEW && !showReviewRow && <LatestReview />}
       </dl>
     </section>
 
