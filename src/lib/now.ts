@@ -1,7 +1,7 @@
 // Short lists for the portfolio intro and the lab
 
 /** One in-progress item. `href` is optional: a full URL opens in a new tab with ↗, a site path (/lab/…) opens in place.
- * `status` is optional: a short word in small accent caps after the title, and it colours the title in the accent
+ * `status` is optional: a short word in an accent pill after the title, and it colours the title in the accent
  * so the item stands out from the rest of the list. */
 type NowItem = { title: string; blurb: string; href?: string; status?: string };
 
