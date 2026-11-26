@@ -9,8 +9,9 @@ live: littledoors.app
 order: 1
 blurb: A festive advent calendar that lives in your Mac’s menu bar.
 # ---------- shown at the top of the page, with a "Get it" button ----------
-price: '$25'
-priceNote: '[Golden Key price, or "One-time, no subscription"]'
+price: '$2.99'
+# TODO(Aniqa): change when the launch price ends
+priceNote: 'Launch price'
 requires: '[macOS version] or later'
 getUrl: https://littledoors.app/christmas
 # more links after Live ↗, e.g. the launch posts. Uncomment and fill in:
