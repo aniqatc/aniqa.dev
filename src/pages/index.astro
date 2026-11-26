@@ -5,20 +5,27 @@ import LatestReview from '../components/LatestReview.astro';
 import NowBuilding from '../components/NowBuilding.astro';
 import UpdatesSignup from '../components/UpdatesSignup.astro';
 import { TINKERING } from '../lib/now';
-import { getLab, real, fmtMonth } from '../lib/projects';
+import { getImage } from 'astro:assets';
+import { getLab, real } from '../lib/projects';
+import { screenshotFor } from '../lib/screenshots';
 
-// The Lab row: the three newest lab entries, then a link to all of them
-const LATEST_LAB_COUNT = 3;
-const labEntries = real(await getLab());
-const latestLab = [...labEntries].reverse().slice(0, LATEST_LAB_COUNT);
+// The Lab row: a fanned stack of the three newest lab screenshots, tinted mint so they sit on the dark page
+const FAN_SIZE = 3;
+const newestWithScreenshots = real(await getLab())
+  .reverse()
+  .filter((entry) => screenshotFor(entry))
+  .slice(0, FAN_SIZE);
+const fanImages = await Promise.all(
+  newestWithScreenshots.map((entry) => getImage({ src: screenshotFor(entry)!, width: 240, format: 'webp' })),
+);
 
 // The intro's Hooked on line (the newest review) is hidden for now, during the Little Doors launch.
 // Set this back to true to bring it back. The footer's Reviews link stays either way.
 const SHOW_LATEST_REVIEW = false;
 ---
 
-{/* Home: just the intro, centred on the page. Selected work moved into the lab, and the Lab row shows its
-    newest entries with a link to the rest. */}
+{/* Home: just the intro, centred on the page. Selected work moved into the lab, and the Lab row shows a
+    fanned stack of its newest screenshots. */}
 <Base mode="portfolio">
   <main class="wrap pf">
     <section class="intro" aria-labelledby="pf-h">
@@ -42,22 +49,21 @@ const SHOW_LATEST_REVIEW = false;
         </div>
         <NowBuilding />
         {SHOW_LATEST_REVIEW && <LatestReview />}
-        <div class="intro-row">
+        <div class="intro-row lab-row">
           <dt class="label">Lab</dt>
-          <dd class="intro-lab">
-            <ol class="lab-latest">
-              {latestLab.map((entry) => (
-                <li>
-                  <a href={`/lab/${entry.id}`}>
-                    <span class="lab-latest-title">{entry.data.title}</span>
-                    <span class="lab-latest-type">{entry.data.type}</span>
-                    <span class="lab-latest-date">{fmtMonth(entry.data.released)}</span>
-                  </a>
-                </li>
-              ))}
-            </ol>
-            <a class="lab-all" href="/lab">
-              All {labEntries.length} things I’ve made <span aria-hidden="true">→</span>
+          <dd>
+            <a class="lab-fan-link" href="/lab">
+              <span class="lab-fan" aria-hidden="true">
+                {fanImages.map((image) => (
+                  <img src={image.src} alt="" width="104" height="65" loading="lazy" decoding="async" />
+                ))}
+              </span>
+              <span class="lab-fan-text">
+                <span class="lab-fan-title">
+                  See the lab <span aria-hidden="true">→</span>
+                </span>
+                <span class="lab-fan-blurb">My digital sketchbook: everything I’ve made while learning.</span>
+              </span>
             </a>
           </dd>
         </div>

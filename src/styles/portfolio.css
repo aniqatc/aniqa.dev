@@ -94,62 +94,77 @@ body:has(.pf) > main {
   transform: translateY(-2px);
 }
 
-/* ---------- Lab row: the three newest lab entries, then a link to all of them ---------- */
-.lab-latest {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* ---------- Lab row: a fanned stack of the newest lab screenshots beside "See the lab" ---------- */
+.lab-row {
+  align-items: center;
 }
-/* each entry: title, type and month on one line, like a row in the lab */
-.lab-latest a {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 4.75rem;
-  gap: 12px;
-  align-items: baseline;
-  padding: 6px 0;
-  border-bottom: 1px dashed var(--line);
+.lab-fan-link {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
-.lab-latest li:first-child a {
-  padding-top: 0;
+/* three cards stacked with a slight tilt: the newest on top, the other two peeking out on either side */
+.lab-fan {
+  position: relative;
+  flex: none;
+  width: 132px;
+  height: 80px;
 }
-.lab-latest-title {
-  font: 500 12px/1.4 var(--font-mono);
+.lab-fan img {
+  position: absolute;
+  width: 104px;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
+  /* the lab is light, the home page is dark: greyscale, flipped dark, then tinted toward the mint accent */
+  filter: grayscale(1) invert(1) brightness(0.75) sepia(1) hue-rotate(140deg) saturate(1.6);
+  transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.lab-fan img:nth-child(1) {
+  left: 14px;
+  top: 0;
+  z-index: 3;
+}
+.lab-fan img:nth-child(2) {
+  left: 28px;
+  top: 12px;
+  transform: rotate(7deg);
+  z-index: 2;
+}
+.lab-fan img:nth-child(3) {
+  left: 0;
+  top: 10px;
+  transform: rotate(-7deg);
+  z-index: 1;
+}
+/* on hover the side cards fan further out */
+.lab-fan-link:hover .lab-fan img:nth-child(2) {
+  transform: rotate(12deg) translate(10px, 2px);
+}
+.lab-fan-link:hover .lab-fan img:nth-child(3) {
+  transform: rotate(-12deg) translate(-10px, 2px);
+}
+.lab-fan-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.lab-fan-title {
+  font: 600 16px/1.3 var(--font-display);
   color: var(--fg);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   transition: color 0.2s;
 }
-.lab-latest-type,
-.lab-latest-date {
-  font: 400 10.5px/1.4 var(--font-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.lab-latest-date {
-  text-align: right;
-}
-.lab-latest a:hover .lab-latest-title {
+.lab-fan-link:hover .lab-fan-title {
   color: var(--accent);
 }
-/* the way into the rest of the lab: a pill like Reviews in the footer */
-.lab-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  height: 32px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font: 400 11.5px/1 var(--font-mono);
-  color: var(--fg);
-  transition: border-color 0.2s;
-}
-.lab-all:hover {
-  border-color: var(--accent);
+.lab-fan-blurb {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
 /* ---------- Updates: under the intro, its closing line the top of this row ---------- */
@@ -193,11 +208,5 @@ body:has(.pf) > main {
   .updates .intro-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
-  }
-  .lab-latest a {
-    grid-template-columns: minmax(0, 1fr) 4.75rem;
-  }
-  .lab-latest-type {
-    display: none;
   }
 }
