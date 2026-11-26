@@ -16,7 +16,7 @@ const { label = 'Building', items = BUILDING } = Astro.props;
     <dt class="label">{label}</dt>
     <dd>
       <ul class="building">
-        {items.map(({ title, blurb, href, status }) => (
+        {items.map(({ title, blurb, href, status, story }) => (
           <li class:list={{ 'building-highlight': status }}>
             <i class="dot-on" aria-hidden="true" />
             <div>
@@ -32,6 +32,11 @@ const { label = 'Building', items = BUILDING } = Astro.props;
                 )}
               </div>
               <span>{blurb}</span>
+              {story && (
+                <a class="building-story" href={story}>
+                  Read about it <span aria-hidden="true">→</span>
+                </a>
+              )}
             </div>
           </li>
         ))}
@@ -104,13 +109,30 @@ const { label = 'Building', items = BUILDING } = Astro.props;
     background: var(--accent);
     animation: building-pulse 2s ease-in-out infinite;
   }
-  li span:not(.building-status) {
+  /* the blurb under each title (only the direct child, so spans inside its links keep their own styles) */
+  li > div > span {
     display: block;
     margin-top: 2px;
     font-size: 12.5px;
     line-height: 1.5;
     color: var(--muted);
     max-width: 44ch;
+  }
+  /* ---------- Write-up link: its own small mono line under the blurb, in the text colour ---------- */
+  .building-story {
+    display: inline-block;
+    margin-top: 6px;
+    font: 400 11px/1.4 var(--font-mono);
+    color: var(--fg);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--line);
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .building-story:hover {
+    color: var(--accent);
+    border-color: var(--accent);
   }
   @keyframes building-pulse {
     50% {

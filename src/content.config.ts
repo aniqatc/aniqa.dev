@@ -30,12 +30,22 @@ const base = z.object({
   screenshotAlt: z.string().optional(), // what's on screen in screenshot.png
 });
 
-// Portfolio: src/content/projects/<slug>/ → /work/<slug>. Empty for now: Selected work moved into the lab as favorites.
+// Work: src/content/projects/<slug>/ → /work/<slug>. Shipped products get a case study here; everything else is in the lab.
 const projects = defineCollection({
   loader: folder('./src/content/projects'), // locate all index.md files within the projects folder and generate slugs from folder names
   schema: base.extend({
     order: z.number().int().positive(), // position in Selected work
     blurb: z.string(), // one line for the portfolio card
+    pageTitle: z.string().optional(), // the browser tab and search result title, when it should say more than the title
+    // ---------- For a product people buy: shown at the top of the case study ----------
+    price: z.string().optional(), // e.g. "$25"; adds a Price fact and a "Get it" button
+    priceNote: z.string().optional(), // a quieter line under the price, e.g. "One-time, no subscription"
+    requires: z.string().optional(), // system requirements, e.g. "macOS 14 or later"
+    getUrl: z.url().optional(), // where the "Get it" button goes; the live site when left out
+    // more links after Live ↗ / Code ↗, e.g. the Show HN post
+    extraLinks: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
+    // places that wrote about it or listed it, shown as a "Featured on" fact
+    featuredOn: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
   }),
 });
 

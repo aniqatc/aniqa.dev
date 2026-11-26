@@ -2,8 +2,9 @@
 
 /** One in-progress item. `href` is optional: a full URL opens in a new tab with ↗, a site path (/lab/…) opens in place.
  * `status` is optional: a short word in an accent pill after the title, and it colours the title in the accent
- * so the item stands out from the rest of the list. */
-export type NowItem = { title: string; blurb: string; href?: string; status?: string };
+ * so the item stands out from the rest of the list. `story` is optional: a site path to its write-up, shown as
+ * "Read about it →" on its own line under the blurb. */
+export type NowItem = { title: string; blurb: string; href?: string; status?: string; story?: string };
 
 /** "Currently tinkering with" chips. Not shown on the home page for now; kept for when the row comes back. */
 export const TINKERING = ['TypeScript', 'Three.js', 'CSS art', 'Agentic coding'];
@@ -15,6 +16,7 @@ export const SHIPPED: NowItem[] = [
     blurb: 'A festive advent calendar that lives in your Mac’s menu bar.',
     href: 'https://littledoors.app',
     status: 'Launched',
+    story: '/work/little-doors',
   },
 ];
 

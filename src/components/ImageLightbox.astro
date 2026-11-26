@@ -1,5 +1,5 @@
 ---
-// Pictures in a review's notes open full size: click one (or focus it and press Enter) and it fills
+// Pictures in a review's or case study's notes open full size: click one (or focus it and press Enter) and it fills
 // the screen in a <dialog>, at the image's own resolution, with its caption underneath. Picture notes (an
 // image titled "note" in the Markdown, a chip in the line of text; see src/lib/md-sections.mjs) open the
 // same way. Esc, the close button or a click anywhere closes it, and focus goes back to the picture. The
@@ -22,10 +22,11 @@
     const full = dialog?.querySelector<HTMLImageElement>('.lightbox-img');
     const caption = dialog?.querySelector<HTMLParagraphElement>('.lightbox-caption');
     if (!dialog || !full || !caption) return;
-    // the pictures in the notes (one per paragraph, or two side by side), not the screenshot at the top
-    const pictures = [...document.querySelectorAll<HTMLImageElement>('.d-rv .sec p > img')];
+    // the pictures in the notes (one per paragraph, or two side by side), not the screenshot at the top.
+    // Styles for both are in src/styles/pictures.css.
+    const pictures = [...document.querySelectorAll<HTMLImageElement>(':is(.d-rv, .d-cs) .sec p > img')];
     // picture notes already have their role, label and tab stop from the Markdown
-    const notes = [...document.querySelectorAll<HTMLElement>('.d-rv .sec .picture-note')];
+    const notes = [...document.querySelectorAll<HTMLElement>(':is(.d-rv, .d-cs) .sec .picture-note')];
     const triggers: HTMLElement[] = [...pictures, ...notes];
     const imageFor = (trigger: HTMLElement) =>
       trigger instanceof HTMLImageElement ? trigger : trigger.querySelector<HTMLImageElement>('img');
