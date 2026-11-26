@@ -108,14 +108,17 @@ body:has(.pf) > main {
   position: relative;
   flex: none;
   width: 132px;
-  height: 80px;
+  height: 66px;
 }
 .lab-fan img {
   position: absolute;
   width: 104px;
   height: auto;
-  aspect-ratio: 16 / 10;
+  /* cropped to the top three-quarters of the page, so controls along the bottom edge (like Our Street's date
+     slider) stay out of the stack */
+  aspect-ratio: 16 / 7.5;
   object-fit: cover;
+  object-position: top;
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
