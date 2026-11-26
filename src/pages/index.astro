@@ -9,15 +9,19 @@ import { getImage } from 'astro:assets';
 import { getLab, real } from '../lib/projects';
 import { screenshotFor } from '../lib/screenshots';
 
-// The Lab row: a fanned stack of the three newest lab screenshots, tinted mint so they sit on the dark page
-const FAN_SIZE = 3;
-const newestWithScreenshots = real(await getLab())
+// The Lab row: a folder with the two newest lab screenshots peeking out, tinted mint so they sit on the dark page
+const FOLDER_PAGES = 2;
+const labEntries = real(await getLab());
+const newestWithScreenshots = [...labEntries]
   .reverse()
   .filter((entry) => screenshotFor(entry))
-  .slice(0, FAN_SIZE);
-const fanImages = await Promise.all(
-  newestWithScreenshots.map((entry) => getImage({ src: screenshotFor(entry)!, width: 240, format: 'webp' })),
-);
+  .slice(0, FOLDER_PAGES);
+// back page first, so the newest entry is drawn last and sits in front
+const folderImages = (
+  await Promise.all(
+    newestWithScreenshots.map((entry) => getImage({ src: screenshotFor(entry)!, width: 240, format: 'webp' })),
+  )
+).reverse();
 
 // The intro's Hooked on line (the newest review) is hidden for now, during the Little Doors launch.
 // Set this back to true to bring it back. The footer's Reviews link stays either way.
@@ -25,7 +29,7 @@ const SHOW_LATEST_REVIEW = false;
 ---
 
 {/* Home: just the intro, centred on the page. Selected work moved into the lab, and the Lab row shows a
-    fanned stack of its newest screenshots. */}
+    folder with its newest screenshots peeking out. */}
 <Base mode="portfolio">
   <main class="wrap pf">
     <section class="intro" aria-labelledby="pf-h">
@@ -44,12 +48,16 @@ const SHOW_LATEST_REVIEW = false;
           <dt class="label">Lab</dt>
           <dd>
             <a class="lab-fan-link" href="/lab">
-              <span class="lab-fan" aria-hidden="true">
-                {fanImages.map((image) => (
-                  <span class="lab-fan-card">
-                    <img src={image.src} alt="" width="130" height="81" loading="lazy" decoding="async" />
+              <span class="lab-folder" aria-hidden="true">
+                {folderImages.map((image) => (
+                  <span class="lab-folder-page">
+                    <img src={image.src} alt="" width="120" height="75" loading="lazy" decoding="async" />
                   </span>
                 ))}
+                <svg class="lab-folder-front" viewBox="0 0 132 60" width="132" height="60">
+                  <path d="M2 10a6 6 0 0 1 6-6h34l8 7h74a6 6 0 0 1 6 6v35a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6Z" />
+                </svg>
+                <span class="lab-folder-label">Lab · {labEntries.length}</span>
               </span>
               <span class="lab-fan-text">
                 <span class="lab-fan-title">

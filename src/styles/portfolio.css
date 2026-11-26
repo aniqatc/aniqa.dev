@@ -103,26 +103,24 @@ body:has(.pf) > main {
   align-items: center;
   gap: 20px;
 }
-/* three cards stacked with a slight tilt: the newest on top, the other two peeking out on either side */
-.lab-fan {
+/* a folder with the two newest lab pages peeking out of the top */
+.lab-folder {
   position: relative;
   flex: none;
   width: 132px;
-  height: 80px;
+  height: 86px;
 }
-/* each card keeps the page's 16:10 shape; the screenshot inside is zoomed to 125% and pinned to the top, so the
-   bottom fifth of the page (where controls like Our Street's date slider sit) is trimmed off */
-.lab-fan-card {
+/* each page keeps the screenshot's 16:10 shape; the screenshot is zoomed to 125% and pinned to the top, so the
+   bottom of the page (where controls like Our Street's date slider sit) stays inside the folder */
+.lab-folder-page {
   position: absolute;
-  width: 104px;
+  width: 92px;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
   transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
-.lab-fan-card img {
+.lab-folder-page img {
   display: block;
   width: 125%;
   max-width: none;
@@ -131,30 +129,50 @@ body:has(.pf) > main {
   /* the lab is light, the home page is dark: greyscale, flipped dark, then tinted toward the mint accent */
   filter: grayscale(1) invert(1) brightness(0.75) sepia(1) hue-rotate(140deg) saturate(1.6);
 }
-.lab-fan-card:nth-child(1) {
-  left: 14px;
-  top: 0;
-  z-index: 3;
+/* the back page: tilted left and dimmed, so the front page stands clear of it */
+.lab-folder-page:nth-child(1) {
+  left: 16px;
+  top: 2px;
+  transform: rotate(-6deg);
+  border: 1px solid var(--line);
 }
-.lab-fan-card:nth-child(2) {
-  left: 28px;
-  top: 12px;
-  transform: rotate(7deg);
-  z-index: 2;
+.lab-folder-page:nth-child(1) img {
+  filter: grayscale(1) invert(1) brightness(0.42) sepia(1) hue-rotate(140deg) saturate(1.2);
 }
-.lab-fan-card:nth-child(3) {
+/* the front page: the newest entry, brighter, with a light edge and a shadow on the page behind */
+.lab-folder-page:nth-child(2) {
+  left: 32px;
+  top: 8px;
+  transform: rotate(4deg);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: -6px 8px 18px -6px rgba(0, 0, 0, 0.7);
+}
+/* the folder's front flap, over the bottom of both pages */
+.lab-folder-front {
+  position: absolute;
   left: 0;
-  top: 10px;
-  transform: rotate(-7deg);
-  z-index: 1;
+  bottom: 0;
+  fill: var(--surface);
+  stroke: #3a3644;
+  stroke-width: 1.2;
 }
-/* on hover the side cards fan further out */
-.lab-fan-link:hover .lab-fan-card:nth-child(2) {
-  transform: rotate(12deg) translate(10px, 2px);
+.lab-folder-label {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  font: 500 9px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
-.lab-fan-link:hover .lab-fan-card:nth-child(3) {
-  transform: rotate(-12deg) translate(-10px, 2px);
+/* on hover the pages slide a little further out of the folder */
+.lab-fan-link:hover .lab-folder-page:nth-child(1) {
+  transform: rotate(-9deg) translateY(-6px);
 }
+.lab-fan-link:hover .lab-folder-page:nth-child(2) {
+  transform: rotate(6deg) translateY(-10px);
+}
+
 .lab-fan-text {
   display: flex;
   flex-direction: column;
