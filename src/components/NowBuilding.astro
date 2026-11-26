@@ -1,15 +1,22 @@
 ---
-// Portfolio intro: what's in progress. Edit BUILDING in src/lib/now.ts; the section hides itself when it's empty.
+// Portfolio intro: a dotted list under a label. Used for Shipped and Building; edit both lists in
+// src/lib/now.ts. The section hides itself when its list is empty.
 import NowTitle from './NowTitle.astro';
-import { BUILDING } from '../lib/now';
+import { BUILDING, type NowItem } from '../lib/now';
+
+interface Props {
+  label?: string; // the row's label on the left
+  items?: NowItem[]; // the list to show; Building's by default
+}
+const { label = 'Building', items = BUILDING } = Astro.props;
 ---
 
-{BUILDING.length > 0 && (
+{items.length > 0 && (
   <div class="intro-row">
-    <dt class="label">Building</dt>
+    <dt class="label">{label}</dt>
     <dd>
       <ul class="building">
-        {BUILDING.map(({ title, blurb, href, status }) => (
+        {items.map(({ title, blurb, href, status }) => (
           <li class:list={{ 'building-highlight': status }}>
             <i class="dot-on" aria-hidden="true" />
             <div>

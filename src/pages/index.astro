@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import LatestReview from '../components/LatestReview.astro';
 import NowBuilding from '../components/NowBuilding.astro';
 import UpdatesSignup from '../components/UpdatesSignup.astro';
-import { TINKERING } from '../lib/now';
+import { SHIPPED } from '../lib/now';
 import { getImage } from 'astro:assets';
 import { getLab, real } from '../lib/projects';
 import { screenshotFor } from '../lib/screenshots';
@@ -37,16 +37,7 @@ const SHOW_LATEST_REVIEW = false;
       </p>
       <p class="intro-role label">Software engineer in New York</p>
       <dl class="intro-list">
-        <div class="intro-row">
-          <dt class="label">Tinkering</dt>
-          <dd>
-            <ul class="chips">
-              {TINKERING.map((t) => (
-                <li>{t}</li>
-              ))}
-            </ul>
-          </dd>
-        </div>
+        <NowBuilding label="Shipped" items={SHIPPED} />
         <NowBuilding />
         {SHOW_LATEST_REVIEW && <LatestReview />}
         <div class="intro-row lab-row">
