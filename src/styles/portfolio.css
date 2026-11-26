@@ -202,7 +202,8 @@ body:has(.pf) > main {
 @media (max-width: 650px) {
   .pf {
     justify-content: flex-start;
-    padding-block: 44px 56px;
+    /* less room under Updates, so the footer follows the page instead of floating below it */
+    padding-block: 44px 20px;
   }
   .intro .intro-row,
   .updates .intro-row {

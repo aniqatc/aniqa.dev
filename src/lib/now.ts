@@ -6,7 +6,7 @@
 type NowItem = { title: string; blurb: string; href?: string; status?: string };
 
 /** "Currently tinkering with" chips in the portfolio intro. */
-export const TINKERING = ['TypeScript', 'Next.js', 'Astro', 'Three.js', 'CSS art', 'Agentic coding'];
+export const TINKERING = ['TypeScript', 'Three.js', 'CSS art', 'Agentic coding'];
 
 /** "Now building" in the portfolio intro */
 export const BUILDING: NowItem[] = [
