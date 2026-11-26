@@ -129,12 +129,12 @@ body:has(.pf) > main {
   /* the lab is light, the home page is dark: greyscale, flipped dark, then tinted toward the mint accent */
   filter: grayscale(1) invert(1) brightness(0.75) sepia(1) hue-rotate(140deg) saturate(1.6);
 }
-/* the back page: tilted left and dimmed, so the front page stands clear of it */
+/* the back page: tilted left and dimmed, with the same mint edge, so the front page stands clear of it */
 .lab-folder-page:nth-child(1) {
   left: 16px;
   top: 2px;
   transform: rotate(-6deg);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
 }
 .lab-folder-page:nth-child(1) img {
   filter: grayscale(1) invert(1) brightness(0.42) sepia(1) hue-rotate(140deg) saturate(1.2);
