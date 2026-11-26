@@ -46,7 +46,9 @@ const SHOW_LATEST_REVIEW = false;
             <a class="lab-fan-link" href="/lab">
               <span class="lab-fan" aria-hidden="true">
                 {fanImages.map((image) => (
-                  <img src={image.src} alt="" width="104" height="65" loading="lazy" decoding="async" />
+                  <span class="lab-fan-card">
+                    <img src={image.src} alt="" width="130" height="81" loading="lazy" decoding="async" />
+                  </span>
                 ))}
               </span>
               <span class="lab-fan-text">

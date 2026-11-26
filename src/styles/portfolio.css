@@ -108,46 +108,51 @@ body:has(.pf) > main {
   position: relative;
   flex: none;
   width: 132px;
-  height: 66px;
+  height: 80px;
 }
-.lab-fan img {
+/* each card keeps the page's 16:10 shape; the screenshot inside is zoomed to 125% and pinned to the top, so the
+   bottom fifth of the page (where controls like Our Street's date slider sit) is trimmed off */
+.lab-fan-card {
   position: absolute;
   width: 104px;
-  height: auto;
-  /* cropped to the top three-quarters of the page, so controls along the bottom edge (like Our Street's date
-     slider) stay out of the stack */
-  aspect-ratio: 16 / 7.5;
-  object-fit: cover;
-  object-position: top;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
-  /* the lab is light, the home page is dark: greyscale, flipped dark, then tinted toward the mint accent */
-  filter: grayscale(1) invert(1) brightness(0.75) sepia(1) hue-rotate(140deg) saturate(1.6);
   transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
 }
-.lab-fan img:nth-child(1) {
+.lab-fan-card img {
+  display: block;
+  width: 125%;
+  max-width: none;
+  height: auto;
+  margin-left: -12.5%;
+  /* the lab is light, the home page is dark: greyscale, flipped dark, then tinted toward the mint accent */
+  filter: grayscale(1) invert(1) brightness(0.75) sepia(1) hue-rotate(140deg) saturate(1.6);
+}
+.lab-fan-card:nth-child(1) {
   left: 14px;
   top: 0;
   z-index: 3;
 }
-.lab-fan img:nth-child(2) {
+.lab-fan-card:nth-child(2) {
   left: 28px;
   top: 12px;
   transform: rotate(7deg);
   z-index: 2;
 }
-.lab-fan img:nth-child(3) {
+.lab-fan-card:nth-child(3) {
   left: 0;
   top: 10px;
   transform: rotate(-7deg);
   z-index: 1;
 }
 /* on hover the side cards fan further out */
-.lab-fan-link:hover .lab-fan img:nth-child(2) {
+.lab-fan-link:hover .lab-fan-card:nth-child(2) {
   transform: rotate(12deg) translate(10px, 2px);
 }
-.lab-fan-link:hover .lab-fan img:nth-child(3) {
+.lab-fan-link:hover .lab-fan-card:nth-child(3) {
   transform: rotate(-12deg) translate(-10px, 2px);
 }
 .lab-fan-text {
