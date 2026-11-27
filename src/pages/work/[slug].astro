@@ -39,7 +39,7 @@ interface Props {
 }
 
 const { project, i, total, prev, next } = Astro.props;
-const { title, summary, pageTitle, price, launch } = project.data;
+const { title, summary, pageTitle, getLabel, launch } = project.data;
 const { Content } = await render(project);
 // the facts under the lede, and where Get it goes when it's for sale (src/lib/launch.ts)
 const facts = factsFor(project);
@@ -63,7 +63,7 @@ const getHref = getItHref(project);
   <Fragment slot="facts">
     {getHref && (
       <p class="get-it">
-        <GetItButton href={getHref} label={`Get it · ${price}`} />
+        <GetItButton href={getHref} label={getLabel} />
       </p>
     )}
     <Facts class="entry-facts" items={facts} />

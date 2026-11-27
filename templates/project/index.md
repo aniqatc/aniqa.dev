@@ -20,6 +20,7 @@ summary: Two sentences for the top of the case study. What it is and what it doe
 # priceNote: 'Launch price' # a quieter line under the price
 # requires: 'macOS 13 or later'
 # getUrl: https://example.app/buy # where Get it goes; the live site if left out
+# getLabel: 'Get it on sale' # the button under the lede; 'Get it' if left out
 # extraLinks: # after Live ↗, e.g. the Show HN post
 #   - { label: 'Show HN', href: 'https://news.ycombinator.com/item?id=…' }
 # featuredOn: # shown as a "Featured on" fact

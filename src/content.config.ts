@@ -39,10 +39,11 @@ const projects = defineCollection({
       blurb: z.string(), // one line for the portfolio card
       pageTitle: z.string().optional(), // the browser tab and search result title, when it should say more than the title
       // ---------- For a product people buy: shown at the top of the case study ----------
-      price: z.string().optional(), // e.g. "$25"; adds a Price fact and a "Get it" button
+      price: z.string().optional(), // e.g. "$2.99"; adds a Price fact and a "Get it" button
       priceNote: z.string().optional(), // a quieter line under the price, e.g. "One-time, no subscription"
       requires: z.string().optional(), // system requirements, e.g. "macOS 14 or later"
       getUrl: z.url().optional(), // where the "Get it" button goes; the live site when left out
+      getLabel: z.string().default('Get it'), // what the button under the lede says (no price: it changes)
       // more links after Live ↗ / Code ↗, e.g. the Show HN post
       extraLinks: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
       // places that wrote about it or listed it, shown as a "Featured on" fact
