@@ -20,6 +20,13 @@
   width: 100%;
   height: auto;
 }
+/* case studies run their text the full width, so a framed picture sits in the middle of it, caption too */
+.d-cs .sec p:has(> img) {
+  margin-inline: auto;
+}
+.d-cs .sec p:has(> img) > em {
+  text-align: center;
+}
 /* phone screens: side by side, each with its own rounded frame */
 :is(.d-rv, .d-cs) .sec p:has(> img + img) {
   align-items: flex-start;
