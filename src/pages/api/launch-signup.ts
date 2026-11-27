@@ -10,25 +10,13 @@
 // in Vercel's environment.
 import type { APIRoute } from 'astro';
 import { getEntry } from 'astro:content';
-import { Ratelimit } from '@upstash/ratelimit';
-import { likesConfigured as redisConfigured, redis } from '../../lib/redis';
+import { env, isEmail, json, signupLimiter, withinLimit } from '../../lib/api';
 
 export const prerender = false;
 
-const env = (name: string): string | undefined => import.meta.env[name] ?? process.env[name];
 const apiKey = env('LOOPS_API_KEY');
-
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// slowing down anyone hammering the route: 5 sign-ups per 10 minutes per IP (only when Upstash is set up)
-const ratelimit = redisConfigured
-  ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5, '10 m'), prefix: 'rl:launch-signup' })
-  : undefined;
-
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
-  });
+// slowing down anyone hammering the route (only when Upstash is set up)
+const limiter = signupLimiter('launch-signup');
 
 /** Call the Loops API. */
 const loops = (path: string, method: 'POST' | 'PUT', body: Record<string, unknown>) =>
@@ -46,7 +34,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     launch?: string;
   };
   const address = email.trim().toLowerCase();
-  if (!EMAIL.test(address) || address.length > 254)
+  if (!isEmail(address))
     return json({ error: 'That email doesn’t look right' }, 400);
 
   // ---------- the list: only a published case study's own sign-up ----------
@@ -54,10 +42,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const list = project && !project.data.draft ? project.data.launch?.signup?.loopsList : undefined;
   if (!list) return json({ error: 'unknown launch' }, 400);
 
-  if (ratelimit) {
-    const { success } = await ratelimit.limit(clientAddress ?? 'unknown');
-    if (!success) return json({ error: 'Too many tries, give it a few minutes' }, 429);
-  }
+  if (!(await withinLimit(limiter, clientAddress)))
+    return json({ error: 'Too many tries, give it a few minutes' }, 429);
 
   // ---------- add them: a new contact, or an existing one joining the list ----------
   const contact = { email: address, source: 'aniqa.dev', mailingLists: { [list]: true } };

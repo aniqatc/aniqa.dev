@@ -2,16 +2,17 @@
 import { render } from 'astro:content';
 import '../../styles/pictures.css';
 import '../../styles/mac-screen.css';
-import '../../styles/launch.css';
 import Detail from '../../layouts/Detail.astro';
 import Facts from '../../components/Facts.astro';
+import GetItButton from '../../components/GetItButton.astro';
 import ImageLightbox from '../../components/ImageLightbox.astro';
 import LaunchEnd from '../../components/LaunchEnd.astro';
 import LaunchHero from '../../components/LaunchHero.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import SiteScreenshot from '../../components/SiteScreenshot.astro';
 import Stars from '../../components/Stars.astro';
-import { fmtMonth, getSelected, links, pad, type Project } from '../../lib/projects';
+import { factsFor, getItHref } from '../../lib/launch';
+import { getSelected, pad, type Project } from '../../lib/projects';
 
 // One case study per selected project; previous / next wrap around.
 export async function getStaticPaths() {
@@ -38,11 +39,12 @@ interface Props {
 }
 
 const { project, i, total, prev, next } = Astro.props;
-const { title, type, stack, released, summary, pageTitle, price, priceNote, requires, getUrl, extraLinks, featuredOn } =
-  project.data;
+const { title, summary, pageTitle, price, launch } = project.data;
 const { Content } = await render(project);
-
-// ---------- Facts under the lede: price and requirements first for a product, then the usual four ----------
+// the facts under the lede, and where Get it goes when it's for sale (src/lib/launch.ts)
+const facts = factsFor(project);
+const getHref = getItHref(project);
+---------- Facts under the lede: price and requirements first for a product, then the usual four ----------
 const facts = [
   ...(price ? [{ label: 'Price', value: price, note: priceNote }] : []),
   ...(requires ? [{ label: 'Requires', value: requires }] : []),
@@ -74,17 +76,15 @@ const getHref = price ? (getUrl ?? (project.data.live ? `https://${project.data.
   <Fragment slot="facts">
     {getHref && (
       <p class="get-it">
-        <a class="get-it-button" href={getHref} target="_blank" rel="noopener">
-          Get it · {price} <span aria-hidden="true">↗</span>
-        </a>
+        <GetItButton href={getHref} label={`Get it · ${price}`} />
       </p>
     )}
     <Facts class="entry-facts" items={facts} />
   </Fragment>
   {/* ---------- a launch: the app on a Mac screen and a gallery; otherwise the website's screenshot ---------- */}
-  {project.data.launch ? <LaunchHero project={project} /> : <SiteScreenshot entry={project} />}
+  {launch ? <LaunchHero project={project} /> : <SiteScreenshot entry={project} />}
   <Content />
-  {project.data.launch && <LaunchEnd project={project} getHref={getHref} />}
+  {launch && <LaunchEnd project={project} />}
   <ImageLightbox />
   {total > 1 && (
     <PrevNext
@@ -96,3 +96,9 @@ const getHref = price ? (getUrl ?? (project.data.live ? `https://${project.data.
   )}
 </Detail>
 
+<style>
+  /* the Get it button under the lede, above the facts */
+  .get-it {
+    margin: 4px 0 0;
+  }
+</style>

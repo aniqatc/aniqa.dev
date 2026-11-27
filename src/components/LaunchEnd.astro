@@ -1,20 +1,22 @@
 ---
-// The end of a launch case study: a "Get it" row like a store listing (icon, name, price, requirements, Get it and
+// The end of a launch case study: a Get it row like a store listing (icon, name, price, requirements, Get it and
 // Gift it), then, with launch.signup, an email sign-up for what's next that adds people to the launch's own
-// Loops list (UpdatesSignup with `launch`). Styles are in src/styles/launch.css.
+// Loops list (UpdatesSignup with `launch`, posting to /api/launch-signup). Everything shown comes from the
+// entry's frontmatter; see content.config.ts and templates/project/index.md.
 import { Image } from 'astro:assets';
+import GetItButton from './GetItButton.astro';
 import UpdatesSignup from './UpdatesSignup.astro';
+import { getItHref } from '../lib/launch';
 import type { Project } from '../lib/projects';
 
 interface Props {
   project: Project;
-  /** where Get it goes */
-  getHref?: string;
 }
 
-const { project, getHref } = Astro.props;
+const { project } = Astro.props;
 const { title, price, priceNote, requires } = project.data;
 const launch = project.data.launch!;
+const getHref = getItHref(project);
 // the line under the name: "$2.99 · Launch price · macOS 13 or later"
 const details = [price, priceNote, requires].filter(Boolean).join(' · ');
 ---
@@ -22,7 +24,7 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
 <section class="launch-end" aria-label={`Get ${title}`}>
   {/* ---------- Get it: the app, its price and the buttons ---------- */}
   <div class="launch-end-part">
-    <p class="label launch-end-label">Get it</p>
+    <p class="label">Get it</p>
     <div class="launch-app">
       <Image class="launch-app-icon" src={launch.logo} alt="" widths={[88, 176]} sizes="44px" />
       <div class="launch-app-text">
@@ -31,20 +33,8 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
       </div>
     </div>
     <p class="launch-buttons">
-      {
-        getHref && (
-          <a class="get-it-button" href={getHref} target="_blank" rel="noopener">
-            Get it <span aria-hidden="true">↗</span>
-          </a>
-        )
-      }
-      {
-        launch.giftUrl && (
-          <a class="get-it-button get-it-button-outline" href={launch.giftUrl} target="_blank" rel="noopener">
-            Gift it <span aria-hidden="true">↗</span>
-          </a>
-        )
-      }
+      {getHref && <GetItButton href={getHref} label="Get it" />}
+      {launch.giftUrl && <GetItButton href={launch.giftUrl} label="Gift it" variant="outline" />}
     </p>
   </div>
 
@@ -52,14 +42,66 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
   {
     launch.signup && (
       <div class="launch-end-part">
-        <p class="label launch-end-label">{launch.signup.title}</p>
+        <p class="label">{launch.signup.title}</p>
         <p class="launch-end-text">{launch.signup.text}</p>
-        <UpdatesSignup
-          launch={project.id}
-          placeholder="Your email"
-          thanks="Thanks! You’ll get one email when it’s out"
-        />
+        <UpdatesSignup launch={project.id} placeholder={launch.signup.placeholder} thanks={launch.signup.thanks} />
       </div>
     )
   }
 </section>
+
+<style>
+  /* ---------- the ending: Get it, then the sign-up, each under a rule like the sections ---------- */
+  .launch-end {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .launch-end-part {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .launch-end p {
+    margin: 0;
+  }
+  .launch-end-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--body);
+  }
+
+  /* ---------- the app: icon, name, and the price line ---------- */
+  .launch-app {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .launch-app-icon {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+  }
+  .launch-app-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .launch-app-name {
+    font: 700 17px/1.15 var(--font-display);
+    color: var(--fg);
+  }
+  .launch-app-details {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .launch-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+</style>

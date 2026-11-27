@@ -1,0 +1,63 @@
+---
+// A pill that leaves the site to get or gift something: "Get it · $2.99 ↗" under a launch's lede, and Get it /
+// Gift it at its end (LaunchEnd.astro). The same shape as a review's Try it button. `outline` is the quieter one.
+interface Props {
+  href: string;
+  /** what it says, before the ↗ */
+  label: string;
+  variant?: 'solid' | 'outline';
+}
+
+const { href, label, variant = 'solid' } = Astro.props;
+---
+
+<a class:list={['get-it-button', `get-it-button-${variant}`]} href={href} target="_blank" rel="noopener">
+  {label} <span aria-hidden="true">↗</span>
+</a>
+
+<style>
+  .get-it-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 18px;
+    border: 1px solid var(--fg);
+    border-radius: 999px;
+    font: 500 10.5px/1 var(--font-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .get-it-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  /* solid: light on the dark page, mint on hover */
+  .get-it-button-solid {
+    background: var(--fg);
+    color: var(--bg);
+  }
+  .get-it-button-solid:hover {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  /* outline: just the line, mint on hover */
+  .get-it-button-outline {
+    border-color: var(--line);
+    background: transparent;
+    color: var(--fg);
+  }
+  .get-it-button-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .get-it-button {
+      transition: none;
+    }
+  }
+</style>

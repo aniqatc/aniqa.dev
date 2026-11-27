@@ -55,6 +55,7 @@ const projects = defineCollection({
           desktop: z.enum(['window', 'menubar', 'notch']).default('menubar'),
           screen: image(), // a 2× capture of only the app: its popover, window or notch panel, no background
           screenAlt: z.string(), // what's in the capture
+          screenCaption: z.string().optional(), // under it; "In the menu bar" (or "On the desktop", "In the notch") if left out
           shadow: z.boolean().default(true), // false if the capture has its own shadow
           logo: image(), // the app icon: the menu bar, the Dock and the Get it row
           brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // warms the wallpaper
@@ -67,6 +68,8 @@ const projects = defineCollection({
               loopsList: z.string(), // the list's ID: Loops → Audience → Mailing lists
               title: z.string(), // e.g. "Spring is next"
               text: z.string(), // e.g. "Get one email when the next edition is out."
+              placeholder: z.string().default('Your email'), // in the field
+              thanks: z.string().default('Thanks! You’ll get one email when it’s out'), // once an address is in
             })
             .optional(),
         })

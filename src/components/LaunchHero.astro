@@ -27,12 +27,9 @@ const scene = {
   alt: launch.screenAlt,
   logo: launch.logo,
 };
-// what the first thumbnail says: the app, as it is in the menu bar, a window or the notch
-const screenCaption = {
-  menubar: 'In the menu bar',
-  window: 'On the desktop',
-  notch: 'In the notch',
-}[launch.desktop];
+// the caption while the Mac screen shows: the entry's, or where the app lives
+const DEFAULT_SCREEN_CAPTIONS = { menubar: 'In the menu bar', window: 'On the desktop', notch: 'In the notch' };
+const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.desktop];
 ---
 
 <figure class="launch-hero" data-launch-hero>

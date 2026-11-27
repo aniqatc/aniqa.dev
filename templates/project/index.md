@@ -28,6 +28,7 @@ summary: Two sentences for the top of the case study. What it is and what it doe
 #   desktop: menubar # menubar (a popover), window or notch, as for Mac app reviews
 #   screen: ./screen.png # a 2× capture of only the app, no background
 #   screenAlt: What's in the capture.
+#   screenCaption: In the menu bar # optional; under the Mac screen
 #   logo: ./logo.png # the app icon
 #   brand: '#8b7cf6' # warms the wallpaper
 #   gallery: # thumbnails under the Mac screen; tapping one shows it big
@@ -37,6 +38,8 @@ summary: Two sentences for the top of the case study. What it is and what it doe
 #     loopsList: list-id # Loops → Audience → Mailing lists
 #     title: 'The next edition'
 #     text: 'Get one email when the next one is out.'
+#     placeholder: 'Your email' # optional
+#     thanks: 'Thanks! You’ll get one email when it’s out' # optional
 ---
 
 ## Why
