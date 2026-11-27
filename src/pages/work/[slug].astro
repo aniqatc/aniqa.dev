@@ -44,19 +44,6 @@ const { Content } = await render(project);
 // the facts under the lede, and where Get it goes when it's for sale (src/lib/launch.ts)
 const facts = factsFor(project);
 const getHref = getItHref(project);
----------- Facts under the lede: price and requirements first for a product, then the usual four ----------
-const facts = [
-  ...(price ? [{ label: 'Price', value: price, note: priceNote }] : []),
-  ...(requires ? [{ label: 'Requires', value: requires }] : []),
-  { label: 'Released', value: fmtMonth(released) },
-  { label: 'Type', value: type },
-  { label: 'Stack', value: stack },
-  { label: 'Links', value: [...links(project), ...extraLinks.map((l) => ({ ...l, label: `${l.label} ↗` }))] },
-  ...(featuredOn.length ? [{ label: 'Featured on', value: featuredOn.map((l) => ({ ...l, label: `${l.label} ↗` })) }] : []),
-];
-
-// ---------- "Get it" button: only for something people buy; goes to getUrl, or the live site ----------
-const getHref = price ? (getUrl ?? (project.data.live ? `https://${project.data.live}` : undefined)) : undefined;
 ---
 
 <Detail
