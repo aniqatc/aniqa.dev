@@ -1,0 +1,112 @@
+---
+// The top of a launch case study, in place of the website screenshot: the app on a Mac screen (MacScreen.astro,
+// as on Mac app reviews), then a gallery of pictures, four to a row (two on phones). Each picture opens full size
+// in the lightbox (ImageLightbox.astro), with its caption. The data is the entry's `launch` block.
+import { getImage, Image } from 'astro:assets';
+import MacScreen from './MacScreen.astro';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const launch = project.data.launch!;
+
+// ---------- the Mac screen: the scene for MacScreen, dated the release month ----------
+const scene = {
+  app: project.data.title,
+  brand: launch.brand,
+  date: `${project.data.released}-01`,
+  desktop: launch.desktop,
+  shadow: launch.shadow,
+  alt: launch.screenAlt,
+  logo: launch.logo,
+};
+
+// ---------- the gallery: a small picture to show, and its full size file for the lightbox ----------
+const gallery = await Promise.all(
+  launch.gallery.map(async (shot) => ({
+    ...shot,
+    full: (await getImage({ src: shot.src, width: Math.min(shot.src.width, 1600), format: 'webp' })).src,
+  })),
+);
+---
+
+<figure class="launch-hero">
+  <div class="launch-screen">
+    <MacScreen scene={scene} screen={launch.screen} />
+  </div>
+  {
+    gallery.length > 0 && (
+      <ul class="launch-gallery" aria-label="Pictures">
+        {gallery.map((shot) => (
+          <li>
+            <button
+              class="launch-shot"
+              type="button"
+              data-caption={shot.caption}
+              data-full={shot.full}
+              aria-label={`Open full size: ${shot.caption}`}
+            >
+              <Image src={shot.src} alt={shot.alt} widths={[240, 480]} sizes="(max-width: 640px) 45vw, 160px" />
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  <figcaption class="launch-caption">{gallery.length > 0 ? 'Tap a picture to see it full size' : launch.screenAlt}</figcaption>
+</figure>
+
+<style>
+  /* ---------- Mac screen, then the gallery and a small caption ---------- */
+  .launch-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+  }
+  .launch-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .launch-shot {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+    cursor: zoom-in;
+    transition: border-color 0.2s;
+  }
+  .launch-shot:hover {
+    border-color: var(--accent);
+  }
+  .launch-shot:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .launch-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .launch-caption {
+    font: 400 11px/1.4 var(--font-mono);
+    color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .launch-gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

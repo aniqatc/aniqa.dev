@@ -1,9 +1,13 @@
 ---
 import { render } from 'astro:content';
 import '../../styles/pictures.css';
+import '../../styles/mac-screen.css';
+import '../../styles/launch.css';
 import Detail from '../../layouts/Detail.astro';
 import Facts from '../../components/Facts.astro';
 import ImageLightbox from '../../components/ImageLightbox.astro';
+import LaunchEnd from '../../components/LaunchEnd.astro';
+import LaunchHero from '../../components/LaunchHero.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import SiteScreenshot from '../../components/SiteScreenshot.astro';
 import Stars from '../../components/Stars.astro';
@@ -77,8 +81,10 @@ const getHref = price ? (getUrl ?? (project.data.live ? `https://${project.data.
     )}
     <Facts class="entry-facts" items={facts} />
   </Fragment>
-  <SiteScreenshot entry={project} />
+  {/* ---------- a launch: the app on a Mac screen and a gallery; otherwise the website's screenshot ---------- */}
+  {project.data.launch ? <LaunchHero project={project} /> : <SiteScreenshot entry={project} />}
   <Content />
+  {project.data.launch && <LaunchEnd project={project} getHref={getHref} />}
   <ImageLightbox />
   {total > 1 && (
     <PrevNext
@@ -90,30 +96,3 @@ const getHref = price ? (getUrl ?? (project.data.live ? `https://${project.data.
   )}
 </Detail>
 
-<style>
-  /* ---------- "Get it" button under the lede: the same pill as a review's Try it button ---------- */
-  .get-it {
-    margin: 4px 0 0;
-  }
-  .get-it-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 36px;
-    padding: 0 18px;
-    border-radius: 999px;
-    background: var(--fg);
-    color: var(--bg);
-    font: 500 10.5px/1 var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    transition: background-color 0.2s;
-  }
-  .get-it-button:hover {
-    background: var(--accent);
-  }
-  .get-it-button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-</style>

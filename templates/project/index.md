@@ -13,6 +13,30 @@ order: 6 # position in Selected work (1 = first)
 blurb: One line for the portfolio card, about 15 words.
 screenshotAlt: What's on screen in screenshot.png, for the case study. # take it with npm run screenshots
 summary: Two sentences for the top of the case study. What it is and what it does.
+# ---------- Optional: a launch, for something people buy (src/content/projects/little-doors is a full example) ----------
+# price adds a Price fact and a "Get it" button under the lede; launch swaps the screenshot for the app on a Mac
+# screen and a gallery, and ends the page with Get it and an email sign-up to the launch's own Loops list.
+# price: '$4.99'
+# priceNote: 'Launch price' # a quieter line under the price
+# requires: 'macOS 13 or later'
+# getUrl: https://example.app/buy # where Get it goes; the live site if left out
+# extraLinks: # after Live ↗, e.g. the Show HN post
+#   - { label: 'Show HN', href: 'https://news.ycombinator.com/item?id=…' }
+# featuredOn: # shown as a "Featured on" fact
+#   - { label: 'Site name', href: 'https://…' }
+# launch:
+#   desktop: menubar # menubar (a popover), window or notch, as for Mac app reviews
+#   screen: ./screen.png # a 2× capture of only the app, no background
+#   screenAlt: What's in the capture.
+#   logo: ./logo.png # the app icon
+#   brand: '#8b7cf6' # warms the wallpaper
+#   gallery: # four to a row; each opens full size
+#     - { src: ./gallery-1.jpg, alt: What's in it., caption: A short caption. }
+#   giftUrl: https://example.app/gift # adds Gift it ↗
+#   signup: # needs LOOPS_API_KEY on Vercel
+#     loopsList: list-id # Loops → Audience → Mailing lists
+#     title: 'The next edition'
+#     text: 'Get one email when the next one is out.'
 ---
 
 ## Why

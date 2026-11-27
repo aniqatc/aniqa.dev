@@ -2,7 +2,7 @@
 // Pictures in a review's or case study's notes open full size: click one (or focus it and press Enter) and it fills
 // the screen in a <dialog>, at the image's own resolution, with its caption underneath. Picture notes (an
 // image titled "note" in the Markdown, a chip in the line of text; see src/lib/md-sections.mjs) open the
-// same way. Esc, the close button or a click anywhere closes it, and focus goes back to the picture. The
+// same way, and so do a launch's gallery pictures (LaunchHero.astro). Esc, the close button or a click anywhere closes it, and focus goes back to the picture. The
 // screenshot at the top isn't part of this; it links to the app.
 ---
 
@@ -26,7 +26,11 @@
     // Styles for both are in src/styles/pictures.css.
     const pictures = [...document.querySelectorAll<HTMLImageElement>(':is(.d-rv, .d-cs) .sec p > img')];
     // picture notes already have their role, label and tab stop from the Markdown
-    const notes = [...document.querySelectorAll<HTMLElement>(':is(.d-rv, .d-cs) .sec .picture-note')];
+    const notes = [
+      ...document.querySelectorAll<HTMLElement>(':is(.d-rv, .d-cs) .sec .picture-note'),
+      // a launch's gallery under the Mac screen (LaunchHero.astro): buttons with data-caption, like the notes
+      ...document.querySelectorAll<HTMLElement>('.launch-gallery .launch-shot'),
+    ];
     const triggers: HTMLElement[] = [...pictures, ...notes];
     const imageFor = (trigger: HTMLElement) =>
       trigger instanceof HTMLImageElement ? trigger : trigger.querySelector<HTMLImageElement>('img');
@@ -39,7 +43,8 @@
       const picture = imageFor(trigger);
       if (!picture) return;
       // the picture's own file: Markdown images are converted, not shrunk, so this is the full resolution
-      full.src = picture.currentSrc || picture.src;
+      // (a gallery thumbnail names its bigger file in data-full)
+      full.src = trigger.dataset.full || picture.currentSrc || picture.src;
       full.alt = picture.alt;
       caption.textContent = captionFor(trigger);
       caption.hidden = !caption.textContent;

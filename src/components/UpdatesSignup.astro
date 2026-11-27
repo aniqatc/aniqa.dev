@@ -1,5 +1,6 @@
 ---
-// An email sign-up: new things on the portfolio intro, new reviews on /reviews.
+// An email sign-up: new things on the portfolio intro, new reviews on /reviews, and a launch's own list at the
+// end of its case study (with `launch`, through Loops).
 // It subscribes the address to Buttondown (the username in contact.ts), tagged so you can tell the lists apart,
 // then says thanks. How it sends is in src/scripts/signup.ts.
 import { SIGNUP_ACTION } from '../lib/contact';
@@ -13,6 +14,8 @@ interface Props {
   tag?: string;
   /** 'stub': an outlined button, for the sign-up joined under a review's Try it card */
   variant?: 'default' | 'stub';
+  /** a launch case study's slug: signs up to that launch's Loops list (src/pages/api/launch-signup.ts), not Buttondown */
+  launch?: string;
 }
 
 const {
@@ -21,20 +24,24 @@ const {
   thanks = 'Thanks! You’ll hear about new things from me soon',
   tag = 'updates',
   variant = 'default',
+  launch,
 } = Astro.props;
+// where the address goes: a launch's Loops list, or Buttondown with the tag
+const endpoint = launch ? '/api/launch-signup' : '/api/subscribe';
 ---
 
 <form
   class:list={['updates-signup', { 'updates-signup-stub': variant === 'stub' }]}
   aria-label="Get updates"
-  action={SIGNUP_ACTION}
+  action={launch ? endpoint : SIGNUP_ACTION}
   method="post"
   data-signup
+  data-signup-endpoint={endpoint}
   data-thanks={thanks}
   novalidate
 >
   <input type="hidden" name="embed" value="1" />
-  <input type="hidden" name="tag" value={tag} />
+  {launch ? <input type="hidden" name="launch" value={launch} /> : <input type="hidden" name="tag" value={tag} />}
   <span class="updates-signup-fields" data-signup-fields>
     <input
       class="updates-signup-email"

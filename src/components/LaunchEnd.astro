@@ -1,0 +1,65 @@
+---
+// The end of a launch case study: a "Get it" row like a store listing (icon, name, price, requirements, Get it and
+// Gift it), then, with launch.signup, an email sign-up for what's next that adds people to the launch's own
+// Loops list (UpdatesSignup with `launch`). Styles are in src/styles/launch.css.
+import { Image } from 'astro:assets';
+import UpdatesSignup from './UpdatesSignup.astro';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+  /** where Get it goes */
+  getHref?: string;
+}
+
+const { project, getHref } = Astro.props;
+const { title, price, priceNote, requires } = project.data;
+const launch = project.data.launch!;
+// the line under the name: "$2.99 · Launch price · macOS 13 or later"
+const details = [price, priceNote, requires].filter(Boolean).join(' · ');
+---
+
+<section class="launch-end" aria-label={`Get ${title}`}>
+  {/* ---------- Get it: the app, its price and the buttons ---------- */}
+  <div class="launch-end-part">
+    <p class="label launch-end-label">Get it</p>
+    <div class="launch-app">
+      <Image class="launch-app-icon" src={launch.logo} alt="" widths={[88, 176]} sizes="44px" />
+      <div class="launch-app-text">
+        <p class="launch-app-name">{title}</p>
+        {details && <p class="launch-app-details">{details}</p>}
+      </div>
+    </div>
+    <p class="launch-buttons">
+      {
+        getHref && (
+          <a class="get-it-button" href={getHref} target="_blank" rel="noopener">
+            Get it <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+      {
+        launch.giftUrl && (
+          <a class="get-it-button get-it-button-outline" href={launch.giftUrl} target="_blank" rel="noopener">
+            Gift it <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+    </p>
+  </div>
+
+  {/* ---------- what's next: the launch's own email list ---------- */}
+  {
+    launch.signup && (
+      <div class="launch-end-part">
+        <p class="label launch-end-label">{launch.signup.title}</p>
+        <p class="launch-end-text">{launch.signup.text}</p>
+        <UpdatesSignup
+          launch={project.id}
+          placeholder="Your email"
+          thanks="Thanks! You’ll get one email when it’s out"
+        />
+      </div>
+    )
+  }
+</section>

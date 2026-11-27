@@ -10,9 +10,9 @@ order: 1
 blurb: A festive advent calendar that lives in your Mac’s menu bar.
 # ---------- shown at the top of the page, with a "Get it" button ----------
 price: '$2.99'
-# TODO(Aniqa): change when the launch price ends
-priceNote: 'Launch price'
-requires: '[macOS version] or later'
+# TODO(Aniqa): change when the 100 launch keys are gone (then $5.99; Golden Key $5.99 now, $10.99 after)
+priceNote: 'Launch price, first 100 keys'
+requires: 'macOS 13 or later'
 getUrl: https://littledoors.app/christmas
 # more links after Live ↗, e.g. the launch posts. Uncomment and fill in:
 # extraLinks:
@@ -21,8 +21,30 @@ getUrl: https://littledoors.app/christmas
 # places that wrote about it or listed it. Uncomment and fill in:
 # featuredOn:
 #   - { label: 'Site name', href: 'https://…' }
-# TODO(Aniqa): swap for a real capture with `npm run screenshots -- little-doors` (this is the dark share image for now)
+# the link preview and the home page hover use screenshot.png; the page itself shows the launch block below
 screenshotAlt: "Little Doors: Christmas share image in dark mode: string lights along the top, the headline “An advent calendar that lives in your menu bar.”, and a grid of 25 numbered doors with door 1 and door 25 open."
+# ---------- the launch: the calendar on a Mac screen, a gallery, and Get it / sign-up at the end ----------
+launch:
+  desktop: menubar
+  # TODO(Aniqa): swap for a real 2× capture of the popover with no background (Shift-Cmd-4, Space, click it)
+  screen: ./screen.jpg
+  screenAlt: 'The Little Doors calendar open from the menu bar: “Merry Christmas, open door 1 to begin” above 25 doors in red, green and gold, door 1 with a wreath and door 25 with a gold star'
+  logo: ./logo.png
+  brand: '#c0392b'
+  gallery:
+    - { src: ./gallery-tree.jpg, alt: 'A Christmas tree on the desktop, covered in ornaments', caption: 'A new ornament with every door' }
+    - { src: ./gallery-snowman.jpg, alt: 'A snowman on the desktop in a red Santa hat and a striped scarf', caption: 'A snowman to dress up in hats and scarves' }
+    - { src: ./gallery-stockings.jpg, alt: 'Four knitted stockings hanging in a row, two named Jim and Pam', caption: 'Stockings with the names you choose' }
+    - { src: ./gallery-sleighs.jpg, alt: 'Three sleighs riding along the top of the Dock', caption: 'Sleighs ride along your Dock' }
+    - { src: ./gallery-frost.jpg, alt: 'A browser window covered in frost', caption: 'Frost you melt away with your pointer' }
+    - { src: ./gallery-wrapped.jpg, alt: 'A window wrapped in gold paper with a green bow and a gift tag', caption: 'Windows wrapped like presents' }
+    - { src: ./gallery-lights.jpg, alt: 'Coloured string lights hanging under the menu bar', caption: 'String lights in warm white, gold or classic colours' }
+    - { src: ./gallery-santa.jpg, alt: 'Santa’s sleigh flying across the desktop, dropping a present on a parachute', caption: 'Santa flies by with presents' }
+  giftUrl: https://littledoors.app/christmas/gift
+  signup:
+    loopsList: cmwl2qnl501vv0j0p4h3g896h # Loops: "New editions and updates"
+    title: 'The next edition'
+    text: 'Get one email when the next Little Doors is out.'
 summary: "Little Doors: Christmas is a digital advent calendar for the Mac. It lives in the menu bar, opens a new door each day until Christmas, and each door adds something to your desktop."
 ---
 
@@ -35,12 +57,8 @@ I looked for an advent calendar app for the Mac and couldn't find anything that 
 ## What it does
 
 1. Lives in the menu bar. Click the little door and the calendar opens: 25 doors, a surprise behind each one.
-
-   ![The Little Doors calendar open from the menu bar: “Merry Christmas, open door 1 to begin” above 25 doors in red, green and gold, door 1 with a wreath and a Start here button, and door 25 with a gold star](./popover.jpg)
-   _The calendar on day one, with door 1 ready_
-
-2. Behind the doors are things for your desktop. Decorate a Christmas tree, with a new ornament behind every door, then light it up ![A Christmas tree on a snowy night, covered in ornaments: baubles, gingerbread, candy canes, stars and bells](./tree.jpg 'note: The tree, fully decorated'). Build a snowman ![A snowman on a snowy hill under a starry sky](./snowman.jpg 'note: The snowman'), and hang stockings with the names you choose ![Five knitted stockings hanging in a row, two named Jim and Pam](./stockings.jpg 'note: Stockings with names on them').
-3. Some reach past the desktop. Sleighs ride along your Dock, even when it magnifies ![Three sleighs carrying gifts and a little tree, sitting on top of a snowy Mac Dock](./dock.jpg 'note: Sleighs on the Dock'). Windows frost over, and you can draw in the frost with your pointer ![A browser window covered in frost, the page behind it barely visible](./frost.jpg 'note: A frosted window'). Step away and your windows get wrapped like presents, ready to unwrap when you're back ![Windows wrapped in red, blue and green paper with bows and gift tags](./wrapped.jpg 'note: Wrapped windows').
+2. Behind the doors are things for your desktop. Decorate a Christmas tree, with a new ornament behind every door, then light it up. Build a snowman and hang stockings with the names you choose.
+3. Some reach past the desktop. Sleighs ride along your Dock, even when it magnifies. String lights hang under the menu bar. Windows frost over, and you melt the frost with your pointer. Step away and your windows get wrapped like presents, ready to unwrap when you're back.
 4. Make it yours: pick the snowman's hat and scarf, name the stockings, and save a look to come back to. When you need a clean screen, Hide all puts everything away with one shortcut.
 
 ## Hardest part
@@ -64,8 +82,4 @@ I looked for an advent calendar app for the Mac and couldn't find anything that 
 
 ## What's next
 
-Christmas is the first edition. Spring is next, then Independence Day, and more after that. If you want to hear when the next one is out, there's a [sign-up on the site](https://littledoors.app/coming-soon).
-
-## Trying it
-
-Little Doors: Christmas is out now for macOS, on [littledoors.app](https://littledoors.app/christmas). You can start any time; your first door opens the day you install it. There's a Standard Key, and a Golden Key that comes with a surprise gift. You can also [send it as a gift](https://littledoors.app/christmas/gift): it arrives by email with your note, which makes it an easy last-minute present for someone who spends the day at a Mac.
+Christmas is the first edition. Spring is next, then Independence Day, and more after that.

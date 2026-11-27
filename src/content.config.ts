@@ -33,20 +33,45 @@ const base = z.object({
 // Work: src/content/projects/<slug>/ → /work/<slug>. Shipped products get a case study here; everything else is in the lab.
 const projects = defineCollection({
   loader: folder('./src/content/projects'), // locate all index.md files within the projects folder and generate slugs from folder names
-  schema: base.extend({
-    order: z.number().int().positive(), // position in Selected work
-    blurb: z.string(), // one line for the portfolio card
-    pageTitle: z.string().optional(), // the browser tab and search result title, when it should say more than the title
-    // ---------- For a product people buy: shown at the top of the case study ----------
-    price: z.string().optional(), // e.g. "$25"; adds a Price fact and a "Get it" button
-    priceNote: z.string().optional(), // a quieter line under the price, e.g. "One-time, no subscription"
-    requires: z.string().optional(), // system requirements, e.g. "macOS 14 or later"
-    getUrl: z.url().optional(), // where the "Get it" button goes; the live site when left out
-    // more links after Live ↗ / Code ↗, e.g. the Show HN post
-    extraLinks: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
-    // places that wrote about it or listed it, shown as a "Featured on" fact
-    featuredOn: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
-  }),
+  schema: ({ image }) =>
+    base.extend({
+      order: z.number().int().positive(), // position in Selected work
+      blurb: z.string(), // one line for the portfolio card
+      pageTitle: z.string().optional(), // the browser tab and search result title, when it should say more than the title
+      // ---------- For a product people buy: shown at the top of the case study ----------
+      price: z.string().optional(), // e.g. "$25"; adds a Price fact and a "Get it" button
+      priceNote: z.string().optional(), // a quieter line under the price, e.g. "One-time, no subscription"
+      requires: z.string().optional(), // system requirements, e.g. "macOS 14 or later"
+      getUrl: z.url().optional(), // where the "Get it" button goes; the live site when left out
+      // more links after Live ↗ / Code ↗, e.g. the Show HN post
+      extraLinks: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
+      // places that wrote about it or listed it, shown as a "Featured on" fact
+      featuredOn: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
+      // ---------- A launch: the app on a Mac screen in place of the screenshot, a gallery, and a Get it ending ----------
+      // Files sit in the entry's folder next to index.md. little-doors is a full example; the template lists the fields.
+      launch: z
+        .object({
+          // the Mac screen drawn around the app (src/components/MacScreen.astro), as for Mac app reviews
+          desktop: z.enum(['window', 'menubar', 'notch']).default('menubar'),
+          screen: image(), // a 2× capture of only the app: its popover, window or notch panel, no background
+          screenAlt: z.string(), // what's in the capture
+          shadow: z.boolean().default(true), // false if the capture has its own shadow
+          logo: image(), // the app icon: the menu bar, the Dock and the Get it row
+          brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // warms the wallpaper
+          // pictures under the Mac screen, four to a row; each opens full size
+          gallery: z.array(z.object({ src: image(), alt: z.string(), caption: z.string() })).default([]),
+          giftUrl: z.url().optional(), // adds "Gift it ↗" next to Get it at the end
+          // an email sign-up at the end, adding people to a Loops mailing list (src/pages/api/launch-signup.ts)
+          signup: z
+            .object({
+              loopsList: z.string(), // the list's ID: Loops → Audience → Mailing lists
+              title: z.string(), // e.g. "Spring is next"
+              text: z.string(), // e.g. "Get one email when the next edition is out."
+            })
+            .optional(),
+        })
+        .optional(),
+    }),
 });
 
 // Lab: src/content/experiments/<slug>/ → /lab/<slug>. Links out to its own site, or runs its sketch on the page.

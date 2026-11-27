@@ -1,0 +1,100 @@
+/* ---------- A launch case study (/work/<slug> with a `launch` block, or a price) ----------
+   The Get it buttons at the top and the end, and the Get it / sign-up ending (LaunchEnd.astro).
+   The Mac screen and gallery at the top are styled in LaunchHero.astro and mac-screen.css. */
+
+/* the Get it pill: the same as a review's Try it button; the outline one is Gift it */
+.get-it {
+  margin: 4px 0 0;
+}
+.get-it-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 18px;
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+.get-it-button:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.get-it-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.get-it-button-outline {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--fg);
+}
+.get-it-button-outline:hover {
+  border-color: var(--accent);
+  background: transparent;
+  color: var(--accent);
+}
+
+/* ---------- the ending: Get it, then the sign-up, each under a rule like the sections ---------- */
+.launch-end {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.launch-end-part {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.launch-end-label,
+.launch-end-text,
+.launch-buttons,
+.launch-app-name,
+.launch-app-details {
+  margin: 0;
+}
+.launch-end-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--body);
+}
+.launch-app {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.launch-app-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+}
+.launch-app-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.launch-app-name {
+  font: 700 17px/1.15 var(--font-display);
+  color: var(--fg);
+}
+.launch-app-details {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.launch-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

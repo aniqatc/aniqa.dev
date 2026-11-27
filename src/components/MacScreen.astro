@@ -10,14 +10,37 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { fmtDay, logoFor, type Review } from '../lib/reviews';
 
+/** What the scene shows, when it isn't a review's: a launch case study passes its own (see work/[slug].astro). */
+export interface MacScene {
+  app: string; // the app's name, in the menu bar of a window scene and as the icon's fallback letter
+  brand: string; // the app's colour, warming the wallpaper
+  date: string; // YYYY-MM-DD, the day shown on the clock
+  desktop: 'window' | 'menubar' | 'notch';
+  shadow: boolean; // a drawn Mac shadow under the app; false if the capture has its own
+  alt?: string; // describes the screenshot
+  logo?: ImageMetadata; // the app's icon, for the menu bar and the Dock
+}
+
 interface Props {
-  review: Review;
+  /** a Mac app review: the scene comes from its frontmatter and logo.png */
+  review?: Review;
+  /** or the scene spelled out, for anything else */
+  scene?: MacScene;
   screen: ImageMetadata;
 }
 
-const { review, screen } = Astro.props;
-const { app, brand, date, desktop, shadow, screenshotAlt } = review.data;
-const logo = logoFor(review);
+const { review, scene, screen } = Astro.props;
+// ---------- the scene: given, or read from the review ----------
+const shown: MacScene = scene ?? {
+  app: review!.data.app,
+  brand: review!.data.brand,
+  date: review!.data.date,
+  desktop: review!.data.desktop,
+  shadow: review!.data.shadow,
+  alt: review!.data.screenshotAlt,
+  logo: logoFor(review!),
+};
+const { app, brand, date, desktop, shadow, alt: screenshotAlt, logo } = shown;
 
 // the screenshot in points (a 2× capture)
 const w = Math.round(screen.width / 2);
