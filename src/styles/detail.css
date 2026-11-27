@@ -212,6 +212,12 @@
   max-width: 64ch;
   color: var(--body);
 }
+/* case studies: the text runs the full width of the page, not a 62ch column */
+.d-cs .sec p,
+.d-cs .sec ul,
+.d-cs .sec ol {
+  max-width: none;
+}
 /* numbered lists: 01, 02… on case studies; L.1 / R.1 on lab notes; N.1 on experiments */
 .sec ol {
   list-style: none;
