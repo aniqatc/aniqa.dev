@@ -1,6 +1,6 @@
 ---
-// The end of a launch case study: a Get it row like a store listing (icon, name, price, requirements, Get it and
-// Gift it), then, with launch.signup, an email sign-up for what's next that adds people to the launch's own
+// The end of a launch case study, a centred card like an App Store listing: icon, name, price and requirements,
+// Get it and Gift it, then, with launch.signup, an email sign-up for what's next that adds people to the launch's own
 // Loops list (UpdatesSignup with `launch`, posting to /api/launch-signup). Everything shown comes from the
 // entry's frontmatter; see content.config.ts and templates/project/index.md.
 import { Image } from 'astro:assets';
@@ -22,22 +22,18 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
 ---
 
 <section class="launch-end" aria-label={`Get ${title}`} style={`--brand:${launch.brand}`}>
-  {/* ---------- Get it: the app and its price on the left, the buttons on the right ---------- */}
+  {/* ---------- Get it: icon, name, price line and the buttons, on one centre line ---------- */}
   <div class="launch-end-get">
-    <div class="launch-app">
-      <Image class="launch-app-icon" src={launch.logo} alt="" widths={[112, 224]} sizes="56px" />
-      <div class="launch-app-text">
-        <p class="launch-app-name">{title}</p>
-        {details && <p class="launch-app-details">{details}</p>}
-      </div>
-    </div>
+    <Image class="launch-app-icon" src={launch.logo} alt="" widths={[128, 256]} sizes="64px" />
+    <p class="launch-app-name">{title}</p>
+    {details && <p class="launch-app-details">{details}</p>}
     <p class="launch-buttons">
       {getHref && <GetItButton href={getHref} label="Get it" />}
       {launch.giftUrl && <GetItButton href={launch.giftUrl} label="Gift it" variant="outline" />}
     </p>
   </div>
 
-  {/* ---------- what's next: the launch's own email list ---------- */}
+  {/* ---------- what's next: the launch's own email list, under a hairline ---------- */}
   {
     launch.signup && (
       <div class="launch-end-signup">
@@ -52,7 +48,7 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
 </section>
 
 <style>
-  /* ---------- the card: its own box at the end of the page, lit faintly by the app's colour ---------- */
+  /* ---------- the card: its own box at the end of the page, lit faintly by the app's colour, all centred ---------- */
   .launch-end {
     display: flex;
     flex-direction: column;
@@ -63,45 +59,30 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
       radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 55%),
       var(--surface);
     overflow: hidden;
+    text-align: center;
   }
   .launch-end p {
     margin: 0;
   }
-  .launch-end-get,
-  .launch-end-signup {
-    padding: 24px 28px;
-  }
 
-  /* ---------- Get it: app on the left, buttons on the right (stacked on phones) ---------- */
+  /* ---------- Get it ---------- */
   .launch-end-get {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 18px 24px;
-  }
-  .launch-app {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-width: 0;
+    gap: 10px;
+    padding: 32px 28px 28px;
   }
   .launch-app-icon {
-    flex: none;
-    width: 56px;
-    height: 56px;
-    border-radius: 13px;
-    box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
-  }
-  .launch-app-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 4px;
+    border-radius: 15px;
+    box-shadow: 0 8px 22px rgb(0 0 0 / 0.4);
   }
   .launch-app-name {
-    font: 700 19px/1.15 var(--font-display);
-    letter-spacing: -0.01em;
+    font: 700 22px/1.15 var(--font-display);
+    letter-spacing: -0.015em;
     color: var(--fg);
   }
   .launch-app-details {
@@ -109,17 +90,21 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
     line-height: 1.45;
     color: var(--muted);
   }
-  .launch-buttons {
+  .launch-end .launch-buttons {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
+    margin-top: 8px;
   }
 
-  /* ---------- the sign-up, under a hairline ---------- */
+  /* ---------- the sign-up ---------- */
   .launch-end-signup {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 8px;
+    padding: 24px 28px 28px;
     border-top: 1px solid var(--line);
     background: color-mix(in srgb, var(--bg) 35%, transparent);
   }
@@ -129,16 +114,18 @@ const details = [price, priceNote, requires].filter(Boolean).join(' · ');
     color: var(--body);
   }
   .launch-end-form {
-    max-width: 460px;
+    width: 100%;
+    max-width: 400px;
     margin-top: 6px;
+  }
+  /* the form's thanks line, centred like the rest */
+  .launch-end-form :global(.updates-signup-thanks) {
+    justify-content: center;
   }
   @media (max-width: 560px) {
     .launch-end-get,
     .launch-end-signup {
-      padding: 20px;
-    }
-    .launch-buttons {
-      width: 100%;
+      padding-inline: 20px;
     }
   }
 </style>
