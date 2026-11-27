@@ -1,8 +1,12 @@
 ---
-// The top of a launch case study, in place of the website screenshot: the app on a Mac screen (MacScreen.astro,
-// as on Mac app reviews), then a gallery of pictures, four to a row (two on phones). Each picture opens full size
-// in the lightbox (ImageLightbox.astro), with its caption. The data is the entry's `launch` block.
-import { getImage, Image } from 'astro:assets';
+// The top of a launch case study, in place of the website screenshot: a big picture with a row of thumbnails
+// under it, four to a row (two on phones). It starts on the app on a Mac screen (MacScreen.astro, as on Mac app
+// reviews); tapping a thumbnail shows that picture in the big spot instead, with its caption, and the first
+// thumbnail brings the Mac screen back. The data is the entry's `launch` block.
+//
+// All the big pictures sit in the same grid cell, so the spot keeps the height of the tallest and nothing below
+// jumps when you switch. Only the chosen one is visible (data-shown).
+import { Image } from 'astro:assets';
 import MacScreen from './MacScreen.astro';
 import type { Project } from '../lib/projects';
 
@@ -23,31 +27,60 @@ const scene = {
   alt: launch.screenAlt,
   logo: launch.logo,
 };
-
-// ---------- the gallery: a small picture to show, and its full size file for the lightbox ----------
-const gallery = await Promise.all(
-  launch.gallery.map(async (shot) => ({
-    ...shot,
-    full: (await getImage({ src: shot.src, width: Math.min(shot.src.width, 1600), format: 'webp' })).src,
-  })),
-);
+// what the first thumbnail says: the app, as it is in the menu bar, a window or the notch
+const screenCaption = {
+  menubar: 'In the menu bar',
+  window: 'On the desktop',
+  notch: 'In the notch',
+}[launch.desktop];
 ---
 
-<figure class="launch-hero">
-  <div class="launch-screen">
-    <MacScreen scene={scene} screen={launch.screen} />
+<figure class="launch-hero" data-launch-hero>
+  {/* ---------- the big spot: the Mac screen, then each gallery picture, one shown at a time ---------- */}
+  <div class="launch-stage">
+    <div class="launch-slide" data-launch-slide="0" data-shown="true">
+      <MacScreen scene={scene} screen={launch.screen} />
+    </div>
+    {
+      launch.gallery.map((shot, index) => (
+        <div class="launch-slide" data-launch-slide={index + 1} data-shown="false" aria-hidden="true">
+          <Image
+            class="launch-slide-image"
+            src={shot.src}
+            alt={shot.alt}
+            widths={[640, 960, 1280]}
+            sizes="(max-width: 640px) 100vw, 600px"
+            loading="lazy"
+          />
+        </div>
+      ))
+    }
   </div>
+  <figcaption class="launch-caption" aria-live="polite" data-launch-caption>{screenCaption}</figcaption>
+
+  {/* ---------- thumbnails: the Mac screen first, then the gallery ---------- */}
   {
-    gallery.length > 0 && (
-      <ul class="launch-gallery" aria-label="Pictures">
-        {gallery.map((shot) => (
+    launch.gallery.length > 0 && (
+      <ul class="launch-thumbs" aria-label="Pictures">
+        <li>
+          <button
+            class="launch-thumb launch-thumb-screen"
+            type="button"
+            aria-pressed="true"
+            data-launch-thumb="0"
+            data-caption={screenCaption}
+          >
+            <Image src={launch.screen} alt={launch.screenAlt} widths={[240, 480]} sizes="160px" />
+          </button>
+        </li>
+        {launch.gallery.map((shot, index) => (
           <li>
             <button
-              class="launch-shot"
+              class="launch-thumb"
               type="button"
+              aria-pressed="false"
+              data-launch-thumb={index + 1}
               data-caption={shot.caption}
-              data-full={shot.full}
-              aria-label={`Open full size: ${shot.caption}`}
             >
               <Image src={shot.src} alt={shot.alt} widths={[240, 480]} sizes="(max-width: 640px) 45vw, 160px" />
             </button>
@@ -56,26 +89,84 @@ const gallery = await Promise.all(
       </ul>
     )
   }
-  <figcaption class="launch-caption">{gallery.length > 0 ? 'Tap a picture to see it full size' : launch.screenAlt}</figcaption>
 </figure>
 
+<script>
+  import { onPage } from '../scripts/page';
+
+  // ---------- tapping a thumbnail shows its picture in the big spot ----------
+  onPage(() => {
+    const hero = document.querySelector<HTMLElement>('[data-launch-hero]');
+    if (!hero) return;
+    const slides = [...hero.querySelectorAll<HTMLElement>('[data-launch-slide]')];
+    const thumbs = [...hero.querySelectorAll<HTMLButtonElement>('[data-launch-thumb]')];
+    const caption = hero.querySelector<HTMLElement>('[data-launch-caption]');
+
+    const show = (chosen: HTMLButtonElement) => {
+      const index = chosen.dataset.launchThumb;
+      for (const slide of slides) {
+        const shown = slide.dataset.launchSlide === index;
+        slide.dataset.shown = String(shown);
+        if (shown) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      }
+      for (const thumb of thumbs) thumb.setAttribute('aria-pressed', String(thumb === chosen));
+      if (caption) caption.textContent = chosen.dataset.caption ?? '';
+    };
+    const onClick = (event: Event) => show(event.currentTarget as HTMLButtonElement);
+    for (const thumb of thumbs) thumb.addEventListener('click', onClick);
+    return () => {
+      for (const thumb of thumbs) thumb.removeEventListener('click', onClick);
+    };
+  });
+</script>
+
 <style>
-  /* ---------- Mac screen, then the gallery and a small caption ---------- */
+  /* ---------- the big spot: every picture in one cell, so the height never changes ---------- */
   .launch-hero {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin: 0;
   }
-  .launch-gallery {
+  .launch-stage {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .launch-slide {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+  /* the others still hold their space (the grid cell), they just aren't seen; not [hidden], which removes them */
+  .launch-slide[data-shown='false'] {
+    visibility: hidden;
+  }
+  .launch-slide > :global(*) {
+    width: 100%;
+  }
+  .launch-slide-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .launch-caption {
+    font: 400 11px/1.4 var(--font-mono);
+    color: var(--muted);
+  }
+
+  /* ---------- thumbnails, the chosen one outlined ---------- */
+  .launch-thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
     gap: 10px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .launch-shot {
+  .launch-thumb {
     display: block;
     width: 100%;
     padding: 0;
@@ -83,30 +174,38 @@ const gallery = await Promise.all(
     border-radius: 10px;
     overflow: hidden;
     background: var(--surface);
-    cursor: zoom-in;
-    transition: border-color 0.2s;
+    cursor: pointer;
+    opacity: 0.7;
+    transition:
+      border-color 0.2s,
+      opacity 0.2s;
   }
-  .launch-shot:hover {
+  .launch-thumb:hover,
+  .launch-thumb[aria-pressed='true'] {
+    opacity: 1;
+  }
+  .launch-thumb[aria-pressed='true'] {
     border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
   }
-  .launch-shot:focus-visible {
+  .launch-thumb:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
-  .launch-shot img {
+  .launch-thumb img {
     display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 4 / 3;
     object-fit: cover;
   }
-  .launch-caption {
-    font: 400 11px/1.4 var(--font-mono);
-    color: var(--muted);
+  /* the calendar is tall: show its top, where the doors start */
+  .launch-thumb-screen img {
+    object-position: top;
   }
-  @media (max-width: 640px) {
-    .launch-gallery {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  @media (prefers-reduced-motion: reduce) {
+    .launch-thumb {
+      transition: none;
     }
   }
 </style>

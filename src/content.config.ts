@@ -58,7 +58,7 @@ const projects = defineCollection({
           shadow: z.boolean().default(true), // false if the capture has its own shadow
           logo: image(), // the app icon: the menu bar, the Dock and the Get it row
           brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // warms the wallpaper
-          // pictures under the Mac screen, four to a row; each opens full size
+          // thumbnails under the Mac screen; tapping one shows it in the big spot
           gallery: z.array(z.object({ src: image(), alt: z.string(), caption: z.string() })).default([]),
           giftUrl: z.url().optional(), // adds "Gift it ↗" next to Get it at the end
           // an email sign-up at the end, adding people to a Loops mailing list (src/pages/api/launch-signup.ts)

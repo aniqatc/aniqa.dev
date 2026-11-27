@@ -30,7 +30,7 @@ summary: Two sentences for the top of the case study. What it is and what it doe
 #   screenAlt: What's in the capture.
 #   logo: ./logo.png # the app icon
 #   brand: '#8b7cf6' # warms the wallpaper
-#   gallery: # four to a row; each opens full size
+#   gallery: # thumbnails under the Mac screen; tapping one shows it big
 #     - { src: ./gallery-1.jpg, alt: What's in it., caption: A short caption. }
 #   giftUrl: https://example.app/gift # adds Gift it ↗
 #   signup: # needs LOOPS_API_KEY on Vercel
