@@ -77,6 +77,30 @@ const pictureNote = (node) => {
   };
 };
 
+// A looping clip: an image whose title is "clip: /path/to/clip.mp4" (a file in public/) plays that clip in its place,
+// muted and on a loop like a GIF, with the image as its poster. The <img> stays inside, so Astro still processes
+// it; LoopingClips.astro adds the <video> in the browser, since only then is the poster's final address known.
+const CLIP_TITLE = /^clip:\s*(\/\S+\.(?:mp4|webm))$/;
+
+/**
+ * Turns an image titled "clip: /…mp4" into a looping clip, or returns undefined for any other node.
+ * @param node The node to check.
+ * @returns The clip element, or undefined.
+ */
+const loopingClip = (node) => {
+  if (node.tagName !== 'img') return undefined;
+  const match = CLIP_TITLE.exec(String(node.properties.title ?? '').trim());
+  if (!match) return undefined;
+  const imageProperties = { ...node.properties };
+  delete imageProperties.title;
+  return {
+    type: 'element',
+    tagName: 'span',
+    properties: { className: ['picture-clip'], dataClip: match[1] },
+    children: [{ type: 'element', tagName: 'img', properties: imageProperties, children: [] }],
+  };
+};
+
 // An update tag: inline code that reads "Shipped in 1.4" or "Fixed in 1.4" becomes a small tag with a tick
 // (styled in reviews.css), for an idea the maker built or a gripe that's gone after a review's update.
 const UPDATE_TAG = /^(Shipped|Fixed) in \S.*$/;
@@ -195,6 +219,8 @@ const plain = (n) => {
   if (n.type === 'element') {
     const note = pictureNote(n);
     if (note) return note;
+    const clip = loopingClip(n);
+    if (clip) return clip;
     const tag = updateTag(n);
     if (tag) return tag;
     const properties = { ...n.properties };

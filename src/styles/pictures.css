@@ -5,7 +5,7 @@
    the one at the top stays the main one. The paragraph holding the picture is the frame. Two pictures in one
    paragraph sit side by side (phone screens). A line of _italics_ right after is its caption, in a strip along
    the bottom of the frame, so it reads as part of the picture rather than the review. */
-:is(.d-rv, .d-cs) .sec p:has(> img) {
+:is(.d-rv, .d-cs) .sec p:has(> img, > .picture-clip) {
   max-width: 460px;
   margin-top: 12px;
   display: flex;
@@ -15,16 +15,18 @@
   overflow: hidden;
   background: var(--surface);
 }
-:is(.d-rv, .d-cs) .sec p:has(> img) > img {
+:is(.d-rv, .d-cs) .sec p:has(> img) > img,
+:is(.d-rv, .d-cs) .sec .picture-clip,
+:is(.d-rv, .d-cs) .sec .picture-clip > :is(img, video) {
   display: block;
   width: 100%;
   height: auto;
 }
 /* case studies run their text the full width, so a framed picture sits in the middle of it, caption too */
-.d-cs .sec p:has(> img) {
+.d-cs .sec p:has(> img, > .picture-clip) {
   margin-inline: auto;
 }
-.d-cs .sec p:has(> img) > em {
+.d-cs .sec p:has(> img, > .picture-clip) > em {
   text-align: center;
 }
 /* phone screens: side by side, each with its own rounded frame */
@@ -41,7 +43,7 @@
   border-radius: 22px;
   background: var(--bg);
 }
-:is(.d-rv, .d-cs) .sec p:has(> img) > em {
+:is(.d-rv, .d-cs) .sec p:has(> img, > .picture-clip) > em {
   flex-basis: 100%;
   padding: 10px 14px;
   border-top: 1px solid var(--line);
@@ -216,4 +218,9 @@
 }
 html:has(.lightbox[open]) {
   overflow: hidden;
+}
+
+/* ---------- a looping clip (an image titled "clip: /….mp4"; LoopingClips.astro): framed like a picture ---------- */
+:is(.d-rv, .d-cs) .sec .picture-clip {
+  position: relative;
 }

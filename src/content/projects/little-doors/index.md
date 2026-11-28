@@ -33,14 +33,14 @@ launch:
   logo: ./logo.png
   brand: '#c0392b'
   gallery:
-    - { src: ./gallery-tree.jpg, alt: 'A Christmas tree on the desktop, covered in ornaments', caption: 'A new ornament with every door' }
-    - { src: ./gallery-snowman.jpg, alt: 'A snowman on the desktop in a red Santa hat and a striped scarf', caption: 'A snowman to dress up in hats and scarves' }
-    - { src: ./gallery-stockings.jpg, alt: 'Four knitted stockings hanging in a row, two named Jim and Pam', caption: 'Stockings with the names you choose' }
-    - { src: ./gallery-sleighs.jpg, alt: 'Three sleighs riding along the top of the Dock', caption: 'Sleighs ride along your Dock' }
-    - { src: ./gallery-frost.jpg, alt: 'A browser window covered in frost', caption: 'Frost you melt away with your pointer' }
-    - { src: ./gallery-wrapped.jpg, alt: 'A window wrapped in gold paper with a green bow and a gift tag', caption: 'Windows wrapped like presents' }
-    - { src: ./gallery-lights.jpg, alt: 'Coloured string lights hanging under the menu bar', caption: 'String lights in warm white, gold or classic colours' }
-    - { src: ./gallery-santa.jpg, alt: 'Santa’s sleigh flying across the desktop, dropping a present on a parachute', caption: 'Santa flies by with presents' }
+    - { src: ./gallery-tree.jpg, alt: 'A Christmas tree on the desktop, covered in ornaments', caption: 'A new ornament with every door', video: /launches/little-doors/tree.mp4 }
+    - { src: ./gallery-snowman.jpg, alt: 'A snowman on the desktop in a red Santa hat and a striped scarf', caption: 'A snowman to dress up in hats and scarves', video: /launches/little-doors/snowman.mp4 }
+    - { src: ./gallery-stockings.jpg, alt: 'Four knitted stockings hanging in a row, two named Jim and Pam', caption: 'Stockings with the names you choose', video: /launches/little-doors/stockings.mp4 }
+    - { src: ./gallery-sleighs.jpg, alt: 'Three sleighs riding along the top of the Dock', caption: 'Sleighs ride along your Dock', video: /launches/little-doors/sleighs.mp4 }
+    - { src: ./gallery-frost.jpg, alt: 'A browser window covered in frost', caption: 'Frost you melt away with your pointer', video: /launches/little-doors/frost.mp4 }
+    - { src: ./gallery-wrapped.jpg, alt: 'A window wrapped in gold paper with a green bow and a gift tag', caption: 'Windows wrapped like presents', video: /launches/little-doors/wrapped.mp4 }
+    - { src: ./gallery-lights.jpg, alt: 'Coloured string lights hanging under the menu bar', caption: 'String lights in warm white, gold or classic colours', video: /launches/little-doors/lights.mp4 }
+    - { src: ./gallery-santa.jpg, alt: 'Santa’s sleigh flying across the desktop, dropping a present on a parachute', caption: 'Santa flies by with presents', video: /launches/little-doors/santa.mp4 }
   giftUrl: https://littledoors.app/christmas/gift
   signup:
     loopsList: cmwl2qnl501vv0j0p4h3g896h # Loops: "New editions and updates"
@@ -60,6 +60,10 @@ I looked for an advent calendar app for the Mac and couldn't find anything that 
 1. Lives in the menu bar. Click the little door and the calendar opens: 25 doors, a surprise behind each one.
 2. Behind the doors are things for your desktop. Decorate a Christmas tree, with a new ornament behind every door, then light it up. Build a snowman and hang stockings with the names you choose.
 3. Some reach past the desktop. Sleighs ride along your Dock, even when it magnifies. String lights hang under the menu bar. Windows frost over, and you melt the frost with your pointer. Step away and your windows get wrapped like presents, ready to unwrap when you're back.
+
+   ![A browser window covered in frost, melting away where the pointer moves](./gallery-frost.jpg 'clip: /launches/little-doors/frost.mp4')
+   _Melting the frost with the pointer_
+
 4. Make it yours: change the tree's size and colours, pick the snowman's hat and scarf, name the stockings, and save a look to come back to. When you need a clean screen, Hide all puts everything away with one shortcut ![The bottom of the calendar: Save a look on the left, and Hide all with its Control-Option-H shortcut and a switch on the right](./hide-all.jpg 'note: Save a look and Hide all').
 
    ![The tree's settings next to a plain tree on the desktop: Small, Medium and Large sizes, six pot colours and six bow colours](./tree-settings.jpg)

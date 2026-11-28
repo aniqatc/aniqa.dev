@@ -2,11 +2,12 @@
 // The top of a launch case study, in place of the website screenshot: a big picture with a row of thumbnails
 // under it, four to a row (two on phones). It starts on the app on a Mac screen (MacScreen.astro, as on Mac app
 // reviews); tapping a thumbnail shows that picture in the big spot instead, with its caption, and the first
-// thumbnail brings the Mac screen back. The data is the entry's `launch` block.
+// thumbnail brings the Mac screen back. A gallery item with a `video` plays it there instead, muted and looping
+// like a GIF. The data is the entry's `launch` block.
 //
 // All the big pictures sit in the same grid cell, so the spot keeps the height of the tallest and nothing below
 // jumps when you switch. Only the chosen one is visible (data-shown).
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import MacScreen from './MacScreen.astro';
 import type { Project } from '../lib/projects';
 
@@ -30,6 +31,14 @@ const scene = {
 // the caption while the Mac screen shows: the entry's, or where the app lives
 const DEFAULT_SCREEN_CAPTIONS = { menubar: 'In the menu bar', window: 'On the desktop', notch: 'In the notch' };
 const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.desktop];
+
+// ---------- the gallery: a clip's poster is its still, at the big spot's size ----------
+const gallery = await Promise.all(
+  launch.gallery.map(async (shot) => ({
+    ...shot,
+    poster: shot.video ? (await getImage({ src: shot.src, width: 1280, format: 'webp' })).src : undefined,
+  })),
+);
 ---
 
 <figure class="launch-hero" data-launch-hero>
@@ -39,16 +48,32 @@ const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.des
       <MacScreen scene={scene} screen={launch.screen} />
     </div>
     {
-      launch.gallery.map((shot, index) => (
+      gallery.map((shot, index) => (
         <div class="launch-slide" data-launch-slide={index + 1} data-shown="false" aria-hidden="true">
-          <Image
-            class="launch-slide-image"
-            src={shot.src}
-            alt={shot.alt}
-            widths={[640, 960, 1280]}
-            sizes="(max-width: 640px) 100vw, 600px"
-            loading="lazy"
-          />
+          {shot.video ? (
+            // a clip: muted and looping like a GIF; it only loads and plays once its thumbnail is tapped
+            <video
+              class="launch-slide-image"
+              src={shot.video}
+              poster={shot.poster}
+              width={shot.src.width}
+              height={shot.src.height}
+              aria-label={shot.alt}
+              muted
+              loop
+              playsinline
+              preload="none"
+            />
+          ) : (
+            <Image
+              class="launch-slide-image"
+              src={shot.src}
+              alt={shot.alt}
+              widths={[640, 960, 1280]}
+              sizes="(max-width: 640px) 100vw, 600px"
+              loading="lazy"
+            />
+          )}
         </div>
       ))
     }
@@ -70,16 +95,17 @@ const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.des
             <Image src={launch.screen} alt={launch.screenAlt} widths={[240, 480]} sizes="160px" />
           </button>
         </li>
-        {launch.gallery.map((shot, index) => (
+        {gallery.map((shot, index) => (
           <li>
             <button
-              class="launch-thumb"
+              class:list={['launch-thumb', { 'launch-thumb-clip': shot.video }]}
               type="button"
               aria-pressed="false"
               data-launch-thumb={index + 1}
               data-caption={shot.caption}
             >
               <Image src={shot.src} alt={shot.alt} widths={[240, 480]} sizes="(max-width: 640px) 45vw, 160px" />
+              {shot.video && <span class="launch-thumb-play" aria-hidden="true" />}
             </button>
           </li>
         ))}
@@ -98,6 +124,7 @@ const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.des
     const slides = [...hero.querySelectorAll<HTMLElement>('[data-launch-slide]')];
     const thumbs = [...hero.querySelectorAll<HTMLButtonElement>('[data-launch-thumb]')];
     const caption = hero.querySelector<HTMLElement>('[data-launch-caption]');
+    const stayStill = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const show = (chosen: HTMLButtonElement) => {
       const index = chosen.dataset.launchThumb;
@@ -106,6 +133,12 @@ const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.des
         slide.dataset.shown = String(shown);
         if (shown) slide.removeAttribute('aria-hidden');
         else slide.setAttribute('aria-hidden', 'true');
+        // a clip plays while it's shown (or, with reduced motion, waits on its poster with controls)
+        const clip = slide.querySelector('video');
+        if (!clip) continue;
+        if (shown && stayStill) clip.controls = true;
+        else if (shown) clip.play().catch(() => {});
+        else clip.pause();
       }
       for (const thumb of thumbs) thumb.setAttribute('aria-pressed', String(thumb === chosen));
       if (caption) caption.textContent = chosen.dataset.caption ?? '';
@@ -114,6 +147,7 @@ const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.des
     for (const thumb of thumbs) thumb.addEventListener('click', onClick);
     return () => {
       for (const thumb of thumbs) thumb.removeEventListener('click', onClick);
+      for (const clip of hero.querySelectorAll('video')) clip.pause();
     };
   });
 </script>
@@ -195,6 +229,28 @@ const screenCaption = launch.screenCaption ?? DEFAULT_SCREEN_CAPTIONS[launch.des
     height: auto;
     aspect-ratio: 4 / 3;
     object-fit: cover;
+  }
+  /* a clip's thumbnail: a small play mark in the corner */
+  .launch-thumb-clip {
+    position: relative;
+  }
+  .launch-thumb-play {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.55);
+  }
+  .launch-thumb-play::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    border-style: solid;
+    border-width: 4px 0 4px 6px;
+    border-color: transparent transparent transparent #fff;
   }
   /* the calendar is tall: show its top, where the doors start */
   .launch-thumb-screen img {

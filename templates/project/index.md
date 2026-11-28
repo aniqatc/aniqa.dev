@@ -34,6 +34,7 @@ summary: Two sentences for the top of the case study. What it is and what it doe
 #   brand: '#8b7cf6' # warms the wallpaper
 #   gallery: # thumbnails under the Mac screen; tapping one shows it big
 #     - { src: ./gallery-1.jpg, alt: What's in it., caption: A short caption. }
+#     - { src: ./gallery-2.jpg, alt: What's in it., caption: A short caption., video: /launches/<slug>/clip.mp4 } # plays the clip; the image is its still
 #   giftUrl: https://example.app/gift # adds Gift it ↗
 #   signup: # needs LOOPS_API_KEY on Vercel
 #     loopsList: list-id # Loops → Audience → Mailing lists

@@ -61,7 +61,20 @@ const projects = defineCollection({
           logo: image(), // the app icon: the menu bar, the Dock and the Get it row
           brand: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour like #8b7cf6'), // warms the wallpaper
           // thumbnails under the Mac screen; tapping one shows it in the big spot
-          gallery: z.array(z.object({ src: image(), alt: z.string(), caption: z.string() })).default([]),
+          gallery: z
+            .array(
+              z.object({
+                src: image(), // the picture, or a clip's still: its thumbnail and poster
+                alt: z.string(),
+                caption: z.string(),
+                // a looping clip to play in the big spot instead, from public/ (e.g. /launches/<slug>/tree.mp4)
+                video: z
+                  .string()
+                  .regex(/^\/\S+\.(mp4|webm)$/, 'A path in public/, like /launches/<slug>/clip.mp4')
+                  .optional(),
+              }),
+            )
+            .default([]),
           giftUrl: z.url().optional(), // adds "Gift it ↗" next to Get it at the end
           // an email sign-up at the end, adding people to a Loops mailing list (src/pages/api/launch-signup.ts)
           signup: z

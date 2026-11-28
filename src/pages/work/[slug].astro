@@ -6,6 +6,7 @@ import Detail from '../../layouts/Detail.astro';
 import Facts from '../../components/Facts.astro';
 import GetItButton from '../../components/GetItButton.astro';
 import ImageLightbox from '../../components/ImageLightbox.astro';
+import LoopingClips from '../../components/LoopingClips.astro';
 import LaunchEnd from '../../components/LaunchEnd.astro';
 import LaunchHero from '../../components/LaunchHero.astro';
 import PrevNext from '../../components/PrevNext.astro';
@@ -73,6 +74,7 @@ const getHref = getItHref(project);
   <Content />
   {launch && <LaunchEnd project={project} />}
   <ImageLightbox />
+  <LoopingClips />
   {total > 1 && (
     <PrevNext
       label="More work"

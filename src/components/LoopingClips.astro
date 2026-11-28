@@ -1,0 +1,48 @@
+---
+// Looping clips in an entry's text: an image titled "clip: /path/to/clip.mp4" in the Markdown (md-sections.mjs
+// wraps it in .picture-clip). In the browser, each becomes a muted, looping <video> that plays like a GIF, with
+// the image as its poster, and plays only while it's on screen. With reduced motion it stays still and gets
+// controls instead. Styles are in src/styles/pictures.css.
+---
+
+<script>
+  import { onPage } from '../scripts/page';
+
+  onPage(() => {
+    const clips = [...document.querySelectorAll<HTMLElement>('.picture-clip[data-clip]')];
+    if (clips.length === 0) return;
+    const stayStill = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---------- swap each poster image for its video ----------
+    const videos = clips.flatMap((clip) => {
+      const poster = clip.querySelector('img');
+      if (!poster || clip.querySelector('video')) return [];
+      const video = document.createElement('video');
+      video.src = clip.dataset.clip!;
+      video.poster = poster.currentSrc || poster.src;
+      video.muted = true; // muted, or browsers won't play it on their own
+      video.loop = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+      video.width = poster.width;
+      video.height = poster.height;
+      video.setAttribute('aria-label', poster.alt);
+      video.controls = stayStill;
+      poster.hidden = true;
+      clip.append(video);
+      return [video];
+    });
+    if (stayStill) return;
+
+    // ---------- play only while on screen ----------
+    const watcher = new IntersectionObserver((entries) => {
+      for (const { target, isIntersecting } of entries) {
+        const video = target as HTMLVideoElement;
+        if (isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      }
+    });
+    for (const video of videos) watcher.observe(video);
+    return () => watcher.disconnect();
+  });
+</script>
